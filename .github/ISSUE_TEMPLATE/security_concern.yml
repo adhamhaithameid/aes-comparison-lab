@@ -1,0 +1,33 @@
+name: Security Concern
+description: Report a security issue (use private advisory for vulnerabilities)
+title: "[Security]: "
+labels: ["security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **For actual vulnerabilities, please use a private security advisory instead.**
+
+        This template is for security-related questions, concerns, or
+        improvements that are not critical vulnerabilities.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the security concern or question
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Informational
+        - Low
+        - Medium
+        - High
+        - Critical (use private advisory)
+    validations:
+      required: true

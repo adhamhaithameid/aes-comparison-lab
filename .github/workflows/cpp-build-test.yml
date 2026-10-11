@@ -1,0 +1,60 @@
+name: C++ Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install cmake openssl
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/openssl@4
+
+      - name: Build
+        run: cmake --build build -j
+
+      - name: Test
+        run: ./build/aes_tests tests/test_vectors
+
+      - name: CLI KATs
+        run: |
+          ./build/aes_scratch kat
+          ./build/aes_openssl selftest
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libssl-dev
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build -j
+
+      - name: Test
+        run: ./build/aes_tests tests/test_vectors
+
+      - name: CLI KATs
+        run: |
+          ./build/aes_scratch kat
+          ./build/aes_openssl selftest

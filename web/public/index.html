@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AES Education Platform — Learn Advanced Encryption Standard</title>
+  <meta name="description" content="Interactive AES education platform: learn fundamentals, visualize rounds, explore key expansion, compare implementations, and experiment with security scenarios.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html" class="active" aria-current="page">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="page-header">
+      <div class="container">
+        <div class="text-center" style="padding: 2rem 0;">
+          <h1 style="font-size: 3rem; margin-bottom: 1rem;">Advanced Encryption Standard</h1>
+          <p class="subtitle" style="font-size: 1.25rem; max-width: 70ch; margin: 0 auto 2rem;">
+            An interactive education platform for understanding AES — from fundamental concepts
+            to implementation comparisons and security analysis.
+          </p>
+          <div class="btn-group" style="justify-content: center;">
+            <a href="fundamentals.html" class="btn btn-primary">Start Learning</a>
+            <a href="visualizer.html" class="btn btn-secondary">Open Visualizer</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Cards -->
+    <section class="section">
+      <div class="container">
+        <div class="card-grid">
+          <a href="fundamentals.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" style="font-size: 1.5rem;">📚</span>
+              <h3>Fundamentals</h3>
+            </div>
+            <p>Learn the core concepts: plaintext/ciphertext, keys, symmetric encryption, block sizes, AES-128/192/256, rounds, key expansion, and authenticated encryption.</p>
+            <span class="badge badge-blue">Beginner Friendly</span>
+          </a>
+
+          <a href="visualizer.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" style="font-size: 1.5rem;">🔄</span>
+              <h3>Round Visualizer</h3>
+            </div>
+            <p>Step through all 10 rounds of AES-128 encryption with the FIPS 197 Appendix B test vector. See the state matrix transform at each step.</p>
+            <span class="badge badge-purple">Interactive</span>
+          </a>
+
+          <a href="key-explorer.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" style="font-size: 1.5rem;">🗝️</span>
+              <h3>Key Expansion Explorer</h3>
+            </div>
+            <p>Explore how RotWord, SubWord, Rcon, and XOR operations generate round keys from the original cipher key.</p>
+            <span class="badge badge-purple">Interactive</span>
+          </a>
+
+          <a href="dashboard.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" style="font-size: 1.5rem;">📊</span>
+              <h3>Implementation Dashboard</h3>
+            </div>
+            <p>Compare scratch C++ vs OpenSSL ECB vs OpenSSL GCM across execution time, throughput, memory usage, and more.</p>
+            <span class="badge badge-green">Data-Driven</span>
+          </a>
+
+          <a href="what-if.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" style="font-size: 1.5rem;">🧪</span>
+              <h3>What If? Security Lab</h3>
+            </div>
+            <p>Experiment with 12 security scenarios: bit flips, nonce reuse, wrong keys, ECB pattern leakage, broken implementations, and more.</p>
+            <span class="badge badge-yellow">12 Scenarios</span>
+          </a>
+
+          <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <span aria-hidden="true" style="font-size: 2.5rem; margin-bottom: 1rem;">🛡️</span>
+            <h3>Security First</h3>
+            <p>All educational code is clearly labeled and separate from production C++. Synthetic data only for security scenarios.</p>
+            <span class="badge badge-red">Educational Use Only</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Diagram -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title"><span aria-hidden="true">🏗️</span> Platform Architecture</h2>
+        <div class="mermaid-container">
+          <div class="mermaid">
+graph TD
+    A[Index/Home] --> B[Fundamentals]
+    A --> C[Visualizer]
+    A --> D[Key Explorer]
+    A --> E[Dashboard]
+    A --> F[What If? Lab]
+    B --> B1[AES Concepts]
+    B --> B2[Block Ciphers]
+    B --> B3[Authenticated Encryption]
+    C --> C1[State Matrix]
+    C --> C2[Round Steps]
+    C --> C3[Round Keys]
+    D --> D1[RotWord / SubWord]
+    D --> D2[Rcon / XOR]
+    E --> E1[Benchmark Data]
+    E --> E2[Comparison Charts]
+    F --> F1[12 Scenarios]
+    F --> F2[Security Lessons]
+
+    style A fill:#3b82f6,color:#fff
+    style B fill:#8b5cf6,color:#fff
+    style C fill:#6366f1,color:#fff
+    style D fill:#8b5cf6,color:#fff
+    style E fill:#10b981,color:#fff
+    style F fill:#f59e0b,color:#fff
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Facts -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title"><span aria-hidden="true">💡</span> Quick Facts About AES</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h4>📅 Standardized</h4>
+            <p>November 2001, by NIST (FIPS 197)</p>
+          </div>
+          <div class="card">
+            <h4>🔢 Key Sizes</h4>
+            <p>128, 192, or 256 bits</p>
+          </div>
+          <div class="card">
+            <h4>📦 Block Size</h4>
+            <p>Always 128 bits (16 bytes)</p>
+          </div>
+          <div class="card">
+            <h4>🔄 Rounds</h4>
+            <p>10, 12, or 14 depending on key size</p>
+          </div>
+          <div class="card">
+            <h4>🌍 Usage</h4>
+            <p>TLS, Wi-Fi (WPA2/3), disk encryption, VPNs</p>
+          </div>
+          <div class="card">
+            <h4>🏆 Origin</h4>
+            <p>Rijndael cipher by Daemen &amp; Rijmen</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+name: Sanitizers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  sanitizers:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install cmake openssl
+
+      - name: Configure with sanitizers
+        run: |
+          cmake -S . -B build-san -DCMAKE_BUILD_TYPE=Debug \
+            -DAES_ENABLE_SANITIZERS=ON \
+            -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/openssl@4
+
+      - name: Build
+        run: cmake --build build-san -j
+
+      - name: Run tests under sanitizers
+        run: ./build-san/aes_tests tests/test_vectors
