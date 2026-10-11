@@ -1,0 +1,147 @@
+# Subset of the NIST CAVP 14.0 GCM Encrypt file (keysize 128) file.
+# Extracted by scripts/extract_gcm_subset.py - see
+# tests/test_vectors/PROVENANCE.md for the source of the full file.
+# Kept sections: PTlen in [0, 128, 504, 512, 1024] bits, AADlen in [0, 160, 384] bits, first 2 Count blocks each.
+
+[PTlen = 0]
+[AADlen = 0]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 11754cd72aec309bf52f7687212e8957
+IV = 3c819d9a9bed087615030b65
+PT = 
+AAD = 
+CT = 
+Tag = 250327c674aaf477aef2675748cf6971
+
+
+Count = 1
+Key = ca47248ac0b6f8372a97ac43508308ed
+IV = ffd2b598feabc9019262d2be
+PT = 
+AAD = 
+CT = 
+Tag = 60d20404af527d248d893ae495707d1a
+
+
+[PTlen = 0]
+[AADlen = 160]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 2fb45e5b8f993a2bfebc4b15b533e0b4
+IV = 5b05755f984d2b90f94b8027
+PT = 
+AAD = e85491b2202caf1d7dce03b97e09331c32473941
+CT = 
+Tag = c75b7832b2a2d9bd827412b6ef5769db
+
+
+Count = 1
+Key = 952117048f77e276c2ef6580537c1403
+IV = 070b8fb46a7ad52885be1b26
+PT = 
+AAD = 34b088f982818b5f07dabe2b62f9547f4ed09912
+CT = 
+Tag = bedd4cf30fd7a4abc49bdcc3f3b248b1
+
+
+[PTlen = 0]
+[AADlen = 384]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 99e3e8793e686e571d8285c564f75e2b
+IV = c2dd0ab868da6aa8ad9c0d23
+PT = 
+AAD = b668e42d4e444ca8b23cfdd95a9fedd5178aa521144890b093733cf5cf22526c5917ee476541809ac6867a8c399309fc
+CT = 
+Tag = 3f4fba100eaf1f34b0baadaae9995d85
+
+
+Count = 1
+Key = f8e29efd00a423c4ea9456863f83c54f
+IV = 2d3cf67cbce69d639bd1c092
+PT = 
+AAD = 02c70fc8a2544619c1c3e9fce6b3c6c3bc24643e0f140e6b48ac505ea666cd9a2010c3a8e2f5f10437887fe803b54db3
+CT = 
+Tag = 963cb50aca3e09dd0d9a013c8734155f
+
+
+[PTlen = 128]
+[AADlen = 0]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 7fddb57453c241d03efbed3ac44e371c
+IV = ee283a3fc75575e33efd4887
+PT = d5de42b461646c255c87bd2962d3b9a2
+AAD = 
+CT = 2ccda4a5415cb91e135c2a0f78c9b2fd
+Tag = b36d1df9b9d5e596f83e8b7f52971cb3
+
+
+Count = 1
+Key = ab72c77b97cb5fe9a382d9fe81ffdbed
+IV = 54cc7dc2c37ec006bcc6d1da
+PT = 007c5e5b3e59df24a7c355584fc1518d
+AAD = 
+CT = 0e1bde206a07a9c2c1b65300f8c64997
+Tag = 2b4401346697138c7a4891ee59867d0c
+
+
+[PTlen = 128]
+[AADlen = 160]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = d4a22488f8dd1d5c6c19a7d6ca17964c
+IV = f3d5837f22ac1a0425e0d1d5
+PT = 7b43016a16896497fb457be6d2a54122
+AAD = f1c5d424b83f96c6ad8cb28ca0d20e475e023b5a
+CT = c2bd67eef5e95cac27e3b06e3031d0a8
+Tag = f23eacf9d1cdf8737726c58648826e9c
+
+
+Count = 1
+Key = e8899345e4d89b76f7695ddf2a24bb3c
+IV = 9dfaeb5d73372ceb06ca7bbe
+PT = c2807e403e9babf645268c92bc9d1de6
+AAD = fed0b45a9a7b07c6da5474907f5890e317e74a42
+CT = 8e44bf07454255aa9e36eb34cdfd0036
+Tag = 2f501e5249aa595a53e1985e90346a22
+
+
+[PTlen = 128]
+[AADlen = 384]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 89850dd398e1f1e28443a33d40162664
+IV = e462c58482fe8264aeeb7231
+PT = 2805cdefb3ef6cc35cd1f169f98da81a
+AAD = d74e99d1bdaa712864eec422ac507bddbe2b0d4633cd3dff29ce5059b49fe868526c59a2a3a604457bc2afea866e7606
+CT = ba80e244b7fc9025cd031d0f63677e06
+Tag = d84a8c3eac57d1bb0e890a8f461d1065
+
+
+Count = 1
+Key = cdb850da94d3b56563897c5961ef3ad8
+IV = 841587b7174fb38fb7b3626e
+PT = c16837cb486c04bd30dcae4bcd0bc098
+AAD = de33e6d20c14796484293dff48caffc784367f4bd7b957512ec026c0abc4a39217af0db35be154c45833b97a0b6454df
+CT = f41a9ba9ff296ebdbe3fdd8b1c27dcdb
+Tag = 506cc2136c15238b0f24f61b520fb5e6

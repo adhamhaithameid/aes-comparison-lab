@@ -1,0 +1,50 @@
+AES Comparison Test Suite
+Vectors directory: /Users/adhamhaithameid/Desktop/code/AES/tests/test_vectors
+
+=== A1. FIPS 197 Appendix C.1 KAT (scratch AES-128) ===
+
+=== A2. FIPS 197 Appendix B KAT (scratch AES-128) ===
+
+=== A3. Key expansion (FIPS 197 §5.2) ===
+
+=== A4. Individual transformations (FIPS 197 §3/§4) ===
+
+=== A5. NIST CAVP ECBGFSbox128 (scratch AES-128 ECB) ===
+  7/7 cases passed
+
+=== A5. NIST CAVP ECBVarTxt128 (scratch AES-128 ECB) ===
+  128/128 cases passed
+
+=== A5. NIST CAVP ECBVarKey128 (scratch AES-128 ECB) ===
+  128/128 cases passed
+
+=== A6. NIST CAVP ECBMMT128 multi-block (scratch ECB validation) ===
+  10/10 cases passed
+
+=== B1. Round-trip: scratch AES-128 (ECB validation) ===
+
+=== B2. Round-trip: OpenSSL AES-128-GCM ===
+
+=== C1. Boundary sizes: OpenSSL AES-128-GCM ===
+
+=== C2. Boundary: scratch block cipher rejects non-block-multiple input ===
+
+=== D1. Negative: scratch implementation invalid input ===
+
+=== D2. Negative: OpenSSL AES-128-GCM tampering ===
+
+=== D3. NIST CAVP GCM encrypt KATs (OpenSSL AES-128-GCM) ===
+  12/12 cases passed
+
+=== D4. NIST CAVP GCM decrypt KATs incl. FAIL cases (OpenSSL) ===
+  24/24 cases passed (13 official FAIL cases)
+
+=== E1. Cross-validation: scratch AES-128 vs OpenSSL AES-128-ECB ===
+  1000 random blocks compared, 0 mismatches
+
+=== F1. Determinism and nonce uniqueness ===
+
+========================================
+Total checks: 1431
+Failures:     0
+RESULT: ALL TESTS PASSED

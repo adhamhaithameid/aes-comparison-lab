@@ -1,0 +1,45 @@
+# Build directories
+build/
+build-san/
+cmake-build-*/
+cmake-build*/
+out/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Web
+node_modules/
+dist/
+coverage/
+.playwright/
+test-results/
+playwright-report/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets (never commit)
+*.key
+*.pem
+*.p12
+.env
+secrets/
+
+# Test artifacts
+*.tmp
+*.log

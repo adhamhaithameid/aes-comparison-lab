@@ -1,0 +1,255 @@
+# Subset of the NIST CAVP 14.0 GCM Decrypt file (keysize 128) file.
+# Extracted by scripts/extract_gcm_subset.py - see
+# tests/test_vectors/PROVENANCE.md for the source of the full file.
+# Kept sections: PTlen in [0, 128, 504, 512, 1024] bits, AADlen in [0, 160, 384] bits, first 4 Count blocks each.
+
+[PTlen = 0]
+[AADlen = 0]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = cf063a34d4a9a76c2c86787d3f96db71
+IV = 113b9785971864c83b01c787
+CT = 
+AAD = 
+Tag = 72ac8493e3a5228b5d130a69d2510e42
+PT = 
+
+
+Count = 1
+Key = a49a5e26a2f8cb63d05546c2a62f5343
+IV = 907763b19b9b4ab6bd4f0281
+CT = 
+AAD = 
+Tag = a2be08210d8c470a8df6e8fbd79ec5cf
+FAIL
+
+
+Count = 2
+Key = 2ad0bf5aeb47a0c1a98da3dfdab4fded
+IV = 25f1b6091ee7040fea4ba854
+CT = 
+AAD = 
+Tag = d7963d240317653e01cf5abe5d0966ae
+PT = 
+
+
+Count = 3
+Key = d8cd400a0a73d114cd3ecf36537cab3d
+IV = 3c162c9f16a49b8fe6c92a81
+CT = 
+AAD = 
+Tag = 4203aec165f9d397cf9009770a088c16
+FAIL
+
+
+[PTlen = 0]
+[AADlen = 160]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = b1089cecac8e1a56441353857246773c
+IV = 1af1e6f40b1b21fcb38f65a5
+CT = 
+AAD = ed825cbf40e8f8f198ce1afd1141a3cf391cee73
+Tag = 0edb6756481560956d506a8cdb082db0
+FAIL
+
+
+Count = 1
+Key = e6a76441748e6903a8b7ef114f631dd8
+IV = 79706e2030f9938576d8d9ae
+CT = 
+AAD = d2e6fc9e97ed37a0530f2744ca58ed81f0ddd99f
+Tag = 102bb898d4ca9780a69aa159e8c92228
+FAIL
+
+
+Count = 2
+Key = 5211242698bed4774a090620a6ca56f3
+IV = b1e1349120b6e832ef976f5d
+CT = 
+AAD = b6d729aab8e6416d7002b9faa794c410d8d2f193
+Tag = 0f247e7f9c2505de374006738018493b
+PT = 
+
+
+Count = 3
+Key = 0335807df98f4728dc982efef77686bb
+IV = 5cceb5114b6701989957c926
+CT = 
+AAD = 5bc191e74d849733fea6b8212d01a19ac274bdac
+Tag = 3f5e29ded16cb63f9ba8c103fe753595
+FAIL
+
+
+[PTlen = 0]
+[AADlen = 384]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 748146a0b1d5e9b6facdd95e8a3295be
+IV = 99e8394910c21207541ca90c
+CT = 
+AAD = 5ce0d8dbac8a82fa8dd7aec334b81301b31ab49f3b40a1857cc540a1d992f27f80945dfcb4730dc81ddfd32dee1825d6
+Tag = 847292904038c42168adf62011dc790e
+FAIL
+
+
+Count = 1
+Key = 762da58bb000f5d499818bc859989a30
+IV = 584c291ff1aa388a5112521e
+CT = 
+AAD = 91f92e8bbda7b5ec967ade766f4f26e9189eaafad416f37b4891d3e37d70cb9a267aa843dd202858ade020261223dfce
+Tag = 9ac7eb2d762facae06086c957959880e
+PT = 
+
+
+Count = 2
+Key = 4ae615ef5f3e1ac590d4e5b8623173ba
+IV = 3a998fbdf1131c8992e95bf1
+CT = 
+AAD = 81edcccd1ace673b96fa3b74a2f99fc63bca822f6b9c6b99477b479d5d13b8dca5f6ef726718346ba22c9f492b30d6ba
+Tag = 93cfa8f4dc1da3429eb9dca26ed45024
+FAIL
+
+
+Count = 3
+Key = 2dd1a4bc80d9ae6773fe3284e7f7e734
+IV = 404c5b85d1429e48348ee225
+CT = 
+AAD = 861f17b5e33b17369021b8b2054131715bea7cebaaf732066da9a172341eae3b47a0d49923b25463caabcac6ffb7b5ea
+Tag = e0fadad353d1d29ec6503dd2e049d6a9
+PT = 
+
+
+[PTlen = 128]
+[AADlen = 0]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = e98b72a9881a84ca6b76e0f43e68647a
+IV = 8b23299fde174053f3d652ba
+CT = 5a3c1cf1985dbb8bed818036fdd5ab42
+AAD = 
+Tag = 23c7ab0f952b7091cd324835043b5eb5
+PT = 28286a321293253c3e0aa2704a278032
+
+
+Count = 1
+Key = 33240636cd3236165f1a553b773e728e
+IV = 17c4d61493ecdc8f31700b12
+CT = 47bb7e23f7bdfe05a8091ac90e4f8b2e
+AAD = 
+Tag = b723c70e931d9785f40fd4ab1d612dc9
+PT = 95695a5b12f2870b9cc5fdc8f218a97d
+
+
+Count = 2
+Key = 5164df856f1e9cac04a79b808dc5be39
+IV = e76925d5355e0584ce871b2b
+CT = 0216c899c88d6e32c958c7e553daa5bc
+AAD = 
+Tag = a145319896329c96df291f64efbe0e3a
+FAIL
+
+
+Count = 3
+Key = b1191a672cc55496b3c728d6a67de0ae
+IV = d0b4fa7c7f107f98f66b0195
+CT = ab957acc04c1034d8acc617c0b20f78d
+AAD = 
+Tag = a93cc22f6086e816016606b9ad0ba697
+FAIL
+
+
+[PTlen = 128]
+[AADlen = 160]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 4cf56dd7eb109452d7445e79bcad4f86
+IV = 5f3724b27c345ed5d1757e9e
+CT = 2d0581c040f4e2bb74423682113b818c
+AAD = 20fe2aa2641db7318aa5e339b1e303f952b05dc8
+Tag = f090c0cba2151af2e78ef407720233db
+FAIL
+
+
+Count = 1
+Key = d9529840200e1c17725ab52c9c927637
+IV = 6e9a639d4aecc25530a8ad75
+CT = 6c779895e78179783c51ade1926436b9
+AAD = 472a6f4e7771ca391e42065030db3ff418f3b636
+Tag = 4522bfdef4a635a38db5784b27d43661
+PT = 8ae823895ee4e7f08bc8bad04d63c220
+
+
+Count = 2
+Key = 43ebcf37e131a9b954bf003136e72ce2
+IV = 643e6d21bda599d486f2bb1c
+CT = 6d23fa3b74d3b61f7305fc87e051408b
+AAD = 87c99e3b4292e047ae80947fc5d46c4600d9f5ed
+Tag = 9c036852b5e3c0aff0bb8933796182ee
+PT = d5add8d52c941aeb874cb17d52960210
+
+
+Count = 3
+Key = 23b0b223c477ac83757300dc0c16684a
+IV = 907c5c2d91d33ae435b51be4
+CT = 5943b9c9229301ce25b12e798d2f16a5
+AAD = dcaff8fa814e9302f872b89e8656ee1c7c87c0f3
+Tag = 31fe5884756cc3225c42a82489115fa1
+FAIL
+
+
+[PTlen = 128]
+[AADlen = 384]
+[Taglen = 128]
+[Keylen = 128]
+[IVlen = 96]
+
+Count = 0
+Key = 527da7a4f81d6d4f6f395b623aedac3d
+IV = 2acf3f0c64f5ab9282a6f4a9
+CT = ef47b52ebc6d4cc0dfaf09d22a587c73
+AAD = e5492270c1df154e594c689fc505575c6bf5d7dbde0d1ded5ed32ec65e3e8289072bb10c35e385f499c0600a58f721b2
+Tag = 0530cfe49d93d78bfa9d54ffa6d148ae
+FAIL
+
+
+Count = 1
+Key = a10785641ff210336a96a42001824462
+IV = 906bcc9dcd0fb4caf3c5b691
+CT = 19f30bcdb9f3a4c110e5797c64561c88
+AAD = 96d9404d0a24052efec37c8998726fee2db69d755ac87dae6f9d6b505fdc09799de79757f90053bf503f23283fba3084
+Tag = beeec6ae10e9d7f11188c59c46789e45
+FAIL
+
+
+Count = 2
+Key = abbc49ee0bbe3d81afc2b6b84f70b748
+IV = f11db9f7b99a59ed59ade66f
+CT = ce2d76f834942c022044eebc91b461c0
+AAD = d533cf7644a48da46fcdec47ae5c77b9b52db775d6c886896e4f4e00c51affd59499a0e572f324989df511c4ea5f93cd
+Tag = 62df4b04f219554cd3e69d3c870032d2
+PT = 5135ba1354cbb80478ecaf3db38a443f
+
+
+Count = 3
+Key = bc34611aea26c47b028eda43936fbd1f
+IV = 68628129aa2fb6ba7fa46b83
+CT = 738d5b0edbbdea4085174c168c11e955
+AAD = 6982a727ab5e75c089467b0c9d909d6da2dddaceb3b042aa9b12c1f8d7be7fab63af0e1f457fde6cfea04f4a6df6936f
+Tag = bc0464a8f0f146546b16318dbad4a4ad
+PT = b358a0151f05ba85d65ac3698e674d28
