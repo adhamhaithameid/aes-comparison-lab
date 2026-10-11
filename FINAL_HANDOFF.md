@@ -53,7 +53,14 @@ The previous agent had created:
 
 ### What Remains Incomplete
 
-_(To be filled after final verification)_
+All required deliverables are complete. The following items are explicitly
+out of scope or documented as limitations:
+
+- AES-192/256 not implemented (AES-128 only)
+- Browser E2E tests require Playwright (not run in this environment —
+  web pages verified via HTTP 200 responses)
+- No mutation testing automation (manual verification only)
+- Benchmarks are machine-specific (Apple M1)
 
 ## C. Verification Evidence
 
