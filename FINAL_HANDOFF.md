@@ -184,16 +184,14 @@ _(To be filled after web platform is complete)_
 
 ## F. Repository Information
 
-_(To be filled after publishing)_
-
-- Public GitHub URL: TBD
-- Repository owner: TBD
-- Repository name: TBD
+- Public GitHub URL: https://github.com/adhamhaithameid/aes-comparison-lab
+- Repository owner: adhamhaithameid
+- Repository name: aes-comparison-lab
 - Default branch: main
-- Final commit hash: TBD
-- Number of commits: TBD
-- CI status: TBD
-- Release/tag: TBD
+- Final commit hash: 67c3440c330c98a94ceb4939492838737da89d25
+- Number of commits: 9
+- CI status: GitHub Actions workflows configured (C++ build/test, sanitizers, web tests, docs, security scan)
+- Release/tag: v1.0.0
 
 ## G. How to Run the Project
 
