@@ -7,7 +7,7 @@ The AES Comparison Project is a C++ software security project that implements an
 - **Implementation A** — A from-scratch AES-128 block cipher following FIPS 197, designed for education and validation.
 - **Implementation B** — An OpenSSL-based AES-128-GCM authenticated encryption wrapper, designed for production use.
 
-The project includes a comprehensive test suite, performance benchmarks, memory profiling, and automated CI-style scripts.
+The project includes a comprehensive test suite (1,431 checks), performance benchmarks (355 data points), memory profiling (24 measurements), and automated workflow scripts.
 
 ---
 
@@ -29,14 +29,14 @@ graph TB
         end
 
         subgraph "Testing & Validation"
-            T1[test_main.cpp<br/>Automated test suite]
+            T1[test_main.cpp<br/>Automated test suite<br/>1,431 checks]
             T2[tests/test_plan.md<br/>Test plan document]
             T3[tests/test_vectors/<br/>NIST CAVP .rsp files]
         end
 
         subgraph "Performance & Profiling"
-            BM[benchmark.cpp<br/>Performance benchmark]
-            MR[memory_results.csv<br/>Memory profiling data]
+            BM[benchmark.cpp<br/>Performance benchmark<br/>355 data points]
+            MR[memory_results.csv<br/>Memory profiling<br/>24 measurements]
             BR[benchmark_aggregate.csv<br/>Benchmark results]
         end
 
@@ -121,14 +121,14 @@ The 128-bit key is expanded into 11 round keys (176 bytes total) using the FIPS 
 flowchart LR
     KEY[128-bit Key<br/>16 bytes] --> SPLIT[Split into 4 words<br/>w0, w1, w2, w3]
 
-    SPLIT --> RK0[Round Key 0<br/>w0 || w1 || w2 || w3]
+    SPLIT --> RK0[Round Key 0<br/>w0 or w1 or w2 or w3]
 
     W3[w3] --> ROT[RotWord<br/>Cyclic left rotate]
     ROT --> SUB[SubWord<br/>S-box each byte]
     SUB --> RCON[XOR with Rcon<br/>Round constant]
     RCON --> W4[w4 = w0 XOR result]
 
-    W4 --> RK1[Round Key 1<br/>w4 || w5 || w6 || w7]
+    W4 --> RK1[Round Key 1<br/>w4 or w5 or w6 or w7]
 
     W4 --> W5[w5 = w1 XOR w4]
     W5 --> W6[w6 = w2 XOR w5]
@@ -194,17 +194,26 @@ sequenceDiagram
     participant CLI as aes_scratch_main
     participant A as AES128
 
-    U->>CLI: ./aes_scratch_main <key_hex> <input_hex>
-    CLI->>CLI: Parse hex key and input
+    U->>CLI: aes_scratch kat
     CLI->>A: AES128(key) — construct cipher
     A->>A: Key expansion (11 round keys)
-    loop For each 16-byte block
-        CLI->>A: encrypt_block(block)
-        A->>A: 10 rounds of SubBytes/ShiftRows/MixColumns/AddRoundKey
+    CLI->>A: encrypt_block(block)
+    A->>A: 10 rounds of SubBytes/ShiftRows/MixColumns/AddRoundKey
+    CLI->>A: decrypt_block(block)
+    A->>A: 10 rounds of InvShiftRows/InvSubBytes/InvMixColumns/AddRoundKey
+    CLI-->>U: KAT results (PASS/FAIL)
+
+    U->>CLI: aes_scratch encrypt-block --key HEX16 --input HEX16
+    CLI->>A: AES128(key)
+    CLI->>A: encrypt_block(block)
+    CLI-->>U: Ciphertext hex
+
+    U->>CLI: aes_scratch roundtrace --key HEX16 --input HEX16
+    CLI->>A: AES128(key)
+    loop For each of 10 rounds
+        CLI->>A: sub_bytes, shift_rows, mix_columns, add_round_key
     end
-    CLI->>CLI: Output ciphertext hex
-    CLI->>CLI: Decrypt and verify round-trip
-    CLI-->>U: Ciphertext + verification result
+    CLI-->>U: State after each transformation
 ```
 
 ### OpenSSL GCM CLI (`aes_openssl_main`)
@@ -216,25 +225,33 @@ sequenceDiagram
     participant W as aesgcm wrapper
     participant O as OpenSSL
 
-    U->>CLI: ./aes_openssl_main <encrypt|decrypt> <key_file> <input> <output>
-    alt Encrypt
-        CLI->>W: encrypt_with_random_nonce(key, plaintext)
-        W->>O: RAND_bytes(nonce, 12)
-        W->>O: EVP AES-128-GCM encrypt
-        W-->>CLI: blob = nonce || ciphertext || tag
-        CLI->>CLI: Write blob to output file
-    else Decrypt
-        CLI->>CLI: Read blob from input file
-        CLI->>CLI: Parse nonce (12) || ciphertext (n) || tag (16)
-        CLI->>W: decrypt_blob(key, blob)
-        W->>O: EVP AES-128-GCM decrypt + tag verify
-        alt Tag valid
-            W-->>CLI: plaintext
-            CLI->>CLI: Write plaintext to output file
-        else Tag invalid
-            W-->>CLI: nullopt
-            CLI->>CLI: Error: authentication failed
-        end
+    U->>CLI: aes_openssl keygen keyfile
+    CLI->>W: random_bytes(key, 16)
+    W->>O: RAND_bytes(key, 16)
+    W-->>CLI: 16 random bytes
+    CLI->>CLI: Write hex key to file (chmod 0600)
+
+    U->>CLI: aes_openssl encrypt keyfile infile outfile
+    CLI->>CLI: Read key from keyfile
+    CLI->>CLI: Read plaintext from infile
+    CLI->>W: encrypt_with_random_nonce(key, plaintext)
+    W->>O: RAND_bytes(nonce, 12)
+    W->>O: EVP AES-128-GCM encrypt
+    W-->>CLI: blob = nonce or tag or ciphertext
+    CLI->>CLI: Write blob to outfile
+
+    U->>CLI: aes_openssl decrypt keyfile infile outfile
+    CLI->>CLI: Read blob from infile
+    CLI->>CLI: Parse nonce (12) + tag (16) + ciphertext (n)
+    CLI->>W: decrypt_blob(key, blob)
+    W->>O: EVP AES-128-GCM decrypt + tag verify
+    alt Tag valid
+        W-->>CLI: plaintext
+        CLI->>CLI: Write plaintext to outfile
+    else Tag invalid
+        W-->>CLI: nullopt
+        CLI->>CLI: Error: authentication failed
+        Note over CLI: No output file created
     end
 ```
 
@@ -281,7 +298,7 @@ flowchart LR
 | Ciphertext | Same as plaintext | Same as plaintext |
 | Authentication | None | 16-byte tag |
 | AAD | N/A | Optional, arbitrary length |
-| File format | N/A | `nonce(12) \|\| tag(16) \|\| ciphertext(n)` |
+| File format | N/A | `nonce(12) or tag(16) or ciphertext(n)` |
 
 ---
 
@@ -311,15 +328,15 @@ flowchart TD
 
 The test suite (`test_main.cpp`) is organized into six categories:
 
-| Category | Description | Test Count |
+| Category | Description | Check Count |
 |---|---|---|
-| A | Known-answer tests (FIPS 197 + NIST CAVP) | 282 cases |
-| B | Round-trip tests (scratch ECB + OpenSSL GCM) | 17 cases |
-| C | Boundary tests (input sizes 0 to 10 MiB) | 14 cases |
-| D | Negative/tampering tests | 36 cases |
-| E | Cross-validation (scratch vs OpenSSL) | 1000 blocks |
-| F | Determinism/regression checks | 5 checks |
-| **Total** | | **1431 checks** |
+| A | Known-answer tests (FIPS 197 + NIST CAVP) | 288 |
+| B | Round-trip tests (scratch ECB + OpenSSL GCM) | 20 |
+| C | Boundary tests (input sizes 0 to 10 MiB) | 14 |
+| D | Negative/tampering tests | 51 |
+| E | Cross-validation (scratch vs OpenSSL) | 1,000 |
+| F | Determinism/regression checks | 5 |
+| **Total** | | **1,431** |
 
 ---
 
@@ -397,9 +414,9 @@ AES/
 ├── results/
 │   ├── test_results.txt        # Test suite output
 │   ├── sanitizer_test_results.txt
-│   ├── benchmark_results.csv   # Per-repetition data
-│   ├── benchmark_aggregate.csv # Summary statistics
-│   ├── memory_results.csv      # Memory profiling data
+│   ├── benchmark_results.csv   # Per-repetition data (355 rows)
+│   ├── benchmark_aggregate.csv # Summary statistics (40 rows)
+│   ├── memory_results.csv      # Memory profiling data (24 rows)
 │   └── environment.txt         # System information
 ├── reports/
 │   ├── final_report.md         # Technical report
