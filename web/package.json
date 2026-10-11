@@ -1,0 +1,24 @@
+{
+  "name": "aes-education-platform",
+  "version": "1.0.0",
+  "description": "Interactive AES education web platform with visualizer, key explorer, dashboard, and security lab",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:visualizer": "playwright test tests/visualizer.test.js",
+    "test:what-if": "playwright test tests/what-if.test.js",
+    "serve": "npx serve public -p 3000",
+    "start": "npx serve public -p 3000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "aes",
+    "encryption",
+    "education",
+    "cryptography",
+    "visualizer"
+  ],
+  "license": "MIT"
+}

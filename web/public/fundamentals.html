@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamentals — AES Education Platform</title>
+  <meta name="description" content="Learn AES fundamentals: plaintext, ciphertext, keys, symmetric encryption, block sizes, rounds, key expansion, and authenticated encryption.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html" class="active" aria-current="page">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>AES Fundamentals</h1>
+        <p class="subtitle">Core concepts you need to understand before diving into the interactive modules</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Plaintext & Ciphertext -->
+      <section class="section" id="plaintext-ciphertext">
+        <h2 class="section-title"><span aria-hidden="true">📝</span> Plaintext &amp; Ciphertext</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Plaintext</h3>
+            <p>The original readable data you want to protect. In AES, plaintext is processed in <strong>128-bit blocks</strong> (16 bytes). If your data isn't a multiple of 16 bytes, it must be padded.</p>
+            <p><strong>Example:</strong> The string <code>"Hello, World!!!"</code> is exactly 16 bytes — one AES block.</p>
+          </div>
+          <div class="card">
+            <h3>Ciphertext</h3>
+            <p>The encrypted output that appears random without the key. AES produces ciphertext of the same size as the input block (plus padding if needed).</p>
+            <p><strong>Example:</strong> <code>3ad77bb40d7a3660a89ecaf32466ef97</code></p>
+          </div>
+        </div>
+        <div class="mermaid-container">
+          <div class="mermaid">
+graph LR
+    P[Plaintext Block<br/>128 bits] -->|AES Encryption| C[Ciphertext Block<br/>128 bits]
+    C -->|AES Decryption| P2[Plaintext Block<br/>128 bits]
+    K[Secret Key<br/>128/192/256 bits] -->|Key Schedule| P
+    K -->|Key Schedule| C
+
+    style P fill:#3b82f6,color:#fff
+    style C fill:#10b981,color:#fff
+    style K fill:#f59e0b,color:#000
+    style P2 fill:#3b82f6,color:#fff
+          </div>
+        </div>
+      </section>
+
+      <!-- Keys -->
+      <section class="section" id="keys">
+        <h2 class="section-title"><span aria-hidden="true">🗝️</span> Keys &amp; Symmetric Encryption</h2>
+        <div class="card">
+          <p>AES is a <strong>symmetric key</strong> algorithm — the same key is used for both encryption and decryption. This means both sender and receiver must share the secret key securely beforehand.</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key Size</th>
+                  <th>Rounds</th>
+                  <th>Security Level</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>AES-128</code></td>
+                  <td>10</td>
+                  <td><span class="badge badge-green">Good</span></td>
+                  <td>General purpose, fast</td>
+                </tr>
+                <tr>
+                  <td><code>AES-192</code></td>
+                  <td>12</td>
+                  <td><span class="badge badge-blue">Better</span></td>
+                  <td>Government, defense</td>
+                </tr>
+                <tr>
+                  <td><code>AES-256</code></td>
+                  <td>14</td>
+                  <td><span class="badge badge-purple">Best</span></td>
+                  <td>Maximum security</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Block Size -->
+      <section class="section" id="block-size">
+        <h2 class="section-title"><span aria-hidden="true">📦</span> Block Size</h2>
+        <div class="card">
+          <p>AES always operates on <strong>128-bit blocks</strong> (16 bytes), regardless of key size. This is different from the key size, which varies (128, 192, or 256 bits).</p>
+          <div class="mermaid-container">
+            <div class="mermaid"
+              style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; max-width: 400px; margin: 0 auto;">
+              <div style="background: var(--accent-primary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 0</div>
+              <div style="background: var(--accent-primary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 1</div>
+              <div style="background: var(--accent-primary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 2</div>
+              <div style="background: var(--accent-primary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 3</div>
+              <div style="background: var(--accent-secondary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 4</div>
+              <div style="background: var(--accent-secondary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 5</div>
+              <div style="background: var(--accent-secondary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 6</div>
+              <div style="background: var(--accent-secondary); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 7</div>
+              <div style="background: var(--accent-success); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 8</div>
+              <div style="background: var(--accent-success); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 9</div>
+              <div style="background: var(--accent-success); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 10</div>
+              <div style="background: var(--accent-success); color: #fff; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 11</div>
+              <div style="background: var(--accent-warning); color: #000; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 12</div>
+              <div style="background: var(--accent-warning); color: #000; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 13</div>
+              <div style="background: var(--accent-warning); color: #000; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 14</div>
+              <div style="background: var(--accent-warning); color: #000; padding: 8px; text-align: center; border-radius: 4px; font-family: monospace;">Byte 15</div>
+            </div>
+          </div>
+          <p class="text-center text-muted">A 128-bit state matrix: 16 bytes arranged in a 4×4 grid</p>
+        </div>
+      </section>
+
+      <!-- Rounds -->
+      <section class="section" id="rounds">
+        <h2 class="section-title"><span aria-hidden="true">🔄</span> Rounds</h2>
+        <div class="card">
+          <p>Each AES encryption consists of multiple <strong>rounds</strong> of transformations. More rounds = more security but slower performance.</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Round Type</th>
+                  <th>Operations</th>
+                  <th>Count (AES-128)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Initial Round</td>
+                  <td>AddRoundKey only</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>Main Rounds</td>
+                  <td>SubBytes → ShiftRows → MixColumns → AddRoundKey</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>Final Round</td>
+                  <td>SubBytes → ShiftRows → AddRoundKey (no MixColumns)</td>
+                  <td>1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Try the <a href="visualizer.html">interactive visualizer</a> to see each round step-by-step.</p>
+        </div>
+      </section>
+
+      <!-- Key Expansion -->
+      <section class="section" id="key-expansion">
+        <h2 class="section-title"><span aria-hidden="true">📐</span> Key Expansion</h2>
+        <div class="card">
+          <p>The original cipher key is expanded into <strong>round keys</strong> — one for each round's AddRoundKey operation. AES-128 uses a 16-byte key expanded to 176 bytes (11 round keys).</p>
+          <div class="mermaid-container">
+            <div class="mermaid">
+graph TD
+    K[Original Key<br/>16 bytes] --> KW[Key Schedule]
+    KW --> RK0[Round Key 0<br/>Initial]
+    KW --> RK1[Round Key 1]
+    KW --> RK2[Round Key 2]
+    KW --> RKN[Round Key 10<br/>Final]
+
+    subgraph Key Expansion Steps
+        ROT[RotWord] --> SUB[SubWord]
+        SUB --> RCON[XOR Rcon]
+        RCON --> XOR[XOR with previous word]
+    end
+
+    style K fill:#f59e0b,color:#000
+    style RK0 fill:#3b82f6,color:#fff
+    style RKN fill:#3b82f6,color:#fff
+            </div>
+          </div>
+          <p>Explore the <a href="key-explorer.html">Key Expansion Explorer</a> for a step-by-step breakdown.</p>
+        </div>
+      </section>
+
+      <!-- Block Cipher vs Mode -->
+      <section class="section" id="block-vs-mode">
+        <h2 class="section-title"><span aria-hidden="true">🔀</span> Block Cipher vs. Mode of Operation</h2>
+        <div class="card">
+          <p>AES is a <strong>block cipher</strong> — it encrypts one 16-byte block at a time. A <strong>mode of operation</strong> defines how to encrypt data longer than one block.</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Full Name</th>
+                  <th>Authentication</th>
+                  <th>Parallelizable</th>
+                  <th>Common Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ECB</code></td>
+                  <td>Electronic Codebook</td>
+                  <td><span class="badge badge-red">No</span></td>
+                  <td><span class="badge badge-green">Yes</span></td>
+                  <td>❌ Never for messages</td>
+                </tr>
+                <tr>
+                  <td><code>CBC</code></td>
+                  <td>Cipher Block Chaining</td>
+                  <td><span class="badge badge-red">No</span></td>
+                  <td><span class="badge badge-red">No (decrypt only)</span></td>
+                  <td>Legacy systems</td>
+                </tr>
+                <tr>
+                  <td><code>GCM</code></td>
+                  <td>Galois/Counter Mode</td>
+                  <td><span class="badge badge-green">Yes</span></td>
+                  <td><span class="badge badge-green">Yes</span></td>
+                  <td>TLS 1.3, modern apps</td>
+                </tr>
+                <tr>
+                  <td><code>CTR</code></td>
+                  <td>Counter Mode</td>
+                  <td><span class="badge badge-red">No</span></td>
+                  <td><span class="badge badge-green">Yes</span></td>
+                  <td>Disk encryption</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Confidentiality vs Integrity -->
+      <section class="section" id="confidentiality-integrity">
+        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Confidentiality vs. Integrity vs. Authenticity</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Confidentiality</h3>
+            <p>Ensures only authorized parties can read the message. <strong>AES alone provides this.</strong></p>
+            <span class="badge badge-green">AES provides</span>
+          </div>
+          <div class="card">
+            <h3>Integrity</h3>
+            <p>Ensures the message hasn't been tampered with. <strong>AES alone does NOT provide this.</strong></p>
+            <span class="badge badge-red">Needs MAC</span>
+          </div>
+          <div class="card">
+            <h3>Authenticity</h3>
+            <p>Ensures the message came from the claimed sender. <strong>Requires authentication.</strong></p>
+            <span class="badge badge-red">Needs MAC</span>
+          </div>
+        </div>
+        <div class="alert alert-warning">
+          <span aria-hidden="true">⚠️</span>
+          <div>
+            <strong>Common Mistake:</strong> Using AES-ECB or AES-CBC without a MAC (Message Authentication Code) means an attacker can modify ciphertext without detection. Always use <strong>authenticated encryption</strong> like AES-GCM.
+          </div>
+        </div>
+      </section>
+
+      <!-- Authenticated Encryption -->
+      <section class="section" id="ae">
+        <h2 class="section-title"><span aria-hidden="true">✅</span> Authenticated Encryption (AEAD)</h2>
+        <div class="card">
+          <p><strong>AEAD (Authenticated Encryption with Associated Data)</strong> provides confidentiality, integrity, and authenticity in a single operation. AES-GCM is the most widely used AEAD mode.</p>
+          <div class="mermaid-container">
+            <div class="mermaid">
+graph LR
+    subgraph AEAD Encryption
+        P[Plaintext] --> GCM[AES-GCM]
+        K[Key] --> GCM
+        N[Nonce] --> GCM
+        AAD[Associated Data] --> GCM
+        GCM --> CT[Ciphertext]
+        GCM --> TAG[Auth Tag<br/>16 bytes]
+    end
+
+    subgraph AEAD Decryption
+        CT2[Ciphertext] --> V[Verify + Decrypt]
+        TAG2[Auth Tag] --> V
+        K2[Key] --> V
+        N2[Nonce] --> V
+        AAD2[Associated Data] --> V
+        V -->|Valid| P2[Plaintext]
+        V -->|Invalid| REJECT[Reject]
+    end
+
+    style GCM fill:#10b981,color:#fff
+    style V fill:#3b82f6,color:#fff
+    style REJECT fill:#ef4444,color:#fff
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

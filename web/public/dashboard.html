@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implementation Dashboard — AES Education Platform</title>
+  <meta name="description" content="Compare AES implementations: scratch C++, OpenSSL ECB, OpenSSL GCM with real benchmark data.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html" class="active" aria-current="page">Dashboard</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>Implementation Comparison Dashboard</h1>
+        <p class="subtitle">Real benchmark data comparing scratch C++, OpenSSL ECB, and OpenSSL GCM implementations</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Filters -->
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🔧</span>
+            <h3>Filters</h3>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label class="form-label" for="implFilter">Implementation</label>
+              <select id="implFilter" class="form-select">
+                <option value="all">All Implementations</option>
+                <option value="scratch">Scratch C++</option>
+                <option value="openssl-ecb">OpenSSL ECB</option>
+                <option value="openssl-gcm">OpenSSL GCM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="opFilter">Operation</label>
+              <select id="opFilter" class="form-select">
+                <option value="all">All Operations</option>
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+                <option value="keysetup">Key Setup</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sizeFilter">Input Size</label>
+              <select id="sizeFilter" class="form-select">
+                <option value="all">All Sizes</option>
+                <option value="16">16 bytes</option>
+                <option value="1024">1 KB</option>
+                <option value="102400">100 KB</option>
+                <option value="1048576">1 MB</option>
+                <option value="10485760">10 MB</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary Cards -->
+      <section class="section">
+        <div class="grid-3" id="summaryCards"></div>
+      </section>
+
+      <!-- Charts -->
+      <section class="section">
+        <h2 class="section-title"><span aria-hidden="true">📈</span> Performance Charts</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">⏱️</span>
+              <h3>Execution Time (ns)</h3>
+            </div>
+            <canvas id="timeChart" aria-label="Bar chart of execution time in nanoseconds" role="img"></canvas>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🚀</span>
+              <h3>Throughput (MiB/s)</h3>
+            </div>
+            <canvas id="throughputChart" aria-label="Bar chart of throughput in MiB/s" role="img"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">💾</span>
+            <h3>Memory Usage (Peak RSS)</h3>
+          </div>
+          <canvas id="memoryChart" aria-label="Bar chart of peak memory usage in bytes" role="img"></canvas>
+        </div>
+      </section>
+
+      <!-- Comparison Table -->
+      <section class="section">
+        <h2 class="section-title"><span aria-hidden="true">📋</span> Detailed Comparison</h2>
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">📊</span>
+            <h3>Aggregate Benchmark Data</h3>
+          </div>
+          <div class="table-wrapper">
+            <table id="benchmarkTable">
+              <thead>
+                <tr>
+                  <th>Implementation</th>
+                  <th>Operation</th>
+                  <th>Input Size</th>
+                  <th>Mean Time (ns)</th>
+                  <th>Median Time (ns)</th>
+                  <th>Std Dev</th>
+                  <th>Mean Throughput (MiB/s)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Implementation Profiles -->
+      <section class="section">
+        <h2 class="section-title"><span aria-hidden="true">🏗️</span> Implementation Profiles</h2>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🔧</span>
+              <h3>Scratch C++</h3>
+              <span class="badge badge-yellow">Educational</span>
+            </div>
+            <ul style="list-style: none; padding: 0;">
+              <li><strong>Approach:</strong> Byte-oriented, table-driven S-box</li>
+              <li><strong>Transformations:</strong> SubBytes, ShiftRows, MixColumns, AddRoundKey</li>
+              <li><strong>Key Schedule:</strong> On-the-fly expansion</li>
+              <li><strong>Mode:</strong> ECB (single block)</li>
+              <li><strong>Authentication:</strong> None</li>
+              <li><strong>Hardware Accel:</strong> No AES-NI</li>
+              <li><strong>Use Case:</strong> Learning, reference implementation</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🔒</span>
+              <h3>OpenSSL ECB</h3>
+              <span class="badge badge-blue">Production</span>
+            </div>
+            <ul style="list-style: none; padding: 0;">
+              <li><strong>Approach:</strong> Optimized assembly + AES-NI</li>
+              <li><strong>Transformations:</strong> Same AES rounds</li>
+              <li><strong>Key Schedule:</strong> Pre-computed round keys</li>
+              <li><strong>Mode:</strong> ECB (Electronic Codebook)</li>
+              <li><strong>Authentication:</strong> None</li>
+              <li><strong>Hardware Accel:</strong> AES-NI, AVX-512</li>
+              <li><strong>Use Case:</strong> Legacy compatibility</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">✅</span>
+              <h3>OpenSSL GCM</h3>
+              <span class="badge badge-green">Recommended</span>
+            </div>
+            <ul style="list-style: none; padding: 0;">
+              <li><strong>Approach:</strong> Optimized assembly + AES-NI + PCLMUL</li>
+              <li><strong>Transformations:</strong> AES-CTR + GHASH</li>
+              <li><strong>Key Schedule:</strong> Pre-computed round keys</li>
+              <li><strong>Mode:</strong> GCM (Galois/Counter Mode)</li>
+              <li><strong>Authentication:</strong> Built-in (128-bit tag)</li>
+              <li><strong>Hardware Accel:</strong> AES-NI, PCLMULQDQ</li>
+              <li><strong>Use Case:</strong> TLS 1.3, modern applications</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security Comparison -->
+      <section class="section">
+        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Security Comparison</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Scratch C++</th>
+                <th>OpenSSL ECB</th>
+                <th>OpenSSL GCM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Confidentiality</td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Integrity</td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Authenticity</td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Nonce Reuse Risk</td>
+                <td><span class="badge badge-muted">N/A</span></td>
+                <td><span class="badge badge-muted">N/A</span></td>
+                <td><span class="badge badge-red">Critical</span></td>
+              </tr>
+              <tr>
+                <td>Side-Channel Resistant</td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Timing Attack Resistant</td>
+                <td><span class="badge badge-red">No</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td><span class="badge badge-green">Yes</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/benchmark-data.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

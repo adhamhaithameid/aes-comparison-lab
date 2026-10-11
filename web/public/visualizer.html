@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Round Visualizer — AES Education Platform</title>
+  <meta name="description" content="Interactive AES-128 round visualizer: step through all 10 rounds with the FIPS 197 Appendix B test vector.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html" class="active" aria-current="page">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>AES-128 Round Visualizer</h1>
+        <p class="subtitle">Step through each round of AES-128 encryption using the FIPS 197 Appendix B test vector</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Input Section -->
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">📥</span>
+            <h3>Input</h3>
+            <span class="badge badge-yellow">FIPS 197 Appendix B</span>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label" for="plaintextInput">Plaintext (hex)</label>
+              <input type="text" id="plaintextInput" class="form-input" value="00112233445566778899aabbccddeeff" maxlength="32" spellcheck="false" aria-describedby="plaintextHint">
+              <small id="plaintextHint" class="text-muted">32 hex characters = 16 bytes = 128 bits</small>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="keyInput">Cipher Key (hex)</label>
+              <input type="text" id="keyInput" class="form-input" value="000102030405060708090a0b0c0d0e0f" maxlength="32" spellcheck="false" aria-describedby="keyHint">
+              <small id="keyHint" class="text-muted">32 hex characters = 16 bytes = 128-bit key</small>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" id="encryptBtn" aria-label="Encrypt the plaintext">▶ Encrypt</button>
+            <button class="btn btn-secondary" id="loadVectorBtn">Load FIPS Vector</button>
+            <button class="btn btn-secondary" id="resetBtn">Reset</button>
+          </div>
+          <div class="alert alert-warning mt-2" role="note">
+            <span aria-hidden="true">⚠️</span>
+            <div><strong>Educational JavaScript implementation — NOT for production use.</strong> This is a slow, clear reference for learning AES. Use OpenSSL or similar for real applications.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Round Navigation -->
+      <section class="section" id="roundSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🔄</span>
+            <h3>Round Navigation</h3>
+          </div>
+          <div class="step-indicator" id="stepIndicator" role="progressbar" aria-label="Encryption progress" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"></div>
+          <div class="progress-bar" aria-hidden="true"><div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div></div>
+          <div class="btn-group mt-2" role="group" aria-label="Round navigation controls">
+            <button class="btn btn-secondary btn-sm" id="firstBtn" aria-label="Go to first round">⏮ First</button>
+            <button class="btn btn-secondary btn-sm" id="prevBtn" aria-label="Previous round">◀ Prev</button>
+            <button class="btn btn-secondary btn-sm" id="nextBtn" aria-label="Next round">Next ▶</button>
+            <button class="btn btn-secondary btn-sm" id="lastBtn" aria-label="Go to last round">Last ⏭</button>
+            <button class="btn btn-primary btn-sm" id="autoBtn" aria-label="Auto-play rounds">▶ Auto Play</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Visualization -->
+      <section class="section" id="vizSection" style="display: none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">📊</span>
+              <h3>State Matrix</h3>
+              <span id="roundBadge" class="badge badge-blue">Round 0</span>
+            </div>
+            <p id="operationDesc" class="text-muted">Initial state — plaintext loaded into state matrix</p>
+            <div class="state-matrix" id="stateMatrix" role="img" aria-label="4x4 state matrix showing current AES state"></div>
+            <div id="stateHex" class="hex-dump mt-2"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🔑</span>
+              <h3>Round Key</h3>
+            </div>
+            <div id="roundKeyDisplay" class="round-key-display"></div>
+            <div id="roundKeyHex" class="hex-dump mt-2"></div>
+            <div class="mt-2">
+              <h4>Operation Explanation</h4>
+              <p id="explanationText">The plaintext bytes are loaded into the 4×4 state matrix column by column.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transformation Details -->
+        <div class="card mt-2">
+          <div class="card-header">
+            <span aria-hidden="true">🔍</span>
+            <h3>Transformation Details</h3>
+          </div>
+          <div id="transformDetails">
+            <p class="text-muted">Navigate through rounds to see transformation details.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- All Round Keys -->
+      <section class="section" id="allKeysSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🗝️</span>
+            <h3>All Round Keys</h3>
+          </div>
+          <div id="allRoundKeys"></div>
+        </div>
+      </section>
+
+      <!-- Final Ciphertext -->
+      <section class="section" id="ciphertextSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🔒</span>
+            <h3>Ciphertext Output</h3>
+          </div>
+          <div class="hex-dump" id="ciphertextOutput"></div>
+          <div class="alert alert-success mt-2" role="status">
+            <span aria-hidden="true">✅</span>
+            <div>Expected (FIPS 197): <code>69c4e0d86a7b0430d8cdb78070b4c55a</code></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/aes-js.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

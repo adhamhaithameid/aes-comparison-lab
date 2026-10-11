@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Expansion Explorer — AES Education Platform</title>
+  <meta name="description" content="Interactive AES key expansion explorer: RotWord, SubWord, Rcon, XOR operations with step-through.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html" class="active" aria-current="page">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>Key Expansion Explorer</h1>
+        <p class="subtitle">See how RotWord, SubWord, Rcon, and XOR generate round keys from the original cipher key</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Input -->
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🗝️</span>
+            <h3>Cipher Key Input</h3>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="keyInput">Cipher Key (hex)</label>
+            <input type="text" id="keyInput" class="form-input" value="000102030405060708090a0b0c0d0e0f" maxlength="32" spellcheck="false">
+            <small class="text-muted">32 hex characters = 16 bytes = 128-bit key</small>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" id="expandBtn">Expand Key</button>
+            <button class="btn btn-secondary" id="loadVectorBtn">Load FIPS Vector</button>
+          </div>
+          <div class="alert alert-warning mt-2" role="note">
+            <span aria-hidden="true">⚠️</span>
+            <div><strong>Educational JavaScript implementation — NOT for production use.</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key Schedule Diagram -->
+      <section class="section" id="scheduleSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">📐</span>
+            <h3>Key Schedule</h3>
+          </div>
+          <div class="mermaid-container">
+            <div class="mermaid">
+graph TD
+    K[Original Key<br/>16 bytes] --> W0[W0: bytes 0-3]
+    K --> W1[W1: bytes 4-7]
+    K --> W2[W2: bytes 8-11]
+    K --> W3[W3: bytes 12-15]
+
+    W0 --> W4[W4 = W0 XOR gW3]
+    W1 --> W5[W5 = W1 XOR W4]
+    W2 --> W6[W6 = W2 XOR W5]
+    W3 --> W7[W7 = W3 XOR W6]
+
+    subgraph gFunction[gW3 = SubWord-RotWord-W3 XOR Rcon]
+        ROT[RotWord] --> SUB[SubWord]
+        SUB --> RC[XOR Rcon]
+    end
+
+    style K fill:#f59e0b,color:#000
+    style W0 fill:#3b82f6,color:#fff
+    style W4 fill:#10b981,color:#fff
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step-by-step -->
+      <section class="section" id="stepSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🔍</span>
+            <h3>Step-by-Step Expansion</h3>
+          </div>
+          <div class="btn-group mb-2" role="group" aria-label="Step navigation">
+            <button class="btn btn-secondary btn-sm" id="prevStepBtn">◀ Previous Step</button>
+            <span id="stepLabel" class="badge badge-blue" style="align-self: center;">Step 0 / 43</span>
+            <button class="btn btn-secondary btn-sm" id="nextStepBtn">Next Step ▶</button>
+          </div>
+          <div id="stepContent"></div>
+        </div>
+      </section>
+
+      <!-- All Round Keys -->
+      <section class="section" id="roundKeysSection" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🔑</span>
+            <h3>Generated Round Keys</h3>
+          </div>
+          <div id="roundKeysList"></div>
+        </div>
+      </section>
+
+      <!-- Rcon Table -->
+      <section class="section">
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">📋</span>
+            <h3>Rcon (Round Constant) Values</h3>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Round</th>
+                  <th>Rcon (hex)</th>
+                  <th>Rcon (binary)</th>
+                </tr>
+              </thead>
+              <tbody id="rconTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/aes-js.js"></script>
+  <script src="js/key-explorer.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

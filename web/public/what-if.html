@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What If? — AES Security Lab</title>
+  <meta name="description" content="Interactive AES security lab with 12 scenarios: bit flips, nonce reuse, wrong keys, ECB leakage, and more.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="what-if.html" class="active" aria-current="page">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>What If? — AES Security Lab</h1>
+        <p class="subtitle">Experiment with 12 security scenarios to understand AES vulnerabilities and best practices</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="alert alert-warning" role="note">
+        <span aria-hidden="true">⚠️</span>
+        <div><strong>Educational JavaScript implementation — NOT for production use.</strong> All scenarios use synthetic data only. No real encryption keys or sensitive data are used.</div>
+      </div>
+
+      <!-- Scenario Navigation -->
+      <div class="tabs" role="tablist" aria-label="Security scenarios">
+        <button class="tab active" role="tab" aria-selected="true" aria-controls="s1" data-scenario="1">S1: Bit Flip</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s2" data-scenario="2">S2: Bad Tag</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s3" data-scenario="3">S3: Wrong Key</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s4" data-scenario="4">S4: Nonce Reuse</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s5" data-scenario="5">S5: 128 vs 256</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s6" data-scenario="6">S6: Size Scaling</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s7" data-scenario="7">S7: HW Accel</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s8" data-scenario="8">S8: Broken Impl</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s9" data-scenario="9">S9: Mid-File</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s10" data-scenario="10">S10: ECB Leak</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s11" data-scenario="11">S11: Variance</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="s12" data-scenario="12">S12: Decision</button>
+      </div>
+
+      <!-- S1: Modified Ciphertext -->
+      <div class="tab-panel active" id="s1" role="tabpanel" aria-label="Scenario 1: Modified ciphertext">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">1</span>
+            <h3 class="scenario-title">Modified Ciphertext (Bit Flip)</h3>
+          </div>
+          <p class="scenario-question">What happens if an attacker flips a single bit in AES-GCM ciphertext?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> AES-128-GCM encrypted message. Attacker flips bit 3 of byte 0 in the ciphertext.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s1BitSelect">Select bit to flip (0-7):</label>
+            <input type="range" id="s1BitSelect" min="0" max="7" value="3" class="form-input" style="width: 100%;" aria-describedby="s1BitValue">
+            <span id="s1BitValue" class="badge badge-blue">Bit 3</span>
+          </div>
+          <button class="btn btn-primary" id="s1Run">Run Scenario</button>
+          <div id="s1Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> AES-GCM's authentication tag detects any modification. A single bit flip causes decryption to fail completely — the attacker cannot selectively modify ciphertext.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Always use authenticated encryption (GCM, CCM, or Encrypt-then-MAC). Never use unauthenticated modes like ECB or CBC without a MAC.
+          </div>
+          <p><a href="dashboard.html">View benchmark data</a> | <a href="what-if.html#s2">Next: Modified Tag →</a></p>
+        </div>
+      </div>
+
+      <!-- S2: Modified Authentication Tag -->
+      <div class="tab-panel" id="s2" role="tabpanel" aria-label="Scenario 2: Modified authentication tag">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">2</span>
+            <h3 class="scenario-title">Modified Authentication Tag</h3>
+          </div>
+          <p class="scenario-question">What if an attacker modifies the GCM authentication tag instead of the ciphertext?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> AES-128-GCM encrypted message. Attacker flips bits in the 16-byte authentication tag.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s2TagBits">Number of bits to flip in tag:</label>
+            <input type="range" id="s2TagBits" min="1" max="128" value="16" class="form-input" style="width: 100%;">
+          </div>
+          <button class="btn btn-primary" id="s2Run">Run Scenario</button>
+          <div id="s2Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> The authentication tag is a cryptographic checksum over the ciphertext and AAD. Any modification — even a single bit — will cause verification to fail with overwhelming probability.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> The tag must be transmitted securely alongside the ciphertext. Use constant-time comparison when verifying tags.
+          </div>
+          <p><a href="what-if.html#s1">← Previous: Bit Flip</a> | <a href="what-if.html#s3">Next: Wrong Key →</a></p>
+        </div>
+      </div>
+
+      <!-- S3: Wrong Key -->
+      <div class="tab-panel" id="s3" role="tabpanel" aria-label="Scenario 3: Wrong key">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">3</span>
+            <h3 class="scenario-title">Wrong Key</h3>
+          </div>
+          <p class="scenario-question">What happens when you try to decrypt AES-GCM ciphertext with the wrong key?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Message encrypted with Key A. Attacker attempts decryption with Key B (single bit different).
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s3KeyDiff">Key difference (bits):</label>
+            <input type="range" id="s3KeyDiff" min="1" max="128" value="1" class="form-input" style="width: 100%;">
+          </div>
+          <button class="btn btn-primary" id="s3Run">Run Scenario</button>
+          <div id="s3Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> AES has no "partial decryption" — a wrong key produces completely random-looking output. With GCM, the authentication tag will also fail, preventing any information leakage.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Use strong, randomly generated keys. Implement proper key management with rotation and secure storage.
+          </div>
+          <p><a href="what-if.html#s2">← Previous: Bad Tag</a> | <a href="what-if.html#s4">Next: Nonce Reuse →</a></p>
+        </div>
+      </div>
+
+      <!-- S4: GCM Nonce Reuse -->
+      <div class="tab-panel" id="s4" role="tabpanel" aria-label="Scenario 4: GCM nonce reuse">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">4</span>
+            <h3 class="scenario-title">GCM Nonce Reuse</h3>
+          </div>
+          <p class="scenario-question">Why is reusing a GCM nonce with the same key catastrophic?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Two different messages encrypted with AES-128-GCM using the same key and nonce.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s4Msg1">Message 1:</label>
+            <input type="text" id="s4Msg1" class="form-input" value="Transfer $1000 to Alice" maxlength="64">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s4Msg2">Message 2:</label>
+            <input type="text" id="s4Msg2" class="form-input" value="Transfer $9000 to Bob" maxlength="64">
+          </div>
+          <button class="btn btn-primary" id="s4Run">Run Scenario</button>
+          <div id="s4Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> Nonce reuse in GCM leaks the XOR of the two plaintexts and allows forgery of authentication tags. This completely breaks both confidentiality and authenticity. The GHASH key can be recovered.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Use a counter-based nonce (guaranteed unique) or random 96-bit nonces (collision probability negligible). Never reuse a nonce with the same key.
+          </div>
+          <p><a href="what-if.html#s3">← Previous: Wrong Key</a> | <a href="what-if.html#s5">Next: 128 vs 256 →</a></p>
+        </div>
+      </div>
+
+      <!-- S5: AES-128 vs AES-256 -->
+      <div class="tab-panel" id="s5" role="tabpanel" aria-label="Scenario 5: AES-128 vs AES-256 comparison">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">5</span>
+            <h3 class="scenario-title">AES-128 vs AES-256</h3>
+          </div>
+          <p class="scenario-question">How do AES-128 and AES-256 compare in security and performance?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Synthetic benchmark data comparing key sizes.
+          </div>
+          <button class="btn btn-primary" id="s5Run">Run Comparison</button>
+          <div id="s5Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> AES-256 provides a larger security margin against quantum attacks (Grover's algorithm halves effective key size: 128→64, 256→128). AES-128 is still considered secure against classical attacks.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Use AES-256 for long-term data protection or post-quantum preparation. AES-128 is acceptable for ephemeral data.
+          </div>
+          <p><a href="what-if.html#s4">← Previous: Nonce Reuse</a> | <a href="what-if.html#s6">Next: Size Scaling →</a></p>
+        </div>
+      </div>
+
+      <!-- S6: Input Size Scaling -->
+      <div class="tab-panel" id="s6" role="tabpanel" aria-label="Scenario 6: Input size scaling">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">6</span>
+            <h3 class="scenario-title">Input Size Scaling</h3>
+          </div>
+          <p class="scenario-question">How does AES performance scale with input size?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Real benchmark data from 16 bytes to 10 MB.
+          </div>
+          <button class="btn btn-primary" id="s6Run">Run Scenario</button>
+          <div id="s6Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> Small inputs are dominated by overhead (key setup, function call). Large inputs approach the raw AES throughput. This is why hardware acceleration (AES-NI) matters most for bulk data.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> For small messages, the performance difference between implementations is negligible. For bulk data, always use hardware-accelerated implementations.
+          </div>
+          <p><a href="dashboard.html">View full benchmark data</a> | <a href="what-if.html#s5">← Previous: 128 vs 256</a> | <a href="what-if.html#s7">Next: HW Accel →</a></p>
+        </div>
+      </div>
+
+      <!-- S7: Hardware Acceleration -->
+      <div class="tab-panel" id="s7" role="tabpanel" aria-label="Scenario 7: Hardware acceleration detection">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">7</span>
+            <h3 class="scenario-title">Hardware Acceleration Detection</h3>
+          </div>
+          <p class="scenario-question">How much does AES-NI hardware acceleration improve performance?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Comparing scratch C++ (no AES-NI) vs OpenSSL (with AES-NI).
+          </div>
+          <button class="btn btn-primary" id="s7Run">Run Scenario</button>
+          <div id="s7Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> AES-NI provides 10-100x speedup over software implementations. It also provides better side-channel resistance since the CPU handles AES in dedicated hardware.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Always use hardware-accelerated AES when available. Check CPU flags before falling back to software implementations.
+          </div>
+          <p><a href="dashboard.html">View benchmark comparison</a> | <a href="what-if.html#s6">← Previous: Size Scaling</a> | <a href="what-if.html#s8">Next: Broken Impl →</a></p>
+        </div>
+      </div>
+
+      <!-- S8: Incorrect AES Implementation -->
+      <div class="tab-panel" id="s8" role="tabpanel" aria-label="Scenario 8: Incorrect AES implementation">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">8</span>
+            <h3 class="scenario-title">Incorrect AES Implementation</h3>
+          </div>
+          <p class="scenario-question">What if SubBytes uses a deliberately broken S-box? Round-trips pass but KATs fail.</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> AES-128 with S-box where S[0x00] = 0x00 (should be 0x63).
+          </div>
+          <button class="btn btn-primary" id="s8Run">Run Scenario</button>
+          <div id="s8Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> A broken S-box still produces a bijection (round-trips work), but the output is completely wrong. Known Answer Tests (KATs) from FIPS 197 would catch this immediately. Always validate against test vectors.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Always test against FIPS 197 Appendix B and C test vectors. Use established libraries (OpenSSL, libsodium) rather than rolling your own crypto.
+          </div>
+          <p><a href="visualizer.html">Try the visualizer</a> | <a href="what-if.html#s7">← Previous: HW Accel</a> | <a href="what-if.html#s9">Next: Mid-File →</a></p>
+        </div>
+      </div>
+
+      <!-- S9: Authentication Failure Mid-File -->
+      <div class="tab-panel" id="s9" role="tabpanel" aria-label="Scenario 9: Authentication failure mid-file">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">9</span>
+            <h3 class="scenario-title">Authentication Failure Mid-File</h3>
+          </div>
+          <p class="scenario-question">What happens when authentication fails partway through decrypting a large file?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> 1 MB file encrypted with AES-GCM. Bit flip introduced at 50% of the file.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s9FlipPos">Bit flip position (%):</label>
+            <input type="range" id="s9FlipPos" min="0" max="100" value="50" class="form-input" style="width: 100%;">
+          </div>
+          <button class="btn btn-primary" id="s9Run">Run Scenario</button>
+          <div id="s9Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> GCM authentication is all-or-nothing. If any bit is wrong, the entire decryption fails. You cannot recover partial data — this is by design to prevent oracle attacks.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> For large files, consider chunking with separate authentication per chunk, or use a streaming AEAD. Always verify the tag before using any decrypted data.
+          </div>
+          <p><a href="what-if.html#s8">← Previous: Broken Impl</a> | <a href="what-if.html#s10">Next: ECB Leak →</a></p>
+        </div>
+      </div>
+
+      <!-- S10: ECB Pattern Leakage -->
+      <div class="tab-panel" id="s10" role="tabpanel" aria-label="Scenario 10: ECB pattern leakage">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">10</span>
+            <h3 class="scenario-title">ECB Pattern Leakage</h3>
+          </div>
+          <p class="scenario-question">Why does ECB mode leak patterns in encrypted data?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> A 16×16 pixel image encrypted with AES-ECB. Identical plaintext blocks produce identical ciphertext blocks.
+          </div>
+          <button class="btn btn-primary" id="s10Run">Run Scenario</button>
+          <div id="s10Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> ECB encrypts each block independently. Identical plaintext blocks → identical ciphertext blocks. This preserves patterns in the data. The famous "ECB penguin" demonstrates this visually.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Never use ECB for data with patterns. Use GCM, CBC (with random IV), or CTR mode. Always use authenticated encryption.
+          </div>
+          <p><a href="what-if.html#s9">← Previous: Mid-File</a> | <a href="what-if.html#s11">Next: Variance →</a></p>
+        </div>
+      </div>
+
+      <!-- S11: Memory/Timing Variance -->
+      <div class="tab-panel" id="s11" role="tabpanel" aria-label="Scenario 11: Memory and timing measurement variance">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">11</span>
+            <h3 class="scenario-title">Memory/Timing Measurement Variance</h3>
+          </div>
+          <p class="scenario-question">How much do memory and timing measurements vary between runs?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Real benchmark data with 10 repetitions per measurement.
+          </div>
+          <button class="btn btn-primary" id="s11Run">Run Scenario</button>
+          <div id="s11Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> Timing variance can leak information about keys (timing attacks). Constant-time implementations are essential. Memory measurements vary due to OS paging, allocator behavior, and ASLR.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Use constant-time implementations (OpenSSL, libsodium). Run benchmarks multiple times and report variance. Isolate benchmark processes from other workloads.
+          </div>
+          <p><a href="dashboard.html">View benchmark data</a> | <a href="what-if.html#s10">← Previous: ECB Leak</a> | <a href="what-if.html#s12">Next: Decision Guide →</a></p>
+        </div>
+      </div>
+
+      <!-- S12: Implementation Selection -->
+      <div class="tab-panel" id="s12" role="tabpanel" aria-label="Scenario 12: Implementation selection decision guide">
+        <div class="scenario-card">
+          <div class="scenario-header">
+            <span class="scenario-number">12</span>
+            <h3 class="scenario-title">Implementation Selection Decision Guide</h3>
+          </div>
+          <p class="scenario-question">Which AES implementation should you choose for your use case?</p>
+          <div class="scenario-conditions">
+            <strong>Conditions:</strong> Answer questions to get a recommendation.
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s12UseCase">Primary use case:</label>
+            <select id="s12UseCase" class="form-select">
+              <option value="general">General purpose encryption</option>
+              <option value="tls">TLS/HTTPS communication</option>
+              <option value="storage">Disk/file encryption</option>
+              <option value="embedded">Embedded/IoT device</option>
+              <option value="learning">Learning/education</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="s12Priority">Top priority:</label>
+            <select id="s12Priority" class="form-select">
+              <option value="security">Security</option>
+              <option value="speed">Speed</option>
+              <option value="memory">Low memory usage</option>
+              <option value="compatibility">Compatibility</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="s12Run">Get Recommendation</button>
+          <div id="s12Result" class="scenario-result" style="display: none;"></div>
+          <div class="scenario-lesson">
+            <strong>Security Lesson:</strong> There is no "best" AES implementation — only the best fit for your constraints. Always prefer established, audited libraries over custom implementations.
+          </div>
+          <div class="scenario-mitigation">
+            <strong>Mitigation:</strong> Use OpenSSL or libsodium for production. Use AES-GCM for authenticated encryption. Enable hardware acceleration when available.
+          </div>
+          <p><a href="what-if.html#s11">← Previous: Variance</a> | <a href="dashboard.html">View Dashboard</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/aes-js.js"></script>
+  <script src="js/benchmark-data.js"></script>
+  <script src="js/what-if.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>
