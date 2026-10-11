@@ -9,6 +9,23 @@ Encryption Standard (AES):
 - **Implementation B** — AES-128-GCM authenticated encryption via the OpenSSL
   EVP interface, suitable for real file encryption.
 
+## Quick Start
+
+```bash
+# Build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+
+# Run all tests (1,431 checks)
+./build/aes_tests tests/test_vectors
+
+# Run benchmarks
+./scripts/run_benchmarks.sh
+
+# Run complete workflow
+./scripts/run_all.sh
+```
+
 ## Project Structure
 
 ```
@@ -26,11 +43,48 @@ Encryption Standard (AES):
 ├── tests/
 │   ├── test_vectors/           # NIST CAVP test vectors + FIPS 197 KATs
 │   └── test_plan.md            # Detailed testing plan
-├── scripts/
-│   ├── run_all.sh              # Complete automation script
-│   └── run_all.py              # Result processing and figure generation
-├── results/                    # Benchmark and test results (generated)
-└── reports/                    # Final report and figures (generated)
+├── web/                        # Interactive educational platform
+│   ├── public/                 # Static web app (HTML/CSS/JS)
+│   └── tests/                  # Playwright E2E tests
+├── scripts/                    # Automation scripts
+│   ├── run_all.sh              # Complete workflow
+│   ├── run_tests.sh            # Test-only runner
+│   ├── run_regression.sh       # Regression suite
+│   ├── run_sanitizers.sh       # Sanitizer build + test
+│   ├── run_benchmarks.sh       # Benchmark-only runner
+│   ├── run_memory_tests.sh     # Memory measurement runner
+│   ├── build_web.sh            # Web platform builder
+│   ├── run_e2e.sh              # Browser E2E tests
+│   └── validate_results.py     # Benchmark data validator
+├── docs/                       # Comprehensive documentation
+├── results/                    # Benchmark and test results
+├── reports/                    # Final report and figures
+└── presentation/               # Presentation materials
+```
+
+## Interactive Web Platform
+
+The project includes a full interactive educational website:
+
+- **Landing Page** — Project overview and navigation
+- **AES Fundamentals** — Beginner-to-advanced explanations
+- **AES Round Visualizer** — Step through all 10 rounds with real state display
+- **Key Expansion Explorer** — Visualize RotWord, SubWord, Rcon, XOR
+- **Comparison Dashboard** — Performance charts and implementation comparison
+- **What If? Security Lab** — 12 interactive security scenarios
+
+### Running the Web Platform
+
+```bash
+# From the web directory
+cd web
+npm install
+npm run dev
+
+# Or serve statically
+cd web/public
+python3 -m http.server 8080
+# Open http://localhost:8080
 ```
 
 ## Prerequisites
@@ -38,19 +92,19 @@ Encryption Standard (AES):
 - C++17 compiler (clang++ or g++)
 - CMake 3.16+
 - OpenSSL development files
-- Python 3 (for result processing; no external packages required)
+- Python 3 (for result processing)
+- Node.js 18+ (for web platform and E2E tests)
 
 ### macOS
 
 ```bash
-brew install cmake openssl
+brew install cmake openssl node
 ```
 
-## Building
+### Ubuntu/Debian
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
+sudo apt-get install cmake g++ libssl-dev python3 nodejs npm
 ```
 
 ## Running
@@ -61,7 +115,7 @@ cmake --build build -j
 ./build/aes_tests tests/test_vectors
 ```
 
-This runs 1400+ checks including:
+This runs 1,431 checks including:
 - FIPS 197 known-answer tests
 - NIST CAVP ECB KATs (GFSbox, VarTxt, VarKey, MMT)
 - NIST CAVP GCM KATs (encrypt + decrypt incl. official FAIL cases)
@@ -96,6 +150,10 @@ cmake --build build-san -j
 ```bash
 ./build/aes_benchmark --impl scratch --op encrypt --size 1048576 \
     --reps 10 --csv results/benchmark_results.csv
+./build/aes_benchmark --impl openssl-ecb --op encrypt --size 1048576 \
+    --reps 10 --csv results/benchmark_results.csv
+./build/aes_benchmark --impl openssl-gcm --op encrypt --size 1048576 \
+    --reps 10 --csv results/benchmark_results.csv
 ```
 
 ### Complete Workflow
@@ -128,4 +186,8 @@ mbedTLS) for real applications.
 ## License
 
 This project is provided for educational purposes as part of a Software
-Security course assignment.
+Security course assignment. See [LICENSE](LICENSE) for details.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
