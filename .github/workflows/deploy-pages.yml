@@ -1,0 +1,79 @@
+name: Deploy to GitHub Pages
+
+# The website is a fully static site (HTML/CSS/JS, no backend, no build step).
+# All asset paths in web/public/*.html are RELATIVE (e.g. "js/main.js"),
+# so it works unchanged under a GitHub Pages project site path
+# (https://<owner>.github.io/<repo>/). No base-path rewriting is required.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/public/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Verify generated data is in sync with the CSVs
+        run: |
+          # benchmark-data.js must be the product of the CSVs in results/.
+          # A stale generated file fails the build rather than publishing
+          # numbers that no longer match the raw measurements.
+          python3 scripts/generate_web_data.py --check
+
+      - name: Verify site is complete
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp -r web/public/. _site/
+          # Fail the build if a required page or asset is missing.
+          required="index.html fundamentals.html visualizer.html key-explorer.html dashboard.html what-if.html 404.html case-study.html css/style.css js/main.js js/aes-js.js js/visualizer.js js/key-explorer.js js/dashboard.js js/what-if.js js/benchmark-data.js js/case-study.js"
+          missing=0
+          for f in $required; do
+            if [ ! -f "_site/$f" ]; then echo "::error::missing required file: $f"; missing=1; fi
+          done
+          [ "$missing" -eq 0 ]
+          # Fail if any page references a missing local asset.
+          grep -rhoE '(src|href)="[^"]+"' _site --include='*.html' \
+            | sed -E 's/.*="([^"]+)"/\1/' \
+            | grep -vE '^(https?:|data:|#|mailto:)' \
+            | sed 's/#.*//' | sort -u | while read -r p; do
+                [ -z "$p" ] && continue
+                [ -f "_site/$p" ] || { echo "::error::broken local link: $p"; exit 1; }
+              done
+          echo "Site verification passed."
+          find _site -type f | sort
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

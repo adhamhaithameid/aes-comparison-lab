@@ -21,6 +21,9 @@ coverage/
 test-results/
 playwright-report/
 
+# Deploy workflow staging directory
+_site/
+
 # macOS
 .DS_Store
 .AppleDouble
@@ -29,6 +32,9 @@ playwright-report/
 # IDE
 .vscode/
 .idea/
+
+# OpenCode tooling state
+.opencode/
 *.swp
 *.swo
 *~

@@ -13,10 +13,10 @@ jobs:
   web-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
@@ -35,12 +35,11 @@ jobs:
           cd web
           npm run build
 
-      - name: Run web unit tests
+      - name: Verify generated data is in sync
+        run: |
+          python3 scripts/generate_web_data.py --check
+
+      - name: Run Playwright tests
         run: |
           cd web
           npm test
-
-      - name: Run browser E2E tests
-        run: |
-          cd web
-          npm run test:e2e
