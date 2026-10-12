@@ -287,13 +287,14 @@
       if (actualHex === FIPS_CIPHERTEXT) {
         const alertDiv = document.querySelector('#ciphertextSection .alert-success');
         if (alertDiv) {
-          alertDiv.innerHTML = '<span aria-hidden="true">✅</span><div><strong>Correct!</strong> Output matches FIPS 197 Appendix B: <code>' + FIPS_CIPHERTEXT + '</code></div>';
+          alertDiv.innerHTML = '<span aria-hidden="true" class="icon" data-icon="check-circle"></span><div><strong>Correct!</strong> Output matches FIPS 197 Appendix B: <code>' + FIPS_CIPHERTEXT + '</code></div>';
+          if (window.Icon) Icon.mountIn(alertDiv);
         }
       } else {
         const alertDiv = document.querySelector('#ciphertextSection .alert-success');
         if (alertDiv) {
           alertDiv.className = 'alert alert-danger mt-2';
-          alertDiv.innerHTML = '<span aria-hidden="true">❌</span><div><strong>Mismatch!</strong> Expected: <code>' + FIPS_CIPHERTEXT + '</code> Got: <code>' + actualHex + '</code></div>';
+          alertDiv.innerHTML = '<span aria-hidden="true" class="icon" data-icon="x-circle"></span><div><strong>Mismatch!</strong> Expected: <code>' + FIPS_CIPHERTEXT + '</code> Got: <code>' + actualHex + '</code></div>';
         }
       }
 

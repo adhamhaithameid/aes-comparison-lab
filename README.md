@@ -83,6 +83,8 @@ The project includes a full interactive educational website:
 - **Comparison Dashboard** — Performance charts and implementation comparison
 - **Case Study** — Engineering, performance, and security write-up
 - **What If? Security Lab** — 12 interactive security scenarios
+- **Knowledge Quiz** — 10 questions with instant feedback, streaks, timer,
+  keyboard shortcuts (press <kbd>1</kbd>–<kbd>4</kbd>), and a saved best score
 
 ### Running the Web Platform
 

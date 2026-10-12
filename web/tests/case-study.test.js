@@ -218,11 +218,11 @@ test.describe('Case study page', () => {
 
   test('lists every site page in the learning table', async ({ page }) => {
     const rows = page.locator('#pagesTable tr');
-    await expect(rows).toHaveCount(6);
+    await expect(rows).toHaveCount(7);
     const hrefs = await page.locator('#pagesTable a').evaluateAll(
       as => as.map(a => a.getAttribute('href')));
     for (const href of ['index.html', 'fundamentals.html', 'visualizer.html',
-      'key-explorer.html', 'dashboard.html', 'what-if.html']) {
+      'key-explorer.html', 'dashboard.html', 'what-if.html', 'quiz.html']) {
       expect(hrefs).toContain(href);
     }
   });

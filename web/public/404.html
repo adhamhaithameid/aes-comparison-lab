@@ -6,15 +6,15 @@
   <title>Page not found — AES Comparison Lab</title>
   <meta name="description" content="The requested page does not exist. Return to the AES Comparison Lab home page.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
 </head>
 <body>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
-        <span aria-hidden="true">🔐</span> AES Lab
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="fundamentals.html">Fundamentals</a></li>
@@ -22,10 +22,11 @@
         <li><a href="key-explorer.html">Key Explorer</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="what-if.html">What If?</a></li>
       </ul>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-        <span aria-hidden="true" id="themeIcon">🌙</span>
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
@@ -43,13 +44,13 @@
       <section class="section">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🧭</span>
+            <span aria-hidden="true" class="icon" data-icon="compass"></span>
             <h3>Where to go instead</h3>
           </div>
           <div class="card-grid">
             <div class="card">
               <div class="card-header">
-                <span aria-hidden="true">🏠</span>
+                <span aria-hidden="true" class="icon" data-icon="home"></span>
                 <h3>Home</h3>
               </div>
               <p class="text-muted">Project overview and the full map of the site.</p>
@@ -57,7 +58,7 @@
             </div>
             <div class="card">
               <div class="card-header">
-                <span aria-hidden="true">📄</span>
+                <span aria-hidden="true" class="icon" data-icon="file"></span>
                 <h3>Case study</h3>
               </div>
               <p class="text-muted">Engineering, performance, and security — the long-form write-up.</p>
@@ -65,7 +66,7 @@
             </div>
             <div class="card">
               <div class="card-header">
-                <span aria-hidden="true">📈</span>
+                <span aria-hidden="true" class="icon" data-icon="trending"></span>
                 <h3>Benchmark dashboard</h3>
               </div>
               <p class="text-muted">Measured performance data for all three implementations.</p>

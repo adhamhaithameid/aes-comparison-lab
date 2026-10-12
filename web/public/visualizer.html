@@ -6,16 +6,16 @@
   <title>Round Visualizer — AES Education Platform</title>
   <meta name="description" content="Interactive AES-128 round visualizer: step through all 10 rounds with the FIPS 197 Appendix B test vector.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
 <body>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
-        <span aria-hidden="true">🔐</span> AES Lab
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="fundamentals.html">Fundamentals</a></li>
@@ -23,10 +23,11 @@
         <li><a href="key-explorer.html">Key Explorer</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="what-if.html">What If?</a></li>
       </ul>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-        <span aria-hidden="true" id="themeIcon">🌙</span>
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
@@ -44,7 +45,7 @@
       <section class="section">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">📥</span>
+            <span aria-hidden="true" class="icon" data-icon="download"></span>
             <h3>Input</h3>
             <span class="badge badge-yellow">FIPS 197 Appendix B</span>
           </div>
@@ -66,7 +67,7 @@
             <button class="btn btn-secondary" id="resetBtn">Reset</button>
           </div>
           <div class="alert alert-warning mt-2" role="note">
-            <span aria-hidden="true">⚠️</span>
+            <span aria-hidden="true" class="icon" data-icon="warning"></span>
             <div><strong>Educational JavaScript implementation — NOT for production use.</strong> This is a slow, clear reference for learning AES. Use OpenSSL or similar for real applications.</div>
           </div>
         </div>
@@ -76,7 +77,7 @@
       <section class="section" id="roundSection" style="display: none;">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🔄</span>
+            <span aria-hidden="true" class="icon" data-icon="refresh"></span>
             <h3>Round Navigation</h3>
           </div>
           <div class="step-indicator" id="stepIndicator" role="progressbar" aria-label="Encryption progress" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"></div>
@@ -96,7 +97,7 @@
         <div class="grid-2">
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">📊</span>
+              <span aria-hidden="true" class="icon" data-icon="chart"></span>
               <h3>State Matrix</h3>
               <span id="roundBadge" class="badge badge-blue">Round 0</span>
             </div>
@@ -107,7 +108,7 @@
 
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🔑</span>
+              <span aria-hidden="true" class="icon" data-icon="key"></span>
               <h3>Round Key</h3>
             </div>
             <div id="roundKeyDisplay" class="round-key-display"></div>
@@ -122,7 +123,7 @@
         <!-- Transformation Details -->
         <div class="card mt-2">
           <div class="card-header">
-            <span aria-hidden="true">🔍</span>
+            <span aria-hidden="true" class="icon" data-icon="search"></span>
             <h3>Transformation Details</h3>
           </div>
           <div id="transformDetails">
@@ -135,7 +136,7 @@
       <section class="section" id="allKeysSection" style="display: none;">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🗝️</span>
+            <span aria-hidden="true" class="icon" data-icon="key"></span>
             <h3>All Round Keys</h3>
           </div>
           <div id="allRoundKeys"></div>
@@ -146,12 +147,12 @@
       <section class="section" id="ciphertextSection" style="display: none;">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🔒</span>
+            <span aria-hidden="true" class="icon" data-icon="lock"></span>
             <h3>Ciphertext Output</h3>
           </div>
           <div class="hex-dump" id="ciphertextOutput"></div>
           <div class="alert alert-success mt-2" role="status">
-            <span aria-hidden="true">✅</span>
+            <span aria-hidden="true" class="icon" data-icon="check-circle"></span>
             <div>Expected (FIPS 197): <code>69c4e0d86a7b0430d8cdb78070b4c55a</code></div>
           </div>
         </div>

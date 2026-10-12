@@ -6,7 +6,7 @@
   <title>Implementation Dashboard — AES Education Platform</title>
   <meta name="description" content="Compare AES implementations: scratch C++, OpenSSL ECB, OpenSSL GCM with real benchmark data.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
@@ -14,9 +14,9 @@
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
-        <span aria-hidden="true">🔐</span> AES Lab
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="fundamentals.html">Fundamentals</a></li>
@@ -24,10 +24,11 @@
         <li><a href="key-explorer.html">Key Explorer</a></li>
         <li><a href="dashboard.html" class="active" aria-current="page">Dashboard</a></li>
         <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="what-if.html">What If?</a></li>
       </ul>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-        <span aria-hidden="true" id="themeIcon">🌙</span>
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
@@ -45,7 +46,7 @@
       <section class="section">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🔧</span>
+            <span aria-hidden="true" class="icon" data-icon="tool"></span>
             <h3>Filters</h3>
           </div>
           <div class="grid-3">
@@ -89,18 +90,18 @@
 
       <!-- Charts -->
       <section class="section">
-        <h2 class="section-title"><span aria-hidden="true">📈</span> Performance Charts</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="trending"></span> Performance Charts</h2>
         <div class="grid-2">
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">⏱️</span>
+              <span aria-hidden="true" class="icon" data-icon="timer"></span>
               <h3>Execution Time (ns)</h3>
             </div>
             <canvas id="timeChart" aria-label="Bar chart of execution time in nanoseconds" role="img"></canvas>
           </div>
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🚀</span>
+              <span aria-hidden="true" class="icon" data-icon="rocket"></span>
               <h3>Throughput (MiB/s)</h3>
             </div>
             <canvas id="throughputChart" aria-label="Bar chart of throughput in MiB/s" role="img"></canvas>
@@ -111,7 +112,7 @@
       <section class="section">
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">💾</span>
+            <span aria-hidden="true" class="icon" data-icon="save"></span>
             <h3>Memory Usage (Peak RSS)</h3>
           </div>
           <canvas id="memoryChart" aria-label="Bar chart of peak memory usage in bytes" role="img"></canvas>
@@ -120,10 +121,10 @@
 
       <!-- Comparison Table -->
       <section class="section">
-        <h2 class="section-title"><span aria-hidden="true">📋</span> Detailed Comparison</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="clipboard"></span> Detailed Comparison</h2>
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">📊</span>
+            <span aria-hidden="true" class="icon" data-icon="chart"></span>
             <h3>Aggregate Benchmark Data</h3>
           </div>
           <div class="table-wrapper">
@@ -147,11 +148,11 @@
 
       <!-- Implementation Profiles -->
       <section class="section">
-        <h2 class="section-title"><span aria-hidden="true">🏗️</span> Implementation Profiles</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="blueprint"></span> Implementation Profiles</h2>
         <div class="card-grid">
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🔧</span>
+              <span aria-hidden="true" class="icon" data-icon="tool"></span>
               <h3>Scratch C++</h3>
               <span class="badge badge-yellow">Educational</span>
             </div>
@@ -167,7 +168,7 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🔒</span>
+              <span aria-hidden="true" class="icon" data-icon="lock"></span>
               <h3>OpenSSL ECB</h3>
               <span class="badge badge-blue">Production</span>
             </div>
@@ -183,7 +184,7 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">✅</span>
+              <span aria-hidden="true" class="icon" data-icon="check-circle"></span>
               <h3>OpenSSL GCM</h3>
               <span class="badge badge-green">Recommended</span>
             </div>
@@ -202,7 +203,7 @@
 
       <!-- Security Comparison -->
       <section class="section">
-        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Security Comparison</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="shield"></span> Security Comparison</h2>
         <div class="table-wrapper">
           <table>
             <thead>

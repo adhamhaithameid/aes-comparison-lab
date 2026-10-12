@@ -6,7 +6,7 @@
   <title>Case Study — AES Comparison Lab: Engineering, Performance, and Security</title>
   <meta name="description" content="Engineering case study for the AES Comparison Lab: architecture, implementation, testing strategy, measured benchmarks, interactive learning design, and the security limits of an educational cipher implementation.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
@@ -14,9 +14,9 @@
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
-        <span aria-hidden="true">🔐</span> AES Lab
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="fundamentals.html">Fundamentals</a></li>
@@ -24,10 +24,11 @@
         <li><a href="key-explorer.html">Key Explorer</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="case-study.html" class="active" aria-current="page">Case Study</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="what-if.html">What If?</a></li>
       </ul>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-        <span aria-hidden="true" id="themeIcon">🌙</span>
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
@@ -38,7 +39,6 @@
          =================================================================== -->
     <div class="page-header">
       <div class="container">
-        <p class="cs-eyebrow">Engineering Case Study</p>
         <h1>AES Comparison Lab</h1>
         <p class="subtitle">Engineering, Performance, and Security — how two AES-128 implementations were built, tested, measured, and turned into an interactive learning site.</p>
         <div class="cs-hero-stats" id="heroStats" role="list" aria-label="Project at a glance"></div>
@@ -52,7 +52,7 @@
            2. PROBLEM
            ================================================================ -->
       <section class="section" id="problem">
-        <h2 class="section-title"><span aria-hidden="true">🎯</span> The Problem</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="target"></span> The Problem</h2>
 
         <div class="card">
           <p>
@@ -77,17 +77,17 @@
 
         <div class="grid-3 cs-qcards">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">❓</span><h3>Question 1</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="help-circle"></span><h3>Question 1</h3></div>
             <p>Can an educational AES implementation be made <strong>provably correct</strong>
                against published NIST vectors while staying readable enough to step through?</p>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">⏱️</span><h3>Question 2</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="timer"></span><h3>Question 2</h3></div>
             <p>What is the <strong>real, measured cost</strong> of writing crypto by hand
                instead of using a hardware-accelerated library?</p>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🛡️</span><h3>Question 3</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="shield"></span><h3>Question 3</h3></div>
             <p>Where is the line between <strong>correct</strong> and <strong>safe to use</strong>,
                and can a site teach that line without overstating either side?</p>
           </div>
@@ -98,7 +98,7 @@
            3. ARCHITECTURE
            ================================================================ -->
       <section class="section" id="architecture">
-        <h2 class="section-title"><span aria-hidden="true">🏗️</span> Architecture</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="blueprint"></span> Architecture</h2>
 
         <div class="card">
           <p>
@@ -128,21 +128,21 @@ flowchart LR
 
         <div class="grid-3">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">⚙️</span><h3>Native core</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="settings"></span><h3>Native core</h3></div>
             <ul class="cs-facts" id="archCore"></ul>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🔗</span><h3>Data pipeline</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="link"></span><h3>Data pipeline</h3></div>
             <ul class="cs-facts" id="archPipeline"></ul>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🌐</span><h3>Static site</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="globe"></span><h3>Static site</h3></div>
             <ul class="cs-facts" id="archSite"></ul>
           </div>
         </div>
 
         <div class="alert alert-info">
-          <span aria-hidden="true">💡</span>
+          <span aria-hidden="true" class="icon" data-icon="bulb"></span>
           <div>
             <strong>Design decision:</strong> the browser never computes a benchmark. Every
             number on this site was measured natively and exported to CSV, then derived into a
@@ -155,12 +155,12 @@ flowchart LR
            4. IMPLEMENTATION
            ================================================================ -->
       <section class="section" id="implementation">
-        <h2 class="section-title"><span aria-hidden="true">🧩</span> Implementation</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="puzzle"></span> Implementation</h2>
 
         <div class="grid-2">
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🔧</span><h3>Implementation A — From scratch</h3>
+              <span aria-hidden="true" class="icon" data-icon="tool"></span><h3>Implementation A — From scratch</h3>
               <span class="badge badge-yellow">Educational</span>
             </div>
             <p>
@@ -176,7 +176,7 @@ flowchart LR
 
           <div class="card">
             <div class="card-header">
-              <span aria-hidden="true">🔒</span><h3>Implementation B — OpenSSL</h3>
+              <span aria-hidden="true" class="icon" data-icon="lock"></span><h3>Implementation B — OpenSSL</h3>
               <span class="badge badge-green">Production</span>
             </div>
             <p>
@@ -191,7 +191,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">📐</span><h3>The comparison is only fair where it is like-for-like</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="triangle"></span><h3>The comparison is only fair where it is like-for-like</h3></div>
           <div class="table-wrapper">
             <table>
               <thead>
@@ -225,11 +225,11 @@ flowchart LR
            5. TESTING
            ================================================================ -->
       <section class="section" id="testing">
-        <h2 class="section-title"><span aria-hidden="true">✅</span> Testing</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="check-circle"></span> Testing</h2>
 
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🧪</span><h3>Test results</h3>
+            <span aria-hidden="true" class="icon" data-icon="flask"></span><h3>Test results</h3>
             <span class="badge badge-green" id="testBadge">—</span>
           </div>
           <div class="grid-2">
@@ -250,7 +250,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">📋</span><h3>What is covered</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="clipboard"></span><h3>What is covered</h3></div>
           <div class="table-wrapper">
             <table>
               <thead>
@@ -298,7 +298,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">🚫</span><h3>Negative and authentication tests</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="ban"></span><h3>Negative and authentication tests</h3></div>
           <div id="negativeTests"></div>
         </div>
       </section>
@@ -307,10 +307,10 @@ flowchart LR
            6. BENCHMARKS
            ================================================================ -->
       <section class="section" id="benchmarks">
-        <h2 class="section-title"><span aria-hidden="true">📊</span> Benchmarks</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="chart"></span> Benchmarks</h2>
 
         <div class="alert alert-warning">
-          <span aria-hidden="true">📆</span>
+          <span aria-hidden="true" class="icon" data-icon="calendar"></span>
           <div>
             <strong>These are historical measurements</strong>, not live results. They were
             recorded on one machine, in one session, and are reproduced verbatim from the CSV
@@ -320,7 +320,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">🖥️</span><h3>Measurement environment</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="monitor"></span><h3>Measurement environment</h3></div>
           <div class="grid-2">
             <ul class="cs-facts" id="envList"></ul>
             <ul class="cs-facts" id="methodList"></ul>
@@ -329,7 +329,7 @@ flowchart LR
 
         <div class="card">
           <div class="card-header">
-            <span aria-hidden="true">🚀</span><h3>Encryption throughput by input size</h3>
+            <span aria-hidden="true" class="icon" data-icon="rocket"></span><h3>Encryption throughput by input size</h3>
           </div>
           <div style="position: relative; height: 320px;">
             <canvas id="throughputChart" aria-label="Line chart of encryption throughput in MiB/s across input sizes for scratch AES, OpenSSL ECB, and OpenSSL GCM" role="img"></canvas>
@@ -341,7 +341,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">📋</span><h3>Encryption throughput (MiB/s)</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="clipboard"></span><h3>Encryption throughput (MiB/s)</h3></div>
           <div class="table-wrapper">
             <table id="throughputTable">
               <thead><tr><th>Implementation</th><th>16 B</th><th>1 KiB</th><th>100 KiB</th><th>1 MiB</th><th>10 MiB</th></tr></thead>
@@ -352,7 +352,7 @@ flowchart LR
 
         <div class="grid-2">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">📋</span><h3>Decryption throughput (MiB/s)</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="clipboard"></span><h3>Decryption throughput (MiB/s)</h3></div>
             <div class="table-wrapper">
               <table id="decryptTable">
                 <thead><tr><th>Implementation</th><th>16 B</th><th>1 KiB</th><th>100 KiB</th><th>1 MiB</th><th>10 MiB</th></tr></thead>
@@ -361,7 +361,7 @@ flowchart LR
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🔑</span><h3>Key setup time</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="key"></span><h3>Key setup time</h3></div>
             <div class="table-wrapper">
               <table id="keysetupTable">
                 <thead><tr><th>Implementation</th><th>Mean</th><th>Median</th></tr></thead>
@@ -376,7 +376,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">💾</span><h3>Peak memory (RSS) at 10 MiB input</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="save"></span><h3>Peak memory (RSS) at 10 MiB input</h3></div>
           <div class="table-wrapper">
             <table id="memoryTable">
               <thead><tr><th>Implementation</th><th>Operation</th><th>Baseline RSS</th><th>Peak RSS</th></tr></thead>
@@ -397,7 +397,7 @@ flowchart LR
            7. INTERACTIVE LEARNING
            ================================================================ -->
       <section class="section" id="learning">
-        <h2 class="section-title"><span aria-hidden="true">🎓</span> Interactive Learning</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="graduation"></span> Interactive Learning</h2>
 
         <div class="card">
           <p>
@@ -415,7 +415,7 @@ flowchart LR
 
         <div class="grid-2">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🧪</span><h3>What If? Lab</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="flask"></span><h3>What If? Lab</h3></div>
             <p>
               <span id="scenarioCount" class="badge badge-purple">—</span>
               security scenarios, each framing one decision — reuse a nonce, drop the tag check,
@@ -426,7 +426,7 @@ flowchart LR
             <p><a class="btn btn-sm" href="what-if.html">Open the What If? Lab</a></p>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">👁️</span><h3>Visualizer &amp; Key Explorer</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="eye"></span><h3>Visualizer &amp; Key Explorer</h3></div>
             <p>
               The cipher made inspectable: step through every round of a single block and watch
               the state matrix change, then expand a key and see each round key derive from the
@@ -446,10 +446,10 @@ flowchart LR
            8. SECURITY & LIMITATIONS
            ================================================================ -->
       <section class="section" id="security">
-        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Security &amp; Limitations</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="shield"></span> Security &amp; Limitations</h2>
 
         <div class="alert alert-danger">
-          <span aria-hidden="true">⛔</span>
+          <span aria-hidden="true" class="icon" data-icon="ban"></span>
           <div>
             <strong>This project is for education, not protection.</strong> The from-scratch
             implementation is an unauthenticated block cipher with no defence against timing or
@@ -458,7 +458,7 @@ flowchart LR
         </div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">⚖️</span><h3>ECB and GCM are not interchangeable</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="scale"></span><h3>ECB and GCM are not interchangeable</h3></div>
           <p>
             The benchmark table lists them side by side because they run the same cipher, and
             that is the only axis on which they are comparable. They do not provide the same
@@ -501,7 +501,7 @@ flowchart LR
 
         <div class="grid-2">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">⚠️</span><h3>Limitations of this project</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="warning"></span><h3>Limitations of this project</h3></div>
             <ul class="cs-list">
               <li>From-scratch AES is <strong>unauthenticated</strong> — no tag, no tamper detection.</li>
               <li>It is <strong>not constant-time</strong>; table lookups leak through timing.</li>
@@ -511,7 +511,7 @@ flowchart LR
             </ul>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">📏</span><h3>Limits of the measurements</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="ruler"></span><h3>Limits of the measurements</h3></div>
             <ul class="cs-list">
               <li>Single platform: one Apple M1, one OS, one compiler.</li>
               <li>No repeated independent runs — figures carry run-to-run variance.</li>
@@ -527,17 +527,17 @@ flowchart LR
            9. RESULTS
            ================================================================ -->
       <section class="section" id="results">
-        <h2 class="section-title"><span aria-hidden="true">🏆</span> Results</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="trophy"></span> Results</h2>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">✅</span><h3>Against the acceptance criteria</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="check-circle"></span><h3>Against the acceptance criteria</h3></div>
           <div id="criteriaList"></div>
         </div>
 
         <div class="grid-3" id="resultCards"></div>
 
         <div class="card">
-          <div class="card-header"><span aria-hidden="true">💭</span><h3>What the numbers actually say</h3></div>
+          <div class="card-header"><span aria-hidden="true" class="icon" data-icon="thought"></span><h3>What the numbers actually say</h3></div>
           <p id="resultsNarrative" class="cs-narrative"></p>
         </div>
       </section>
@@ -546,7 +546,7 @@ flowchart LR
            10. CONCLUSION & LINKS
            ================================================================ -->
       <section class="section" id="conclusion">
-        <h2 class="section-title"><span aria-hidden="true">🏁</span> Conclusion &amp; Links</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="flag"></span> Conclusion &amp; Links</h2>
 
         <div class="card">
           <p>
@@ -568,7 +568,7 @@ flowchart LR
 
         <div class="grid-3 cs-links">
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🔗</span><h3>Explore</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="link"></span><h3>Explore</h3></div>
             <ul class="cs-list">
               <li><a href="index.html">Home</a> — project overview</li>
               <li><a href="fundamentals.html">Fundamentals</a> — AES step by step</li>
@@ -579,11 +579,11 @@ flowchart LR
             </ul>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">📚</span><h3>Documentation</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="library"></span><h3>Documentation</h3></div>
             <ul class="cs-list" id="docLinks"></ul>
           </div>
           <div class="card">
-            <div class="card-header"><span aria-hidden="true">🗃️</span><h3>Source data</h3></div>
+            <div class="card-header"><span aria-hidden="true" class="icon" data-icon="database"></span><h3>Source data</h3></div>
             <ul class="cs-list" id="sourceLinks"></ul>
             <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.875rem;" id="provenanceFootnote"></p>
           </div>

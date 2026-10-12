@@ -453,7 +453,7 @@
     const r = ratioAt('encrypt');
     if (r) {
       stats.push({
-        icon: '🚀',
+        icon: 'rocket',
         value: '~' + fmt.n(Math.round(r)) + '×',
         label: 'OpenSSL ECB faster than scratch at ' + fmt.size(LARGE),
         source: 'derived: openssl-ecb ÷ scratch mean throughput'
@@ -463,7 +463,7 @@
     const oh = gcmOverhead();
     if (oh != null) {
       stats.push({
-        icon: '🔐',
+        icon: 'lock',
         value: oh.toFixed(1) + '%',
         label: 'GCM throughput cost vs ECB at ' + fmt.size(LARGE),
         source: 'derived: 1 − (gcm ÷ ecb) mean throughput'
@@ -476,7 +476,7 @@
       const ms = ks.reduce(function (a, x) { return a + x.mean_time_ns; }, 0) / ks.length;
       const mo = ksO.reduce(function (a, x) { return a + x.mean_time_ns; }, 0) / ksO.length;
       stats.push({
-        icon: '🔑',
+        icon: 'key',
         value: '~' + (ms / mo).toFixed(0) + '×',
         label: 'slower key setup in the scratch implementation',
         source: 'derived: mean of per-size mean keysetup times'
@@ -488,8 +488,9 @@
       card.className = 'card cs-stat-card';
       const head = document.createElement('div');
       head.className = 'card-header';
-      head.innerHTML = '<span aria-hidden="true">' + s.icon + '</span><h3>' +
+      head.innerHTML = '<span aria-hidden="true" class="icon"></span><h3>' +
         esc(s.value) + '</h3>';
+      if (window.Icon) Icon.mount(head.querySelector('.icon'), s.icon);
       const body = document.createElement('div');
       const p = document.createElement('p');
       p.textContent = s.label;
@@ -628,7 +629,9 @@
       ['dashboard.html', 'Filter real benchmark data by implementation, operation, size',
         'What the measurements do and do not show'],
       ['what-if.html', 'Break things on purpose and read the consequence',
-        'Why each rule of using AES exists']
+        'Why each rule of using AES exists'],
+      ['quiz.html', 'Answer ten questions with instant feedback and a score',
+        'Whether the lessons actually landed']
     ];
 
     const tbody = el('pagesTable');
@@ -751,7 +754,7 @@
 
       if (typeof tests.checks === 'number') {
         cards.push({
-          icon: '✅',
+          icon: 'check-circle',
           value: fmt.n(tests.checks),
           label: 'checks passed with ' + fmt.n(tests.failures) + ' failures',
           src: 'results/test_results.txt'
@@ -759,7 +762,7 @@
       }
       if (r) {
         cards.push({
-          icon: '⏱️',
+          icon: 'timer',
           value: '~' + fmt.n(Math.round(r)) + '×',
           label: 'faster with a hardware-accelerated library',
           src: 'derived from benchmark_aggregate.csv'
@@ -767,7 +770,7 @@
       }
       if (oh != null) {
         cards.push({
-          icon: '🛡️',
+          icon: 'shield',
           value: oh.toFixed(1) + '%',
           label: 'throughput given up for authentication',
           src: 'derived from benchmark_aggregate.csv'

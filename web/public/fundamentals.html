@@ -6,16 +6,16 @@
   <title>Fundamentals — AES Education Platform</title>
   <meta name="description" content="Learn AES fundamentals: plaintext, ciphertext, keys, symmetric encryption, block sizes, rounds, key expansion, and authenticated encryption.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
 <body>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
-        <span aria-hidden="true">🔐</span> AES Lab
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="fundamentals.html" class="active" aria-current="page">Fundamentals</a></li>
@@ -23,10 +23,11 @@
         <li><a href="key-explorer.html">Key Explorer</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="what-if.html">What If?</a></li>
       </ul>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
-        <span aria-hidden="true" id="themeIcon">🌙</span>
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
@@ -42,7 +43,7 @@
     <div class="container">
       <!-- Plaintext & Ciphertext -->
       <section class="section" id="plaintext-ciphertext">
-        <h2 class="section-title"><span aria-hidden="true">📝</span> Plaintext &amp; Ciphertext</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="pencil"></span> Plaintext &amp; Ciphertext</h2>
         <div class="grid-2">
           <div class="card">
             <h3>Plaintext</h3>
@@ -73,7 +74,7 @@ graph LR
 
       <!-- Keys -->
       <section class="section" id="keys">
-        <h2 class="section-title"><span aria-hidden="true">🗝️</span> Keys &amp; Symmetric Encryption</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="key"></span> Keys &amp; Symmetric Encryption</h2>
         <div class="card">
           <p>AES is a <strong>symmetric key</strong> algorithm — the same key is used for both encryption and decryption. This means both sender and receiver must share the secret key securely beforehand.</p>
           <div class="table-wrapper">
@@ -113,7 +114,7 @@ graph LR
 
       <!-- Block Size -->
       <section class="section" id="block-size">
-        <h2 class="section-title"><span aria-hidden="true">📦</span> Block Size</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="package"></span> Block Size</h2>
         <div class="card">
           <p>AES always operates on <strong>128-bit blocks</strong> (16 bytes), regardless of key size. This is different from the key size, which varies (128, 192, or 256 bits).</p>
           <div class="mermaid-container">
@@ -143,7 +144,7 @@ graph LR
 
       <!-- Rounds -->
       <section class="section" id="rounds">
-        <h2 class="section-title"><span aria-hidden="true">🔄</span> Rounds</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="refresh"></span> Rounds</h2>
         <div class="card">
           <p>Each AES encryption consists of multiple <strong>rounds</strong> of transformations. More rounds = more security but slower performance.</p>
           <div class="table-wrapper">
@@ -180,7 +181,7 @@ graph LR
 
       <!-- Key Expansion -->
       <section class="section" id="key-expansion">
-        <h2 class="section-title"><span aria-hidden="true">📐</span> Key Expansion</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="triangle"></span> Key Expansion</h2>
         <div class="card">
           <p>The original cipher key is expanded into <strong>round keys</strong> — one for each round's AddRoundKey operation. AES-128 uses a 16-byte key expanded to 176 bytes (11 round keys).</p>
           <div class="mermaid-container">
@@ -209,7 +210,7 @@ graph TD
 
       <!-- Block Cipher vs Mode -->
       <section class="section" id="block-vs-mode">
-        <h2 class="section-title"><span aria-hidden="true">🔀</span> Block Cipher vs. Mode of Operation</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="shuffle"></span> Block Cipher vs. Mode of Operation</h2>
         <div class="card">
           <p>AES is a <strong>block cipher</strong> — it encrypts one 16-byte block at a time. A <strong>mode of operation</strong> defines how to encrypt data longer than one block.</p>
           <div class="table-wrapper">
@@ -229,7 +230,7 @@ graph TD
                   <td>Electronic Codebook</td>
                   <td><span class="badge badge-red">No</span></td>
                   <td><span class="badge badge-green">Yes</span></td>
-                  <td>❌ Never for messages</td>
+                  <td><span class="icon" aria-hidden="true" data-icon="ban" style="color: var(--accent-danger);"></span> Never for messages</td>
                 </tr>
                 <tr>
                   <td><code>CBC</code></td>
@@ -260,7 +261,7 @@ graph TD
 
       <!-- Confidentiality vs Integrity -->
       <section class="section" id="confidentiality-integrity">
-        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Confidentiality vs. Integrity vs. Authenticity</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="shield"></span> Confidentiality vs. Integrity vs. Authenticity</h2>
         <div class="grid-3">
           <div class="card">
             <h3>Confidentiality</h3>
@@ -279,7 +280,7 @@ graph TD
           </div>
         </div>
         <div class="alert alert-warning">
-          <span aria-hidden="true">⚠️</span>
+          <span aria-hidden="true" class="icon" data-icon="warning"></span>
           <div>
             <strong>Common Mistake:</strong> Using AES-ECB or AES-CBC without a MAC (Message Authentication Code) means an attacker can modify ciphertext without detection. Always use <strong>authenticated encryption</strong> like AES-GCM.
           </div>
@@ -288,7 +289,7 @@ graph TD
 
       <!-- Authenticated Encryption -->
       <section class="section" id="ae">
-        <h2 class="section-title"><span aria-hidden="true">✅</span> Authenticated Encryption (AEAD)</h2>
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="check-circle"></span> Authenticated Encryption (AEAD)</h2>
         <div class="card">
           <p><strong>AEAD (Authenticated Encryption with Associated Data)</strong> provides confidentiality, integrity, and authenticity in a single operation. AES-GCM is the most widely used AEAD mode.</p>
           <div class="mermaid-container">

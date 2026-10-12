@@ -45,7 +45,7 @@ jobs:
           mkdir -p _site
           cp -r web/public/. _site/
           # Fail the build if a required page or asset is missing.
-          required="index.html fundamentals.html visualizer.html key-explorer.html dashboard.html what-if.html 404.html case-study.html css/style.css js/main.js js/aes-js.js js/visualizer.js js/key-explorer.js js/dashboard.js js/what-if.js js/benchmark-data.js js/case-study.js"
+          required="index.html fundamentals.html visualizer.html key-explorer.html dashboard.html what-if.html 404.html case-study.html quiz.html css/style.css js/main.js js/aes-js.js js/visualizer.js js/key-explorer.js js/dashboard.js js/what-if.js js/benchmark-data.js js/case-study.js js/quiz.js"
           missing=0
           for f in $required; do
             if [ ! -f "_site/$f" ]; then echo "::error::missing required file: $f"; missing=1; fi
