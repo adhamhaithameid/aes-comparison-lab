@@ -43,10 +43,8 @@ test.describe('AES Visualizer', () => {
     await page.locator('#encryptBtn').click();
     await page.waitForSelector('#allKeysSection:not([style*="display: none"])');
 
-    const roundKeys = await page.locator('#allKeysContainer .round-key-item');
-    // 11 round keys (0-10)
-    // We check the container exists and has content
-    const container = await page.locator('#allKeysContainer').textContent();
+    // 11 round keys (0-10) are rendered into #allRoundKeys
+    const container = await page.locator('#allRoundKeys').textContent();
     expect(container).toContain('Round Key 0');
     expect(container).toContain('Round Key 10');
   });

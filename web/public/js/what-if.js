@@ -87,7 +87,7 @@
       const originalTag = 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6';
       const modifiedTag = flipBitsInHex(originalTag, [bit]);
 
-      const details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
       details += '<tr><td>Modified bit</td><td>Bit ' + bit + ' of byte 0</td></tr>';
       details += '<tr><td>Original tag</td><td><code>' + originalTag + '</code></td></tr>';
       details += '<tr><td>Expected tag</td><td><code>' + modifiedTag + '</code></td></tr>';
@@ -115,7 +115,7 @@
       const originalTag = 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6';
       const modifiedTag = modifyTag(originalTag, numBits);
 
-      const details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
       details += '<tr><td>Bits modified</td><td>' + numBits + '</td></tr>';
       details += '<tr><td>Original tag</td><td><code>' + originalTag + '</code></td></tr>';
       details += '<tr><td>Modified tag</td><td><code>' + modifiedTag + '</code></td></tr>';
@@ -144,7 +144,7 @@
       const wrongKey = flipBitsInHex(correctKey, [diffBits]);
 
       // With GCM, wrong key means tag verification fails
-      const details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
       details += '<tr><td>Key difference</td><td>' + diffBits + ' bit(s)</td></tr>';
       details += '<tr><td>Correct key</td><td><code>' + correctKey + '</code></td></tr>';
       details += '<tr><td>Wrong key</td><td><code>' + wrongKey + '</code></td></tr>';
@@ -177,7 +177,7 @@
       // when nonce is reused: C1 XOR C2 = P1 XOR P2
       const p1p2Xor = xorHex(ct1, ct2);
 
-      const details = '<div class="alert alert-danger"><strong>Critical Vulnerability!</strong> Nonce reuse in GCM leaks plaintext XOR.</div>';
+      let details = '<div class="alert alert-danger"><strong>Critical Vulnerability!</strong> Nonce reuse in GCM leaks plaintext XOR.</div>';
       details += '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
       details += '<tr><td>Message 1</td><td><code>' + msg1 + '</code></td></tr>';
       details += '<tr><td>Message 2</td><td><code>' + msg2 + '</code></td></tr>';
@@ -203,7 +203,7 @@
 
     runBtn.addEventListener('click', function () {
       // Synthetic comparison data
-      const details = '<table class="table-wrapper"><tr><th>Property</th><th>AES-128</th><th>AES-256</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Property</th><th>AES-128</th><th>AES-256</th></tr>';
       details += '<tr><td>Key size</td><td>128 bits</td><td>256 bits</td></tr>';
       details += '<tr><td>Rounds</td><td>10</td><td>14</td></tr>';
       details += '<tr><td>Security margin (classical)</td><td><span class="badge badge-green">Secure</span></td><td><span class="badge badge-green">Secure</span></td></tr>';
@@ -265,7 +265,7 @@
 
       let speedup = (scratchTime / osslTime).toFixed(1);
 
-      const details = '<table class="table-wrapper"><tr><th>Implementation</th><th>1MB Encrypt Time</th><th>Throughput</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Implementation</th><th>1MB Encrypt Time</th><th>Throughput</th></tr>';
       details += '<tr><td><span class="badge badge-yellow">Scratch C++</span></td><td>' + BenchmarkData.formatTime(scratchTime) + '</td><td>~0.32 MiB/s</td></tr>';
       details += '<tr><td><span class="badge badge-blue">OpenSSL ECB</span></td><td>' + BenchmarkData.formatTime(osslTime) + '</td><td>~716 MiB/s</td></tr>';
       details += '</table>';
@@ -321,7 +321,7 @@
       // This would pass because the inverse would also use the broken S-box
       const roundTripWorks = true; // In practice, if inverse S-box is also broken correspondingly
 
-      const details = '<table class="table-wrapper"><tr><th>Test</th><th>Result</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Test</th><th>Result</th></tr>';
       details += '<tr><td>FIPS 197 KAT</td><td><span class="badge badge-red">FAILED</span></td></tr>';
       details += '<tr><td>Expected</td><td><code>' + expectedOutput + '</code></td></tr>';
       details += '<tr><td>Got</td><td><code>' + brokenOutput + '</code></td></tr>';
@@ -350,7 +350,7 @@
       const fileSize = 1048576; // 1 MB
       const flipByte = Math.floor(fileSize * pos / 100);
 
-      const details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
+      let details = '<table class="table-wrapper"><tr><th>Property</th><th>Value</th></tr>';
       details += '<tr><td>File size</td><td>' + BenchmarkData.formatSize(fileSize) + '</td></tr>';
       details += '<tr><td>Bit flip at</td><td>' + pos + '% (byte ' + flipByte + ')</td></tr>';
       details += '<tr><td>GCM tag</td><td><span class="badge badge-red">FAILED</span></td></tr>';
@@ -406,7 +406,7 @@
         }
       }
 
-      const details = '<div class="grid-2">';
+      let details = '<div class="grid-2">';
       details += '<div><h4>Original Pattern</h4><div id="ecbOriginal"></div></div>';
       details += '<div><h4>ECB Encrypted</h4><div id="ecbEncrypted"></div></div>';
       details += '</div>';
