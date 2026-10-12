@@ -4,6 +4,7 @@
   "description": "Interactive AES education web platform with visualizer, key explorer, dashboard, and security lab",
   "private": true,
   "scripts": {
+    "build": "echo 'Static site - no build required'",
     "test": "playwright test",
     "test:visualizer": "playwright test tests/visualizer.test.js",
     "test:what-if": "playwright test tests/what-if.test.js",

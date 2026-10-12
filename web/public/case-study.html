@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study — AES Comparison Lab: Engineering, Performance, and Security</title>
+  <meta name="description" content="Engineering case study for the AES Comparison Lab: architecture, implementation, testing strategy, measured benchmarks, interactive learning design, and the security limits of an educational cipher implementation.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true">🔐</span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">☰</button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="case-study.html" class="active" aria-current="page">Case Study</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ===================================================================
+         1. HERO
+         =================================================================== -->
+    <div class="page-header">
+      <div class="container">
+        <p class="cs-eyebrow">Engineering Case Study</p>
+        <h1>AES Comparison Lab</h1>
+        <p class="subtitle">Engineering, Performance, and Security — how two AES-128 implementations were built, tested, measured, and turned into an interactive learning site.</p>
+        <div class="cs-hero-stats" id="heroStats" role="list" aria-label="Project at a glance"></div>
+        <p class="cs-provenance" id="heroProvenance"></p>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- ================================================================
+           2. PROBLEM
+           ================================================================ -->
+      <section class="section" id="problem">
+        <h2 class="section-title"><span aria-hidden="true">🎯</span> The Problem</h2>
+
+        <div class="card">
+          <p>
+            Teaching cryptography usually forces a choice between two bad options. Textbooks
+            describe AES as abstract mathematics — substitutions, permutations, finite-field
+            arithmetic — with no way to watch it happen. Production code hides every step
+            behind a library call, so a learner sees <code>EVP_EncryptUpdate()</code> and
+            nothing else. In between sits the part nobody builds: a correct, instrumented,
+            deliberately slow implementation that exposes each transformation, paired with a
+            real library doing the same work, so the gap between them can be measured rather
+            than asserted.
+          </p>
+          <p>
+            That gap is the project's subject. A from-scratch AES-128 written in clear,
+            table-driven C++ sits next to OpenSSL's AES-128-ECB and AES-128-GCM. Both pass the
+            same NIST known-answer tests, which proves correctness is not the differentiator —
+            correctness is the baseline. What differs is performance, memory, and what each one
+            is actually allowed to protect. The site exists to make that difference visible,
+            measurable, and honest about its own limits.
+          </p>
+        </div>
+
+        <div class="grid-3 cs-qcards">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">❓</span><h3>Question 1</h3></div>
+            <p>Can an educational AES implementation be made <strong>provably correct</strong>
+               against published NIST vectors while staying readable enough to step through?</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">⏱️</span><h3>Question 2</h3></div>
+            <p>What is the <strong>real, measured cost</strong> of writing crypto by hand
+               instead of using a hardware-accelerated library?</p>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🛡️</span><h3>Question 3</h3></div>
+            <p>Where is the line between <strong>correct</strong> and <strong>safe to use</strong>,
+               and can a site teach that line without overstating either side?</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           3. ARCHITECTURE
+           ================================================================ -->
+      <section class="section" id="architecture">
+        <h2 class="section-title"><span aria-hidden="true">🏗️</span> Architecture</h2>
+
+        <div class="card">
+          <p>
+            The system is split along a single hard boundary: a native C++ core that does the
+            cryptographic and measurement work, and a static web front end that only ever reads
+            exported results. There is no server, no runtime API, and no build step in
+            production — the browser fetches data files that the benchmark step already wrote.
+          </p>
+          <div class="mermaid-container">
+            <pre class="mermaid">
+flowchart LR
+  subgraph CORE["C++ Core"]
+    A[AES core<br/>from-scratch AES-128] --> T[Test harness<br/>FIPS 197 + NIST CAVP]
+    O[OpenSSL bindings<br/>ECB + GCM] --> T
+    A --> B[Benchmark harness<br/>timing + RSS]
+    O --> B
+  end
+  T --> R[(results/*.csv + logs)]
+  B --> R
+  R --> G[generate_web_data.py<br/>validate + derive]
+  G --> W[(benchmark-data.js)]
+  W --> S[Static site<br/>6 interactive pages]
+  S --> P[GitHub Pages]
+            </pre>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">⚙️</span><h3>Native core</h3></div>
+            <ul class="cs-facts" id="archCore"></ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🔗</span><h3>Data pipeline</h3></div>
+            <ul class="cs-facts" id="archPipeline"></ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🌐</span><h3>Static site</h3></div>
+            <ul class="cs-facts" id="archSite"></ul>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <span aria-hidden="true">💡</span>
+          <div>
+            <strong>Design decision:</strong> the browser never computes a benchmark. Every
+            number on this site was measured natively and exported to CSV, then derived into a
+            single JavaScript data file. The site renders data; it does not generate it.
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           4. IMPLEMENTATION
+           ================================================================ -->
+      <section class="section" id="implementation">
+        <h2 class="section-title"><span aria-hidden="true">🧩</span> Implementation</h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🔧</span><h3>Implementation A — From scratch</h3>
+              <span class="badge badge-yellow">Educational</span>
+            </div>
+            <p>
+              A byte-oriented AES-128 written directly from FIPS 197. SubBytes, ShiftRows,
+              MixColumns, and AddRoundKey are separate, named functions; the key schedule
+              expands 44 words with explicit GF(2⁸) arithmetic; encryption and decryption are
+              distinct paths. Nothing is optimized: no precomputed T-tables, no AES-NI
+              intrinsics, no hand-tuned assembly. That is deliberate — the point is that a
+              reader can follow one block from plaintext to ciphertext without a jump table.
+            </p>
+            <ul class="cs-facts" id="implA"></ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span aria-hidden="true">🔒</span><h3>Implementation B — OpenSSL</h3>
+              <span class="badge badge-green">Production</span>
+            </div>
+            <p>
+              The same AES-128 through OpenSSL's EVP interface, exercised in two modes:
+              raw ECB for a like-for-like comparison with the core, and GCM for authenticated
+              encryption. OpenSSL dispatches to ARMv8 cryptographic instructions at runtime, so
+              this path measures what a vetted library actually does on modern hardware —
+              including the authentication work the from-scratch path does not perform at all.
+            </p>
+            <ul class="cs-facts" id="implB"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">📐</span><h3>The comparison is only fair where it is like-for-like</h3></div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Scratch C++</th>
+                  <th>OpenSSL ECB</th>
+                  <th>OpenSSL GCM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Algorithm</td><td>AES-128</td><td>AES-128</td><td>AES-128-CTR + GHASH</td></tr>
+                <tr><td>Mode</td><td>ECB (single block)</td><td>ECB</td><td>GCM</td></tr>
+                <tr><td>Confidentiality</td><td><span class="badge badge-green">Yes</span></td><td><span class="badge badge-green">Yes</span></td><td><span class="badge badge-green">Yes</span></td></tr>
+                <tr><td>Integrity / authenticity</td><td><span class="badge badge-red">None</span></td><td><span class="badge badge-red">None</span></td><td><span class="badge badge-green">128-bit tag</span></td></tr>
+                <tr><td>Hardware acceleration</td><td><span class="badge badge-red">No</span></td><td><span class="badge badge-green">ARMv8 AES</span></td><td><span class="badge badge-green">ARMv8 AES + PMULL</span></td></tr>
+                <tr><td>Constant-time</td><td><span class="badge badge-red">No</span></td><td><span class="badge badge-green">Yes</span></td><td><span class="badge badge-green">Yes</span></td></tr>
+                <tr><td>Comparable to A on</td><td>—</td><td>Correctness + speed</td><td>Speed only</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-muted" style="margin-top: 0.75rem;">
+            ECB is compared against GCM on <em>speed</em> only. The two are never compared as
+            if they offered the same security — see
+            <a href="#security">Security &amp; Limitations</a>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           5. TESTING
+           ================================================================ -->
+      <section class="section" id="testing">
+        <h2 class="section-title"><span aria-hidden="true">✅</span> Testing</h2>
+
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🧪</span><h3>Test results</h3>
+            <span class="badge badge-green" id="testBadge">—</span>
+          </div>
+          <div class="grid-2">
+            <div>
+              <h4 style="margin-bottom: 0.5rem;">Release build</h4>
+              <ul class="cs-facts" id="testRelease"></ul>
+            </div>
+            <div>
+              <h4 style="margin-bottom: 0.5rem;">Sanitizer build (ASan + UBSan)</h4>
+              <ul class="cs-facts" id="testSanitizer"></ul>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-top: 1rem;">
+            The same suite runs twice: once optimized for measurement, once instrumented for
+            undefined behaviour and memory errors. Identical check counts confirm the
+            instrumented build exercised the same paths.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">📋</span><h3>What is covered</h3></div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Layer</th><th>Method</th><th>Why it is here</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Known-answer correctness</td>
+                  <td>FIPS 197 Appendix B &amp; C.1, NIST CAVP ECB vectors</td>
+                  <td>Published vectors with published answers — no self-grading</td>
+                </tr>
+                <tr>
+                  <td>Cross-validation</td>
+                  <td>1000 random blocks: scratch vs OpenSSL</td>
+                  <td>Catches bugs the fixed vectors never reach</td>
+                </tr>
+                <tr>
+                  <td>Round-trip</td>
+                  <td>encrypt → decrypt must return the plaintext</td>
+                  <td>Catches decryption-path asymmetries</td>
+                </tr>
+                <tr>
+                  <td>Negative / tampering</td>
+                  <td>Modified ciphertext, tag, nonce, AAD; truncated input; wrong key</td>
+                  <td>Proves GCM actually rejects what it should reject</td>
+                </tr>
+                <tr>
+                  <td>Input validation</td>
+                  <td>15-byte key, 17-byte data, null arguments</td>
+                  <td>Malformed input must fail loudly, not silently</td>
+                </tr>
+                <tr>
+                  <td>Undefined behaviour</td>
+                  <td>ASan + UBSan over the entire suite</td>
+                  <td>Correct output from memory-unsafe code is luck</td>
+                </tr>
+                <tr>
+                  <td>Build hygiene</td>
+                  <td>Zero compiler warnings (<code>-Wall -Wextra</code>)</td>
+                  <td>Warnings are the cheapest bug detector available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">🚫</span><h3>Negative and authentication tests</h3></div>
+          <div id="negativeTests"></div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           6. BENCHMARKS
+           ================================================================ -->
+      <section class="section" id="benchmarks">
+        <h2 class="section-title"><span aria-hidden="true">📊</span> Benchmarks</h2>
+
+        <div class="alert alert-warning">
+          <span aria-hidden="true">📆</span>
+          <div>
+            <strong>These are historical measurements</strong>, not live results. They were
+            recorded on one machine, in one session, and are reproduced verbatim from the CSV
+            files in <code>results/</code>. Your browser does not re-measure anything on this
+            page. <span id="benchEnvInline"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">🖥️</span><h3>Measurement environment</h3></div>
+          <div class="grid-2">
+            <ul class="cs-facts" id="envList"></ul>
+            <ul class="cs-facts" id="methodList"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span aria-hidden="true">🚀</span><h3>Encryption throughput by input size</h3>
+          </div>
+          <div style="position: relative; height: 320px;">
+            <canvas id="throughputChart" aria-label="Line chart of encryption throughput in MiB/s across input sizes for scratch AES, OpenSSL ECB, and OpenSSL GCM" role="img"></canvas>
+          </div>
+          <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.875rem;">
+            Log scale on both axes. Source: <code>results/benchmark_aggregate.csv</code>,
+            <span id="throughputSource"></span>
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">📋</span><h3>Encryption throughput (MiB/s)</h3></div>
+          <div class="table-wrapper">
+            <table id="throughputTable">
+              <thead><tr><th>Implementation</th><th>16 B</th><th>1 KiB</th><th>100 KiB</th><th>1 MiB</th><th>10 MiB</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">📋</span><h3>Decryption throughput (MiB/s)</h3></div>
+            <div class="table-wrapper">
+              <table id="decryptTable">
+                <thead><tr><th>Implementation</th><th>16 B</th><th>1 KiB</th><th>100 KiB</th><th>1 MiB</th><th>10 MiB</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🔑</span><h3>Key setup time</h3></div>
+            <div class="table-wrapper">
+              <table id="keysetupTable">
+                <thead><tr><th>Implementation</th><th>Mean</th><th>Median</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.875rem;">
+              Aggregated across input sizes; the per-size rows are in
+              <code>results/benchmark_aggregate.csv</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">💾</span><h3>Peak memory (RSS) at 10 MiB input</h3></div>
+          <div class="table-wrapper">
+            <table id="memoryTable">
+              <thead><tr><th>Implementation</th><th>Operation</th><th>Baseline RSS</th><th>Peak RSS</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.875rem;">
+            Peak resident set size includes process overhead, library loading, and the
+            input/output buffers — it is not algorithm-only allocation. Source:
+            <code>results/memory_results.csv</code>.
+          </p>
+        </div>
+
+        <div class="grid-3" id="headlineStats"></div>
+      </section>
+
+      <!-- ================================================================
+           7. INTERACTIVE LEARNING
+           ================================================================ -->
+      <section class="section" id="learning">
+        <h2 class="section-title"><span aria-hidden="true">🎓</span> Interactive Learning</h2>
+
+        <div class="card">
+          <p>
+            The site is not a report with charts bolted on — it is a set of six pages that each
+            answer one question a reader would actually ask. Each page is static HTML, CSS, and
+            vanilla JavaScript: no framework, no bundler, no client-side state to corrupt.
+          </p>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Page</th><th>What it lets you do</th><th>Concept it teaches</th></tr></thead>
+              <tbody id="pagesTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🧪</span><h3>What If? Lab</h3></div>
+            <p>
+              <span id="scenarioCount" class="badge badge-purple">—</span>
+              security scenarios, each framing one decision — reuse a nonce, drop the tag check,
+              encrypt with ECB, use a short key — and showing the measured consequence rather
+              than an assertion.
+            </p>
+            <ul class="cs-facts" id="scenarioFacts"></ul>
+            <p><a class="btn btn-sm" href="what-if.html">Open the What If? Lab</a></p>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">👁️</span><h3>Visualizer &amp; Key Explorer</h3></div>
+            <p>
+              The cipher made inspectable: step through every round of a single block and watch
+              the state matrix change, then expand a key and see each round key derive from the
+              last. Both are computed live in JavaScript and checked against the FIPS 197
+              reference vectors.
+            </p>
+            <ul class="cs-facts" id="vizFacts"></ul>
+            <p>
+              <a class="btn btn-sm" href="visualizer.html">Open the Visualizer</a>
+              <a class="btn btn-sm btn-outline" href="key-explorer.html">Open the Key Explorer</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           8. SECURITY & LIMITATIONS
+           ================================================================ -->
+      <section class="section" id="security">
+        <h2 class="section-title"><span aria-hidden="true">🛡️</span> Security &amp; Limitations</h2>
+
+        <div class="alert alert-danger">
+          <span aria-hidden="true">⛔</span>
+          <div>
+            <strong>This project is for education, not protection.</strong> The from-scratch
+            implementation is an unauthenticated block cipher with no defence against timing or
+            power analysis. Do not use it to encrypt anything you care about.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">⚖️</span><h3>ECB and GCM are not interchangeable</h3></div>
+          <p>
+            The benchmark table lists them side by side because they run the same cipher, and
+            that is the only axis on which they are comparable. They do not provide the same
+            security, and nothing on this site should be read as if they did.
+          </p>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>Question</th><th>AES-ECB</th><th>AES-GCM</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>Does identical plaintext produce identical ciphertext?</td>
+                  <td><span class="badge badge-red">Yes — that is ECB</span></td>
+                  <td><span class="badge badge-green">No — nonce-dependent</span></td>
+                </tr>
+                <tr>
+                  <td>Can a modified ciphertext be detected?</td>
+                  <td><span class="badge badge-red">No</span></td>
+                  <td><span class="badge badge-green">Yes — tag check</span></td>
+                </tr>
+                <tr>
+                  <td>Safe for real data?</td>
+                  <td><span class="badge badge-red">No</span></td>
+                  <td><span class="badge badge-green">Yes, with nonce discipline</span></td>
+                </tr>
+                <tr>
+                  <td>Measured cost of that safety</td>
+                  <td>—</td>
+                  <td id="gcmOverheadCell">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-muted" style="margin-top: 0.75rem;">
+            GCM's remaining failure mode is nonce reuse: encrypting two different messages
+            under the same key with the same nonce destroys confidentiality for both. That risk
+            is inherent to the mode, not to this implementation, and it applies to production
+            code too.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">⚠️</span><h3>Limitations of this project</h3></div>
+            <ul class="cs-list">
+              <li>From-scratch AES is <strong>unauthenticated</strong> — no tag, no tamper detection.</li>
+              <li>It is <strong>not constant-time</strong>; table lookups leak through timing.</li>
+              <li>No defence against power, cache, or electromagnetic side channels.</li>
+              <li>ECB mode is used for comparison only and reveals plaintext patterns.</li>
+              <li>Only a subset of the NIST GCM vector files was exercised.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">📏</span><h3>Limits of the measurements</h3></div>
+            <ul class="cs-list">
+              <li>Single platform: one Apple M1, one OS, one compiler.</li>
+              <li>No repeated independent runs — figures carry run-to-run variance.</li>
+              <li>RSS includes process and library overhead, not just algorithm memory.</li>
+              <li>Micro-benchmarks at 16 B are dominated by call overhead.</li>
+              <li>Results do not transfer to x86 AES-NI or to CPUs without crypto extensions.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           9. RESULTS
+           ================================================================ -->
+      <section class="section" id="results">
+        <h2 class="section-title"><span aria-hidden="true">🏆</span> Results</h2>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">✅</span><h3>Against the acceptance criteria</h3></div>
+          <div id="criteriaList"></div>
+        </div>
+
+        <div class="grid-3" id="resultCards"></div>
+
+        <div class="card">
+          <div class="card-header"><span aria-hidden="true">💭</span><h3>What the numbers actually say</h3></div>
+          <p id="resultsNarrative" class="cs-narrative"></p>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           10. CONCLUSION & LINKS
+           ================================================================ -->
+      <section class="section" id="conclusion">
+        <h2 class="section-title"><span aria-hidden="true">🏁</span> Conclusion &amp; Links</h2>
+
+        <div class="card">
+          <p>
+            The project set out to measure the distance between writing AES and using AES, and
+            the measurement is unambiguous. The from-scratch implementation is correct — it
+            clears the same published vectors OpenSSL clears — and it is roughly three orders of
+            magnitude slower, because correctness was never the hard part. A vetted library on
+            hardware built for the job is. The practical lesson is the one the whole comparison
+            exists to deliver: <strong>use authenticated encryption, and use a vetted library
+            to get it.</strong>
+          </p>
+          <p>
+            The site is the second deliverable. Everything on it — test counts, throughput,
+            memory, environment — is derived from files in the repository rather than typed
+            into markup, so the page cannot drift away from the data that produced it. That
+            constraint is the difference between a report and evidence.
+          </p>
+        </div>
+
+        <div class="grid-3 cs-links">
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🔗</span><h3>Explore</h3></div>
+            <ul class="cs-list">
+              <li><a href="index.html">Home</a> — project overview</li>
+              <li><a href="fundamentals.html">Fundamentals</a> — AES step by step</li>
+              <li><a href="visualizer.html">Visualizer</a> — watch a round</li>
+              <li><a href="key-explorer.html">Key Explorer</a> — expand a key</li>
+              <li><a href="dashboard.html">Dashboard</a> — filter the raw data</li>
+              <li><a href="what-if.html">What If? Lab</a> — <span id="linkScenarioCount">—</span> scenarios</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">📚</span><h3>Documentation</h3></div>
+            <ul class="cs-list" id="docLinks"></ul>
+          </div>
+          <div class="card">
+            <div class="card-header"><span aria-hidden="true">🗃️</span><h3>Source data</h3></div>
+            <ul class="cs-list" id="sourceLinks"></ul>
+            <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.875rem;" id="provenanceFootnote"></p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/benchmark-data.js"></script>
+  <script src="js/case-study.js"></script>
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    }
+  </script>
+</body>
+</html>

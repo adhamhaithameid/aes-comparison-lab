@@ -814,6 +814,15 @@ tr:hover td {
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 
+/* Grid items default to min-width: auto, so a wide table inside a card would
+   force the whole page wider than the viewport instead of scrolling inside
+   .table-wrapper. Opt grid children into shrinking. */
+.grid-2 > *,
+.grid-3 > *,
+.card-grid > * {
+  min-width: 0;
+}
+
 @media (max-width: 768px) {
   .grid-2, .grid-3 {
     grid-template-columns: 1fr;
@@ -913,6 +922,157 @@ tr:hover td {
   outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Case study page
+   ========================================================================== */
+
+.cs-eyebrow {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Hero stat strip */
+.cs-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+.cs-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 7rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.cs-stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.cs-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.cs-provenance {
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Fact lists inside cards */
+.cs-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cs-facts li {
+  position: relative;
+  padding: 0.4rem 0 0.4rem 1.1rem;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.cs-facts li:last-child {
+  border-bottom: none;
+}
+
+.cs-facts li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+/* Plain bullet lists */
+.cs-list {
+  list-style: disc;
+  padding-left: 1.15rem;
+  margin: 0;
+}
+
+.cs-list li {
+  margin-bottom: 0.5rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Question cards in the problem section */
+.cs-qcards {
+  margin-top: 1.5rem;
+}
+
+/* Derived-metric cards: value is the headline */
+.cs-stat-card h3 {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.cs-stat-card p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.cs-source {
+  font-size: 0.75rem !important;
+  font-family: var(--font-mono);
+  margin-top: 0.35rem !important;
+}
+
+.cs-narrative {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* Tables scoped to the case study get a little more breathing room */
+#problem table th,
+#security table th {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .cs-hero-stats {
+    gap: 0.65rem;
+  }
+
+  .cs-stat {
+    min-width: calc(50% - 0.65rem);
+    padding: 0.7rem 0.8rem;
+  }
+
+  .cs-stat-value {
+    font-size: 1.25rem;
+  }
 }
 
 /* ==========================================================================
