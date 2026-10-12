@@ -55,12 +55,22 @@ cmake --build build -j
 │   ├── run_memory_tests.sh     # Memory measurement runner
 │   ├── build_web.sh            # Web platform builder
 │   ├── run_e2e.sh              # Browser E2E tests
-│   └── validate_results.py     # Benchmark data validator
+│   ├── validate_results.py     # Benchmark data validator
+│   └── generate_web_data.py    # Derive site data from results/*.csv
 ├── docs/                       # Comprehensive documentation
+│   └── deployment.md           # Pages deployment + maintenance
 ├── results/                    # Benchmark and test results
 ├── reports/                    # Final report and figures
 └── presentation/               # Presentation materials
 ```
+
+## Live Demo
+
+The site is deployed on GitHub Pages:
+
+- **Live site** — https://adhamhaithameid.github.io/aes-comparison-lab/
+- **Engineering case study** —
+  [case-study.html](https://adhamhaithameid.github.io/aes-comparison-lab/case-study.html)
 
 ## Interactive Web Platform
 
@@ -71,6 +81,7 @@ The project includes a full interactive educational website:
 - **AES Round Visualizer** — Step through all 10 rounds with real state display
 - **Key Expansion Explorer** — Visualize RotWord, SubWord, Rcon, XOR
 - **Comparison Dashboard** — Performance charts and implementation comparison
+- **Case Study** — Engineering, performance, and security write-up
 - **What If? Security Lab** — 12 interactive security scenarios
 
 ### Running the Web Platform
@@ -86,6 +97,30 @@ cd web/public
 python3 -m http.server 8080
 # Open http://localhost:8080
 ```
+
+### Data Pipeline
+
+Every figure on the site is derived from the measured CSVs in `results/`, never
+typed into markup:
+
+```bash
+# Regenerate the browser-side data file from the CSVs
+python3 scripts/generate_web_data.py
+
+# Verify the generated file is in sync (CI runs this)
+python3 scripts/generate_web_data.py --check
+```
+
+The generator validates the CSVs (schema, duplicates, internal consistency,
+throughput arithmetic), refuses to publish data derived from a failing test
+log, and embeds provenance — source file SHA-256 digests, row counts, and the
+generating commit — into `web/public/js/benchmark-data.js`.
+
+### Deployment
+
+The site is fully static and deploys to GitHub Actions → GitHub Pages. See
+[docs/deployment.md](docs/deployment.md) for the workflow, permissions model,
+and maintenance procedures.
 
 ## Prerequisites
 
