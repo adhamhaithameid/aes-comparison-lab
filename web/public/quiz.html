@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz — Test Your AES Knowledge</title>
+  <meta name="description" content="Interactive quiz: test your knowledge of AES, cryptography, and security best practices with instant feedback.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fundamentals.html">Fundamentals</a></li>
+        <li><a href="visualizer.html">Visualizer</a></li>
+        <li><a href="key-explorer.html">Key Explorer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="what-if.html">What If?</a></li>
+        <li><a href="quiz.html" class="active" aria-current="page">Quiz</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>Test Your Knowledge</h1>
+        <p class="subtitle">Ten questions on AES, cryptography, and security. Instant feedback, a timer, and a score you can brag about.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Score / progress HUD -->
+      <section class="section" id="quizHud" aria-label="Quiz progress">
+        <div class="card">
+          <div class="quiz-hud">
+            <div class="quiz-hud-item">
+              <span class="quiz-hud-label">Question</span>
+              <span class="quiz-hud-value"><span id="qCurrent">1</span> / <span id="qTotal">10</span></span>
+            </div>
+            <div class="quiz-hud-item">
+              <span class="quiz-hud-label">Score</span>
+              <span class="quiz-hud-value" id="qScore">0</span>
+            </div>
+            <div class="quiz-hud-item">
+              <span class="quiz-hud-label">Streak</span>
+              <span class="quiz-hud-value" id="qStreak">0</span>
+            </div>
+            <div class="quiz-hud-item">
+              <span class="quiz-hud-label">Time</span>
+              <span class="quiz-hud-value" id="qTimer">0:00</span>
+            </div>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="1" aria-label="Quiz progress">
+            <div class="progress-bar-fill" id="qProgress"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Start screen -->
+      <section class="section" id="quizStart">
+        <div class="card quiz-start-card">
+          <div class="quiz-start-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/><path d="M12 18h.01"/></svg>
+          </div>
+          <h2>Ready to test yourself?</h2>
+          <p>You'll get ten questions. Each correct answer earns points — answer quickly for a time bonus. Streaks multiply your score.</p>
+          <ul class="quiz-rules">
+            <li><span aria-hidden="true" class="icon" data-icon="check"></span> Instant feedback after every answer</li>
+            <li><span aria-hidden="true" class="icon" data-icon="bolt"></span> Time bonus for fast answers</li>
+            <li><span aria-hidden="true" class="icon" data-icon="flame"></span> Streaks multiply points</li>
+          </ul>
+          <p>
+            <button class="btn btn-primary btn-lg" id="startBtn" type="button">Start the Quiz</button>
+          </p>
+          <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 0;">
+            <span id="bestScoreLine" hidden>Best score: <strong id="bestScore">0</strong></span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Question screen -->
+      <section class="section" id="quizPlay" hidden>
+        <div class="card" aria-live="polite">
+          <div class="quiz-question-meta">
+            <span class="badge badge-blue" id="qCategory">AES</span>
+            <span class="text-muted" id="qPoints">100 pts</span>
+          </div>
+          <h2 class="quiz-question" id="qText">Question text goes here</h2>
+
+          <div class="quiz-options" id="qOptions" role="radiogroup" aria-label="Answer options"></div>
+
+          <div class="quiz-feedback" id="qFeedback" hidden>
+            <div class="quiz-feedback-inner" id="qFeedbackInner"></div>
+          </div>
+
+          <div class="quiz-actions">
+            <button class="btn" id="nextBtn" type="button" hidden>Next Question</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results screen -->
+      <section class="section" id="quizResults" hidden>
+        <div class="card quiz-results-card">
+          <div class="quiz-results-icon" id="resultsIcon" aria-hidden="true"></div>
+          <h2 id="resultsTitle">Quiz Complete</h2>
+          <p class="quiz-results-score"><span id="finalScore">0</span><span class="quiz-results-unit">points</span></p>
+          <p id="resultsMessage">Nice work.</p>
+
+          <div class="quiz-results-grid">
+            <div class="quiz-results-stat">
+              <span class="quiz-results-num" id="statCorrect">0/10</span>
+              <span class="quiz-results-label">Correct</span>
+            </div>
+            <div class="quiz-results-stat">
+              <span class="quiz-results-num" id="statAccuracy">0%</span>
+              <span class="quiz-results-label">Accuracy</span>
+            </div>
+            <div class="quiz-results-stat">
+              <span class="quiz-results-num" id="statTime">0:00</span>
+              <span class="quiz-results-label">Time</span>
+            </div>
+            <div class="quiz-results-stat">
+              <span class="quiz-results-num" id="statBestStreak">0</span>
+              <span class="quiz-results-label">Best streak</span>
+            </div>
+          </div>
+
+          <div class="quiz-results-badges" id="resultsBadges"></div>
+
+          <p class="quiz-actions" style="justify-content: center;">
+            <button class="btn btn-primary" id="retryBtn" type="button">Try Again</button>
+            <a class="btn btn-outline" href="index.html">Back to Home</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- Keyboard hint -->
+      <p class="text-muted quiz-kbd-hint">
+        Tip: press <kbd>1</kbd>–<kbd>4</kbd> to answer, <kbd>Enter</kbd> for next.
+      </p>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>AES Education Platform — Built for learning purposes only.</p>
+      <p style="font-size: 0.875rem;">Educational JavaScript implementation — NOT for production use</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>
