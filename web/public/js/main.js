@@ -191,6 +191,33 @@
   });
 
   // ==========================================================================
+  // Progress Tracking (localStorage)
+  // ==========================================================================
+
+  const VISITED_KEY = 'aes-visited-pages';
+  const PAGES = ['index.html','glossary.html','fundamentals.html','what-is-aes.html','visualizer.html','key-explorer.html','modes.html','playground.html','what-if.html','dashboard.html','case-study.html','quiz.html'];
+
+  function getVisited() {
+    try { return JSON.parse(localStorage.getItem(VISITED_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function markVisited() {
+    try {
+      const path = window.location.pathname.split('/').pop() || 'index.html';
+      const v = getVisited();
+      if (v.indexOf(path) === -1) { v.push(path); localStorage.setItem(VISITED_KEY, JSON.stringify(v)); }
+    } catch (e) { /* ignore */ }
+  }
+  function progressFraction() {
+    const v = getVisited();
+    const n = v.filter(p => PAGES.indexOf(p) !== -1).length;
+    return { done: n, total: PAGES.length };
+  }
+
+  document.addEventListener('DOMContentLoaded', markVisited);
+
+  global.AESProgress = { getVisited, progressFraction, PAGES };
+
+  // ==========================================================================
   // Export
   // ==========================================================================
 

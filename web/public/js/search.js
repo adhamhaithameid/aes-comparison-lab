@@ -9,6 +9,8 @@
     { title: 'Round Visualizer', url: 'visualizer.html', desc: 'Step through all 10 rounds of AES-128.' },
     { title: 'Modes Visualizer', url: 'modes.html', desc: 'ECB vs CBC vs CTR pattern leakage.' },
     { title: 'AES Playground', url: 'playground.html', desc: 'Encrypt/decrypt a 16-byte block in browser.' },
+    { title: 'File Encrypt/Decrypt', url: 'file-crypto.html', desc: 'Educational in-browser file crypto (ECB+PKCS7).' },
+    { title: 'Padding Visualizer', url: 'modes.html', desc: 'PKCS#7 padding demo.' },
     { title: 'Key Expansion Explorer', url: 'key-explorer.html', desc: 'RotWord, SubWord, Rcon, XOR.' },
     { title: 'Implementation Dashboard', url: 'dashboard.html', desc: 'Scratch vs OpenSSL benchmarks.' },
     { title: 'Attack Lab', url: 'what-if.html', desc: '12 security scenarios.' },

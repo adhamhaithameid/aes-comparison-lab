@@ -6,6 +6,7 @@
   <title>AES Education Platform — Learn Advanced Encryption Standard</title>
   <meta name="description" content="Interactive AES education platform: learn fundamentals, visualize rounds, explore key expansion, compare implementations, and experiment with security scenarios.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
@@ -255,6 +256,18 @@ graph TD
     </section>
   </main>
 
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="target"></span> Your Progress</h2>
+      <div class="card" style="max-width:60ch;">
+        <p id="progressText" style="margin-bottom:.5rem;">Loading…</p>
+        <div style="background:var(--bg-tertiary);border-radius:999px;height:10px;overflow:hidden;">
+          <div id="progressBar" style="background:var(--accent-primary);height:100%;width:0%;transition:width .3s;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
     <div class="container">
       <p>AES Education Platform — Built for learning purposes only.</p>
@@ -265,9 +278,20 @@ graph TD
   <script src="js/main.js"></script>
   <script src="js/search.js"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      if (window.AESProgress) {
+        var p = AESProgress.progressFraction();
+        var pct = Math.round((p.done/p.total)*100);
+        document.getElementById("progressText").textContent = p.done + " of " + p.total + " modules visited (" + pct + "%)";
+        document.getElementById("progressBar").style.width = pct + "%";
+      }
+    });
+  </script>
+  <script>
     if (typeof mermaid !== 'undefined') {
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
     }
   </script>
+  <script>if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }</script>
 </body>
 </html>

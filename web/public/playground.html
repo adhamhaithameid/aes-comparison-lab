@@ -54,6 +54,22 @@
       <p id="pgMsg" role="status" aria-live="polite" style="margin-top:1rem;color:var(--text-muted);"></p>
     </div></section>
   </main>
+  <section class="section"><div class="container" style="max-width:70ch;">
+    <h2 class="section-title">Known-Answer Test (FIPS 197)</h2>
+    <p>Verify the implementation against the official AES-128 test vector.</p>
+    <button class="btn btn-secondary" id="katRun">Run KAT</button>
+    <pre id="katOut" class="hex-dump" style="margin-top:1rem;"></pre>
+  </div></section>
+  <script>
+    document.getElementById('katRun').addEventListener('click',()=>{
+      const k='000102030405060708090a0b0c0d0e0f', p='00112233445566778899aabbccddeeff', exp='69c4e0d86a7b0430d8cdb78070b4c55a';
+      const rk=AES.keyExpansion128(AES.hexToBytes(k));
+      const ct=AES.encryptBlock128(AES.hexToBytes(p),rk);
+      const got=AES.bytesToHex(ct);
+      document.getElementById('katOut').textContent='Key:        '+k+'\nPlaintext:  '+p+'\nExpected:   '+exp+'\nGot:        '+got+'\nResult:     '+(got===exp?'PASS':'FAIL');
+    });
+    document.getElementById('katRun').click();
+  </script>
   <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
   <script src="js/aes-js.js"></script>
   <script src="js/main.js"></script>

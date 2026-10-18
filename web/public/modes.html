@@ -48,6 +48,27 @@
       <p style="margin-top:1rem;color:var(--text-muted);font-size:.875rem;">Each square = one 16-byte block. Color = first byte of ciphertext. Identical colors = identical ciphertext blocks (pattern leakage).</p>
     </div></section>
   </main>
+  <section class="section"><div class="container" style="max-width:70ch;">
+    <h2 class="section-title">PKCS#7 Padding Visualizer</h2>
+    <p>Block ciphers need input that is a multiple of 16 bytes. PKCS#7 pads with N bytes each of value N.</p>
+    <div class="form-group">
+      <label class="form-label" for="pvInput">Input text</label>
+      <input id="pvInput" class="form-input" type="text" value="Hello">
+    </div>
+    <button class="btn btn-primary" id="pvRun">Show padding</button>
+    <pre id="pvOut" class="hex-dump" style="margin-top:1rem;"></pre>
+  </div></section>
+  <script>
+    document.getElementById('pvRun').addEventListener('click',()=>{
+      const t=document.getElementById('pvInput').value;
+      const bytes=new TextEncoder().encode(t);
+      const pad=16-(bytes.length%16)||16;
+      const padded=new Uint8Array(bytes.length+pad);
+      padded.set(bytes); for(let i=bytes.length;i<padded.length;i++) padded[i]=pad;
+      document.getElementById('pvOut').textContent='Original: '+bytes.length+' bytes\nPadded:   '+padded.length+' bytes\nHex:      '+Array.from(padded).map(b=>b.toString(16).padStart(2,'0')).join(' ')+'\nPad byte: 0x'+pad.toString(16).padStart(2,'0')+' (×'+pad+')';
+    });
+    document.getElementById('pvRun').click();
+  </script>
   <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
   <script src="js/aes-js.js"></script>
   <script src="js/main.js"></script>
