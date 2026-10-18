@@ -560,25 +560,25 @@ tr:hover td {
 .alert-info {
   background: rgba(59, 130, 246, 0.08);
   border-color: rgba(59, 130, 246, 0.2);
-  color: var(--accent-primary);
+  color: #1d4ed8;
 }
 
 .alert-success {
   background: rgba(16, 185, 129, 0.08);
   border-color: rgba(16, 185, 129, 0.2);
-  color: var(--accent-success);
+  color: #047857;
 }
 
 .alert-warning {
   background: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.2);
-  color: var(--accent-warning);
+  color: #b45309;
 }
 
 .alert-danger {
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.2);
-  color: var(--accent-danger);
+  color: #b91c1c;
 }
 
 /* ==========================================================================

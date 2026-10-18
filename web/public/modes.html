@@ -91,7 +91,7 @@
         const ctr=[];for(let i=0;i<bs.length;i++){const counter=new Uint8Array(16);counter[15]=i;const ks=AES.encryptBlock128(counter,rk);ctr.push(xor(new TextEncoder().encode(bs[i]),ks));}
         function render(label,arr){
           const div=document.createElement('div');
-          div.innerHTML='<h3 style="margin-bottom:.5rem;">'+label+'</h3>';
+          div.innerHTML='<div style="font-weight:600;margin-bottom:.5rem;">'+label+'</div>';
           const g=document.createElement('div');
           g.style.display='grid';g.style.gridTemplateColumns='repeat(8,1fr)';g.style.gap='4px';
           arr.forEach(c=>{const sq=document.createElement('div');sq.style.aspectRatio='1';sq.style.borderRadius='4px';sq.style.background='hsl('+(c[0]*1.4)+',70%,50%)';sq.title=AES.bytesToHex(c).slice(0,8);g.appendChild(sq);});
