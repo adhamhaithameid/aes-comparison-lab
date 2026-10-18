@@ -240,12 +240,12 @@ pre code {
 }
 
 .nav-links a.active {
-  background: var(--accent-primary);
+  background: #2563eb;
   color: #fff;
 }
 
 .nav-links a.active:hover {
-  background: var(--accent-primary-hover);
+  background: #1d4ed8;
 }
 
 .nav-toggle {
