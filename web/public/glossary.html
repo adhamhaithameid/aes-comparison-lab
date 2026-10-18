@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary — AES Education Platform</title>
+<meta name="description" content="Plain-language glossary of cryptographic, testing, and performance terms.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+        <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html" class="active" aria-current="page">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
+      </button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>Glossary</h1><p class="subtitle">Plain-language definitions of cryptographic, testing, and performance terms used throughout the platform.</p></div></section>
+    <section class="section"><div class="container">
+      <input type="search" id="glossaryFilter" placeholder="Filter terms…" aria-label="Filter glossary terms" style="width:100%;max-width:40ch;padding:.5rem;margin-bottom:1.5rem;">
+      <h2 class="section-title">Cryptographic Terms</h2>
+      <dl class="glossary-list">
+        <div class="glossary-item" data-term="advanced encryption standard (aes)">
+          <dt><strong>Advanced Encryption Standard (AES)</strong></dt>
+          <dd>A symmetric block cipher specified in FIPS 197 (NIST, 2001, updated 2023). It operates on 128-bit blocks with 128, 192, or 256-bit keys. AES-128 uses 10 rounds, AES-192 uses 12 rounds, and AES-256 uses 14 rounds. It is the most widely used symmetric encryption algorithm in the world.</dd>
+        </div>
+        <div class="glossary-item" data-term="block cipher">
+          <dt><strong>Block Cipher</strong></dt>
+          <dd>A deterministic algorithm that operates on fixed-length groups of bits (blocks). AES operates on 128-bit blocks. A raw block cipher provides only confidentiality — it does not detect tampering. To encrypt data larger than one block, a mode of operation must be used.</dd>
+        </div>
+        <div class="glossary-item" data-term="block size">
+          <dt><strong>Block Size</strong></dt>
+          <dd>The fixed length of data that a block cipher operates on. AES has a block size of 128 bits (16 bytes).</dd>
+        </div>
+        <div class="glossary-item" data-term="mode of operation">
+          <dt><strong>Mode of Operation</strong></dt>
+          <dd>A method for applying a block cipher to data larger than one block. Common modes include:<br>- <strong>ECB</strong> (Electronic Codebook) — each block encrypted independently; insecure<br>- <strong>CBC</strong> (Cipher Block Chaining) — each block XORed with previous ciphertext<br>- <strong>CTR</strong> (Counter) — counter mode; converts block cipher to stream cipher<br>- <strong>GCM</strong> (Galois/Counter Mode) — CTR mode + GHASH authentication</dd>
+        </div>
+        <div class="glossary-item" data-term="galois/counter mode (gcm)">
+          <dt><strong>Galois/Counter Mode (GCM)</strong></dt>
+          <dd>An authenticated encryption mode specified in NIST SP 800-38D. It combines CTR mode encryption with GHASH authentication, providing both confidentiality and integrity. It requires a unique nonce for each encryption with the same key.</dd>
+        </div>
+        <div class="glossary-item" data-term="nonce (iv)">
+          <dt><strong>Nonce (IV)</strong></dt>
+          <dd>A number used once — a random value used in encryption to ensure that encrypting the same plaintext twice produces different ciphertexts. GCM uses a 96-bit (12-byte) nonce. <strong>Never reuse a nonce with the same key</strong> — doing so breaks GCM security.</dd>
+        </div>
+        <div class="glossary-item" data-term="authentication tag">
+          <dt><strong>Authentication Tag</strong></dt>
+          <dd>A cryptographic checksum computed over the ciphertext and additional authenticated data. In GCM, it is 128 bits (16 bytes). The tag is verified during decryption — if it does not match, the ciphertext has been modified and no plaintext is released.</dd>
+        </div>
+        <div class="glossary-item" data-term="additional authenticated data (aad)">
+          <dt><strong>Additional Authenticated Data (AAD)</strong></dt>
+          <dd>Data that is authenticated but not encrypted. It is included in the GHASH computation but passed through as plaintext. Examples include packet headers or metadata.</dd>
+        </div>
+        <div class="glossary-item" data-term="known-answer test (kat)">
+          <dt><strong>Known-Answer Test (KAT)</strong></dt>
+          <dd>A test that verifies an implementation produces the correct output for a predefined input. KATs use published test vectors from standards bodies (NIST) to validate correctness.</dd>
+        </div>
+        <div class="glossary-item" data-term="cavp (cryptographic algorithm validation program)">
+          <dt><strong>CAVP (Cryptographic Algorithm Validation Program)</strong></dt>
+          <dd>NIST's program for validating cryptographic algorithms. CAVP provides test vectors in `.rsp` files for AES, GCM, and other algorithms.</dd>
+        </div>
+        <div class="glossary-item" data-term="fips 197">
+          <dt><strong>FIPS 197</strong></dt>
+          <dd>The Federal Information Processing Standard that specifies AES. Published by NIST in 2001, updated in 2023. Defines the algorithm, key expansion, and encryption/decryption procedures.</dd>
+        </div>
+        <div class="glossary-item" data-term="sp 800-38d">
+          <dt><strong>SP 800-38D</strong></dt>
+          <dd>NIST Special Publication that specifies GCM and GMAC. Defines the authenticated encryption mode used in Implementation B.</dd>
+        </div>
+        <div class="glossary-item" data-term="sp 800-38a">
+          <dt><strong>SP 800-38A</strong></dt>
+          <dd>NIST Special Publication that specifies ECB, CBC, CFB, OFB, and CTR modes. Provides test vectors used in this project.</dd>
+        </div>
+        <div class="glossary-item" data-term="key expansion">
+          <dt><strong>Key Expansion</strong></dt>
+          <dd>The process of deriving round keys from the original key. AES-128 expands a 128-bit key into 11 round keys (176 bytes) using RotWord, SubWord, and Rcon operations.</dd>
+        </div>
+        <div class="glossary-item" data-term="round key">
+          <dt><strong>Round Key</strong></dt>
+          <dd>A 16-byte subkey derived from the original key during key expansion. AES-128 uses 11 round keys (round keys 0 through 10).</dd>
+        </div>
+        <div class="glossary-item" data-term="subbytes">
+          <dt><strong>SubBytes</strong></dt>
+          <dd>A non-linear byte substitution using the S-box. Each byte of the state is replaced by its S-box value. Provides confusion.</dd>
+        </div>
+        <div class="glossary-item" data-term="shiftrows">
+          <dt><strong>ShiftRows</strong></dt>
+          <dd>A transposition step where each row of the state is cyclically shifted left by its row index. Row 0 is not shifted, row 1 by 1, row 2 by 2, row 3 by 3. Provides diffusion.</dd>
+        </div>
+        <div class="glossary-item" data-term="mixcolumns">
+          <dt><strong>MixColumns</strong></dt>
+          <dd>A linear mixing operation where each column of the state is multiplied by a fixed 4x4 matrix over GF(2^8). Provides diffusion. Omitted in the final round.</dd>
+        </div>
+        <div class="glossary-item" data-term="addroundkey">
+          <dt><strong>AddRoundKey</strong></dt>
+          <dd>The XOR of the state with a round-specific subkey. This is the only transformation that involves key material.</dd>
+        </div>
+        <div class="glossary-item" data-term="s-box">
+          <dt><strong>S-Box</strong></dt>
+          <dd>The substitution box used in SubBytes. A 256-byte lookup table computed from the multiplicative inverse in GF(2^8) followed by an affine transformation. In this project, the S-box is computed programmatically at startup.</dd>
+        </div>
+        <div class="glossary-item" data-term="gf(2^8)">
+          <dt><strong>GF(2^8)</strong></dt>
+          <dd>The Galois Field with 256 elements, used in AES for MixColumns and S-box computation. Arithmetic is performed modulo the irreducible polynomial x^8 + x^4 + x^3 + x + 1.</dd>
+        </div>
+        <div class="glossary-item" data-term="rcon (round constant)">
+          <dt><strong>Rcon (Round Constant)</strong></dt>
+          <dd>A constant used in key expansion. Rcon[i] = x^(i-1) in GF(2^8), where x = 0x02.</dd>
+        </div>
+        <div class="glossary-item" data-term="rotword">
+          <dt><strong>RotWord</strong></dt>
+          <dd>A cyclic left rotation of a 4-byte word. Used in key expansion.</dd>
+        </div>
+        <div class="glossary-item" data-term="subword">
+          <dt><strong>SubWord</strong></dt>
+          <dd>Application of the S-box to each byte of a 4-byte word. Used in key expansion.</dd>
+        </div>
+        <div class="glossary-item" data-term="evp (envelope)">
+          <dt><strong>EVP (Envelope)</strong></dt>
+          <dd>OpenSSL's high-level cryptographic API. Provides a consistent interface for encryption, decryption, and key management across different algorithms.</dd>
+        </div>
+        <div class="glossary-item" data-term="raii (resource acquisition is initialization)">
+          <dt><strong>RAII (Resource Acquisition Is Initialization)</strong></dt>
+          <dd>A C++ programming idiom where resource management is tied to object lifetime. Resources are acquired in constructors and released in destructors. Used in this project for OpenSSL EVP context management.</dd>
+        </div>
+        <div class="glossary-item" data-term="csprng (cryptographically secure pseudo-random number generator)">
+          <dt><strong>CSPRNG (Cryptographically Secure Pseudo-Random Number Generator)</strong></dt>
+          <dd>A random number generator suitable for cryptographic use. OpenSSL's `RAND_bytes` is a CSPRNG.<br><br>---</dd>
+        </div>
+      </dl>
+      <h2 class="section-title">Testing Terms</h2>
+      <dl class="glossary-list">
+        <div class="glossary-item" data-term="unit test">
+          <dt><strong>Unit Test</strong></dt>
+          <dd>A test that verifies the correctness of a single function or component in isolation. In this project, unit tests include KATs, transformation tests, and key expansion tests.</dd>
+        </div>
+        <div class="glossary-item" data-term="integration test">
+          <dt><strong>Integration Test</strong></dt>
+          <dd>A test that verifies the interaction between components. In this project, round-trip tests and cross-validation tests are integration tests.</dd>
+        </div>
+        <div class="glossary-item" data-term="end-to-end test (e2e)">
+          <dt><strong>End-to-End Test (E2E)</strong></dt>
+          <dd>A test that verifies the complete system from user input to output. In this project, CLI integration tests would be E2E tests (currently a gap).</dd>
+        </div>
+        <div class="glossary-item" data-term="regression test">
+          <dt><strong>Regression Test</strong></dt>
+          <dd>A test that verifies that previously fixed bugs do not reoccur. Determinism checks and cross-validation tests serve as regression tests.</dd>
+        </div>
+        <div class="glossary-item" data-term="sanitizer">
+          <dt><strong>Sanitizer</strong></dt>
+          <dd>A runtime tool that detects memory errors and undefined behavior. This project uses AddressSanitizer (ASan) and UndefinedBehaviorSanitizer (UBSan).</dd>
+        </div>
+        <div class="glossary-item" data-term="asan (addresssanitizer)">
+          <dt><strong>ASan (AddressSanitizer)</strong></dt>
+          <dd>A memory error detector that finds heap buffer overflows, stack buffer overflows, use-after-free, and memory leaks.</dd>
+        </div>
+        <div class="glossary-item" data-term="ubsan (undefinedbehaviorsanitizer)">
+          <dt><strong>UBSan (UndefinedBehaviorSanitizer)</strong></dt>
+          <dd>A detector for undefined behavior such as signed integer overflow, misaligned access, and null pointer dereference.</dd>
+        </div>
+        <div class="glossary-item" data-term="cross-validation">
+          <dt><strong>Cross-Validation</strong></dt>
+          <dd>Comparing the output of two independent implementations on identical inputs. In this project, the scratch implementation is compared against OpenSSL on 1,000 random blocks.</dd>
+        </div>
+        <div class="glossary-item" data-term="boundary test">
+          <dt><strong>Boundary Test</strong></dt>
+          <dd>A test that verifies behavior at the edges of valid input ranges. In this project, boundary tests cover sizes from 0 bytes to 10 MiB.</dd>
+        </div>
+        <div class="glossary-item" data-term="negative test">
+          <dt><strong>Negative Test</strong></dt>
+          <dd>A test that verifies correct handling of invalid input. In this project, negative tests verify that tampered ciphertext, wrong keys, and malformed input are properly rejected.</dd>
+        </div>
+        <div class="glossary-item" data-term="fuzz testing">
+          <dt><strong>Fuzz Testing</strong></dt>
+          <dd>A testing technique that provides random or malformed input to find crashes and security vulnerabilities. Not currently implemented in this project (identified gap).</dd>
+        </div>
+        <div class="glossary-item" data-term="mutation testing">
+          <dt><strong>Mutation Testing</strong></dt>
+          <dd>A testing technique that introduces small code changes (mutations) to verify that the test suite detects them. Not currently implemented in this project (identified gap).<br><br>---</dd>
+        </div>
+      </dl>
+      <h2 class="section-title">Performance Terms</h2>
+      <dl class="glossary-list">
+        <div class="glossary-item" data-term="throughput">
+          <dt><strong>Throughput</strong></dt>
+          <dd>The amount of data processed per unit time. In this project, measured in MiB/s (megabytes per second).</dd>
+        </div>
+        <div class="glossary-item" data-term="latency">
+          <dt><strong>Latency</strong></dt>
+          <dd>The time taken to complete a single operation. In this project, measured in nanoseconds (ns) or milliseconds (ms).</dd>
+        </div>
+        <div class="glossary-item" data-term="warmup">
+          <dt><strong>Warmup</strong></dt>
+          <dd>Preliminary iterations performed before timing to stabilize CPU caches, branch predictors, and memory allocators.</dd>
+        </div>
+        <div class="glossary-item" data-term="dead-code elimination">
+          <dt><strong>Dead-Code Elimination</strong></dt>
+          <dd>A compiler optimization that removes code whose results are never used. Prevented in this project by computing a checksum of the output and writing it to a volatile sink.</dd>
+        </div>
+        <div class="glossary-item" data-term="peak rss (resident set size)">
+          <dt><strong>Peak RSS (Resident Set Size)</strong></dt>
+          <dd>The maximum amount of physical memory used by a process during its lifetime. Measured with `/usr/bin/time -l` on macOS.</dd>
+        </div>
+        <div class="glossary-item" data-term="hardware acceleration">
+          <dt><strong>Hardware Acceleration</strong></dt>
+          <dd>The use of specialized CPU instructions to speed up cryptographic operations. On the Apple M1, ARMv8 Cryptographic Extensions provide hardware AES instructions.</dd>
+        </div>
+        <div class="glossary-item" data-term="aes-ni (advanced encryption standard new instructions)">
+          <dt><strong>AES-NI (Advanced Encryption Standard New Instructions)</strong></dt>
+          <dd>Intel's hardware acceleration for AES. Available on x86 processors. The Apple M1 uses ARMv8 Cryptographic Extensions instead.</dd>
+        </div>
+        <div class="glossary-item" data-term="armv8 cryptographic extensions">
+          <dt><strong>ARMv8 Cryptographic Extensions</strong></dt>
+          <dd>ARM's hardware acceleration for AES and other cryptographic operations. Available on the Apple M1 (`hw.optional.arm.FEAT_AES: 1`).<br><br>---</dd>
+        </div>
+      </dl>
+      <h2 class="section-title">Project-Specific Terms</h2>
+      <dl class="glossary-list">
+        <div class="glossary-item" data-term="implementation a">
+          <dt><strong>Implementation A</strong></dt>
+          <dd>The from-scratch AES-128 block cipher in `src/aes_core.hpp` and `src/aes_core.cpp`. Designed for education and validation. Provides no authentication.</dd>
+        </div>
+        <div class="glossary-item" data-term="implementation b">
+          <dt><strong>Implementation B</strong></dt>
+          <dd>The OpenSSL AES-128-GCM wrapper in `src/aes_gcm_openssl.hpp` and `src/aes_gcm_openssl.cpp`. Designed for production use. Provides authenticated encryption.</dd>
+        </div>
+        <div class="glossary-item" data-term="scratch cli">
+          <dt><strong>Scratch CLI</strong></dt>
+          <dd>The command-line tool `aes_scratch_main` for demonstrating the scratch implementation. Subcommands: `kat`, `encrypt-block`, `decrypt-block`, `expand-key`, `roundtrace`.</dd>
+        </div>
+        <div class="glossary-item" data-term="openssl cli">
+          <dt><strong>OpenSSL CLI</strong></dt>
+          <dd>The command-line tool `aes_openssl_main` for file encryption with GCM. Subcommands: `keygen`, `encrypt`, `decrypt`, `selftest`.</dd>
+        </div>
+        <div class="glossary-item" data-term="test vector">
+          <dt><strong>Test Vector</strong></dt>
+          <dd>A predefined input/output pair used to verify correctness. NIST CAVP provides test vectors in `.rsp` files.</dd>
+        </div>
+        <div class="glossary-item" data-term=".rsp file">
+          <dt><strong>.rsp File</strong></dt>
+          <dd>A response file format used by NIST CAVP to distribute test vectors. Contains key/value fields for each test case.</dd>
+        </div>
+        <div class="glossary-item" data-term="mcgrew-viega test case 3">
+          <dt><strong>McGrew-Viega Test Case 3</strong></dt>
+          <dd>A published GCM test vector from the GCM specification (McGrew and Viega, 2004). Used in the OpenSSL CLI selftest.</dd>
+        </div>
+      </dl>
+    </section></div>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+
+  <script>
+    const filter = document.getElementById('glossaryFilter');
+    if (filter) {
+      filter.addEventListener('input', () => {
+        const q = filter.value.toLowerCase();
+        document.querySelectorAll('.glossary-item').forEach(el => {
+          const t = el.dataset.term || '';
+          const d = el.textContent.toLowerCase();
+          el.style.display = (t.includes(q) || d.includes(q)) ? '' : 'none';
+        });
+      });
+    }
+  </script>
+</body></html>

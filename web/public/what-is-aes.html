@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is AES? — AES Education Platform</title>
+  <meta name="description" content="A beginner-friendly introduction to the Advanced Encryption Standard.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>What is AES?</h1><p class="subtitle">A beginner-friendly introduction — no prior crypto knowledge needed.</p></div></section>
+    <section class="section"><div class="container" style="max-width:70ch;">
+      <h2>The short version</h2>
+      <p><strong>AES (Advanced Encryption Standard)</strong> is a recipe for scrambling data so only someone with the right key can read it. It is the most widely used symmetric encryption algorithm in the world — used in HTTPS, Wi-Fi, disk encryption, and VPNs.</p>
+      <h2>An analogy: a locked box</h2>
+      <p>Imagine a box with a lock that has <em>one</em> key. You and your friend both have a copy of that key. You put a message in the box, lock it, and send it. Anyone who intercepts the box sees only metal — they cannot read the message. Your friend unlocks it with their copy. That is <em>symmetric</em> encryption: one shared key for both locking and unlocking.</p>
+      <h2>What AES actually does</h2>
+      <ul>
+        <li>Takes a fixed-size chunk of data called a <strong>block</strong> (128 bits = 16 bytes).</li>
+        <li>Mixes it with a <strong>key</strong> (128, 192, or 256 bits) through several <strong>rounds</strong> of substitution, shifting, and mixing.</li>
+        <li>Produces a 128-bit block of <strong>ciphertext</strong> that looks random.</li>
+      </ul>
+      <p>AES-128 uses 10 rounds; AES-192 uses 12; AES-256 uses 14. More rounds = more security, slightly slower.</p>
+      <h2>Why "standard"?</h2>
+      <p>In 2001 NIST published AES as FIPS 197 after a public competition. The winner was <em>Rijndael</em>, designed by Joan Daemen and Vincent Rijmen. Being a standard means everyone implements the same algorithm, so systems can interoperate.</p>
+      <h2>What AES does NOT do</h2>
+      <ul>
+        <li>It does not prove <em>who</em> sent the message (no authentication on its own).</li>
+        <li>It does not detect tampering (use GCM or a MAC for that).</li>
+        <li>It does not manage or distribute keys (you must handle keys securely).</li>
+      </ul>
+      <p class="alert alert-info" role="note"><strong>Next:</strong> <a href="fundamentals.html">Fundamentals</a> for deeper concepts, or <a href="visualizer.html">Round Visualizer</a> to watch AES happen.</p>
+    </div></section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

@@ -11,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
@@ -25,15 +26,20 @@
         <li><a href="dashboard.html" class="active" aria-current="page">Dashboard</a></li>
         <li><a href="case-study.html">Case Study</a></li>
         <li><a href="quiz.html">Quiz</a></li>
-        <li><a href="what-if.html">What If?</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
       </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
         <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
 
-  <main>
+  <main id="main">
     <div class="page-header">
       <div class="container">
         <h1>Implementation Comparison Dashboard</h1>
@@ -266,6 +272,8 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+
   <script src="js/benchmark-data.js"></script>
   <script src="js/dashboard.js"></script>
   <script>

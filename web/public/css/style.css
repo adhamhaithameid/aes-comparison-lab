@@ -1473,3 +1473,193 @@ textarea:focus-visible,
     animation: none;
   }
 }
+
+/* ==========================================================================
+   Skip link (accessibility)
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-primary);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  border-radius: 0 0 var(--radius-md) 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Guided paths (Home)
+   ========================================================================== */
+
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.path-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-primary);
+}
+
+.path-card:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.path-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.path-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.path-list li {
+  padding: 0.25rem 0;
+}
+
+.path-list a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.path-list a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Glossary
+   ========================================================================== */
+
+.glossary-list {
+  margin: 1rem 0 2rem;
+}
+
+.glossary-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glossary-item dt {
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+  color: var(--accent-primary);
+}
+
+.glossary-item dd {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Nav search
+   ========================================================================== */
+
+.nav-search {
+  position: relative;
+  margin: 0 0.75rem;
+}
+
+.nav-search input {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  width: 140px;
+}
+
+.nav-search input:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 1px;
+  width: 200px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 260px;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  list-style: none;
+  padding: 0.25rem 0;
+  margin: 0.25rem 0 0;
+  z-index: 100;
+}
+
+.search-results li a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.search-results li a:hover,
+.search-results li a:focus {
+  background: var(--bg-secondary);
+}
+
+/* ==========================================================================
+   Mobile responsiveness (Phase 1)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .path-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-search {
+    display: none;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Focus-visible baseline for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}

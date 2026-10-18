@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
@@ -18,48 +19,98 @@
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="index.html" class="active" aria-current="page">Home</a></li>
-        <li><a href="fundamentals.html">Fundamentals</a></li>
-        <li><a href="visualizer.html">Visualizer</a></li>
-        <li><a href="key-explorer.html">Key Explorer</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="case-study.html">Case Study</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
         <li><a href="quiz.html">Quiz</a></li>
-        <li><a href="what-if.html">What If?</a></li>
       </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
       <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
         <span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span>
       </button>
     </div>
   </nav>
 
-  <main>
+  <main id="main">
     <!-- Hero Section -->
     <section class="page-header">
       <div class="container">
         <div class="text-center" style="padding: 2rem 0;">
           <h1 style="font-size: 3rem; margin-bottom: 1rem;">Advanced Encryption Standard</h1>
           <p class="subtitle" style="font-size: 1.25rem; max-width: 70ch; margin: 0 auto 2rem;">
-            An interactive education platform for understanding AES — from fundamental concepts
-            to implementation comparisons and security analysis.
+            An interactive, open-source laboratory for understanding AES — from your first
+            concept to real implementations, benchmarks, and security attacks.
           </p>
-          <div class="btn-group" style="justify-content: center;">
-            <a href="fundamentals.html" class="btn btn-primary">Start Learning</a>
-            <a href="visualizer.html" class="btn btn-secondary">Open Visualizer</a>
-          </div>
+          <p style="color: var(--text-muted); max-width: 60ch; margin: 0 auto 2rem;">
+            New here? Pick a path below. Everything is educational and runs in your browser.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- Module Cards -->
+    <!-- Three Guided Paths -->
     <section class="section">
       <div class="container">
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="compass"></span> Choose Your Path</h2>
+        <div class="path-grid">
+          <a href="fundamentals.html" class="path-card path-learn">
+            <div class="path-icon" aria-hidden="true">📘</div>
+            <h3>Learn</h3>
+            <p>Start from zero. What is AES, how do blocks and keys work, what are
+              modes, and why authentication matters. Plain language, analogies, and a glossary.</p>
+            <ul class="path-list">
+              <li><a href="fundamentals.html">Fundamentals</a></li>
+              <li><a href="glossary.html">Glossary</a></li>
+              <li><a href="key-explorer.html">Key Expansion Explorer</a></li>
+            </ul>
+            <span class="badge badge-blue">Beginner Friendly</span>
+          </a>
+
+          <a href="visualizer.html" class="path-card path-play">
+            <div class="path-icon" aria-hidden="true">🔬</div>
+            <h3>Play</h3>
+            <p>See AES happen. Step through all 10 rounds, watch the state matrix
+              transform, and experiment with 12 security attack scenarios.</p>
+            <ul class="path-list">
+              <li><a href="visualizer.html">Round Visualizer</a></li>
+              <li><a href="key-explorer.html">Key Expansion Explorer</a></li>
+              <li><a href="what-if.html">Attack Lab (12 scenarios)</a></li>
+            </ul>
+            <span class="badge badge-purple">Interactive</span>
+          </a>
+
+          <a href="dashboard.html" class="path-card path-measure">
+            <div class="path-icon" aria-hidden="true">📊</div>
+            <h3>Measure</h3>
+            <p>Real numbers. Compare a from-scratch C++ implementation against
+              OpenSSL GCM across time, throughput, and memory, with NIST test vectors.</p>
+            <ul class="path-list">
+              <li><a href="dashboard.html">Implementation Dashboard</a></li>
+              <li><a href="case-study.html">Engineering Case Study</a></li>
+              <li><a href="quiz.html">Knowledge Quiz</a></li>
+            </ul>
+            <span class="badge badge-green">Data-Driven</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Modules -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="grid"></span> All Modules</h2>
         <div class="card-grid">
           <a href="fundamentals.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
               <span aria-hidden="true" style="font-size: 1.5rem;" class="icon" data-icon="library"></span>
               <h3>Fundamentals</h3>
             </div>
-            <p>Learn the core concepts: plaintext/ciphertext, keys, symmetric encryption, block sizes, AES-128/192/256, rounds, key expansion, and authenticated encryption.</p>
+            <p>Core concepts: plaintext/ciphertext, keys, symmetric encryption, block sizes, AES-128/192/256, rounds, key expansion, authenticated encryption.</p>
             <span class="badge badge-blue">Beginner Friendly</span>
           </a>
 
@@ -93,7 +144,7 @@
           <a href="what-if.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="flask"></span>
-              <h3>What If? Security Lab</h3>
+              <h3>Attack Lab</h3>
             </div>
             <p>Experiment with 12 security scenarios: bit flips, nonce reuse, wrong keys, ECB pattern leakage, broken implementations, and more.</p>
             <span class="badge badge-yellow">12 Scenarios</span>
@@ -106,6 +157,15 @@
             </div>
             <p>Test yourself on AES, cryptography, and security. Instant feedback, streaks, a timer, and a score to beat.</p>
             <span class="badge badge-green">Interactive</span>
+          </a>
+
+          <a href="glossary.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+              <span aria-hidden="true" class="icon" data-icon="book"></span>
+              <h3>Glossary</h3>
+            </div>
+            <p>Plain-language definitions of cryptographic, testing, and performance terms used throughout the platform.</p>
+            <span class="badge badge-blue">Reference</span>
           </a>
 
           <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
@@ -129,7 +189,7 @@ graph TD
     A --> C[Visualizer]
     A --> D[Key Explorer]
     A --> E[Dashboard]
-    A --> F[What If? Lab]
+    A --> F[Attack Lab]
     B --> B1[AES Concepts]
     B --> B2[Block Ciphers]
     B --> B3[Authenticated Encryption]
@@ -196,6 +256,7 @@ graph TD
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
   <script>
     if (typeof mermaid !== 'undefined') {
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
