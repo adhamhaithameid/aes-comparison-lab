@@ -4,6 +4,7 @@
   const pages = [
     { title: 'Home', url: 'index.html', desc: 'Guided entry point: Learn, Play, Measure.' },
     { title: 'Glossary', url: 'glossary.html', desc: 'Plain-language definitions of crypto terms.' },
+    { title: 'Best Practices', url: 'best-practices.html', desc: 'How to use AES correctly: mode, nonce, key mgmt, auth.' },
     { title: 'What is AES?', url: 'what-is-aes.html', desc: 'Beginner introduction to AES with analogies.' },
     { title: 'Fundamentals', url: 'fundamentals.html', desc: 'AES concepts, block ciphers, modes, authenticated encryption.' },
     { title: 'Round Visualizer', url: 'visualizer.html', desc: 'Step through all 10 rounds of AES-128.' },

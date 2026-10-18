@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AES Best Practices — AES Education Platform</title>
+  <meta name="description" content="How to use AES correctly: mode, nonce, key management, authentication.">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="best-practices.html" class="active" aria-current="page">Best Practices</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="playground.html">Playground</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>AES Best Practices</h1><p class="subtitle">How to use AES correctly in real systems.</p></div></section>
+    <section class="section"><div class="container" style="max-width:70ch;">
+      <ul>
+        <li><strong>Use an authenticated mode.</strong> Prefer AES-GCM or AES-CCM. Never use ECB. CBC/CTR alone provide no integrity.</li>
+        <li><strong>Never reuse a nonce.</strong> In GCM, reusing a nonce with the same key breaks confidentiality and authenticity.</li>
+        <li><strong>Use a CSPRNG for keys and nonces.</strong> Never derive keys from passwords without a KDF (Argon2/scrypt/PBKDF2).</li>
+        <li><strong>Use a 96-bit (12-byte) nonce for GCM.</strong> Avoid 64-bit nonces unless you know why.</li>
+        <li><strong>Verify the tag before releasing plaintext.</strong> Use constant-time comparison.</li>
+        <li><strong>Don't implement crypto yourself.</strong> Use OpenSSL, libsodium, or Web Crypto API in production.</li>
+        <li><strong>Rotate keys periodically.</strong> Plan key lifecycle and revocation.</li>
+        <li><strong>Don't log keys or plaintext.</strong> Keep secrets out of logs and error messages.</li>
+      </ul>
+      <p style="margin-top:1rem;"><a href="what-if.html">See what goes wrong → Attack Lab</a></p>
+    </div></section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

@@ -160,6 +160,7 @@
 
     const step = currentTrace[stepIndex];
     currentStep = stepIndex;
+    try { history.replaceState(null, '', '#step-' + stepIndex); } catch (e) {}
 
     // Update round badge
     const badge = $('roundBadge');
@@ -267,6 +268,9 @@
 
       // Render first step
       renderStep(0);
+      // Deep-link: honor #step-N if present
+      var m = (location.hash || '').match(/step-(\d+)/);
+      if (m) { var si = parseInt(m[1], 10); if (!isNaN(si)) renderStep(si); }
 
       // Render all round keys
       renderAllRoundKeys();
@@ -376,6 +380,13 @@
     if (nextBtn) nextBtn.addEventListener('click', function () { renderStep(currentStep + 1); });
     if (lastBtn) lastBtn.addEventListener('click', function () { renderStep(currentTrace.length - 1); });
     if (autoBtn) autoBtn.addEventListener('click', toggleAutoPlay);
+
+    // Deep-link hash navigation
+    window.addEventListener('hashchange', function () {
+      if (!currentTrace.length) return;
+      var m = (location.hash || '').match(/step-(\d+)/);
+      if (m) { var si = parseInt(m[1], 10); if (!isNaN(si)) renderStep(si); }
+    });
 
     // Keyboard navigation
     document.addEventListener('keydown', function (e) {
