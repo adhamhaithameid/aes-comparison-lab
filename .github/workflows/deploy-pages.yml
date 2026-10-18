@@ -55,7 +55,7 @@ jobs:
           grep -rhoE '(src|href)="[^"]+"' _site --include='*.html' \
             | sed -E 's/.*="([^"]+)"/\1/' \
             | grep -vE '^(https?:|data:|#|mailto:)' \
-            | sed 's/#.*//' | sort -u | while read -r p; do
+            | sed 's/[#?].*//' | sort -u | while read -r p; do
                 [ -z "$p" ] && continue
                 [ -f "_site/$p" ] || { echo "::error::broken local link: $p"; exit 1; }
               done
