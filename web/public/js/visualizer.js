@@ -316,7 +316,7 @@
     if (autoPlayInterval) {
       clearInterval(autoPlayInterval);
       autoPlayInterval = null;
-      if (btn) btn.textContent = '▶ Auto Play';
+      if (btn) btn.textContent = 'Auto Play';
     } else {
       if (btn) btn.textContent = '⏸ Pause';
       autoPlayInterval = setInterval(function () {
@@ -325,7 +325,7 @@
         } else {
           clearInterval(autoPlayInterval);
           autoPlayInterval = null;
-          if (btn) btn.textContent = '▶ Auto Play';
+          if (btn) btn.textContent = 'Auto Play';
         }
       }, 1500);
     }
@@ -386,7 +386,7 @@
       try {
         navigator.clipboard.writeText(location.href);
         shareBtn.textContent = '✓ Copied';
-        setTimeout(function () { shareBtn.textContent = '🔗 Share step'; }, 1500);
+        setTimeout(function () { shareBtn.textContent = 'Share step'; }, 1500);
       } catch (e) { alert(location.href); }
     });
 
