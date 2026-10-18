@@ -366,7 +366,7 @@ pre code {
 
 .btn-outline {
   background: transparent;
-  color: var(--accent-primary);
+  color: #1d4ed8;
   border-color: var(--accent-primary);
 }
 
