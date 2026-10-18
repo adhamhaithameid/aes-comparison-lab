@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modes Visualizer — AES Education Platform</title>
+  <meta name="description" content="Visualize ECB vs CBC vs CTR pattern leakage on a sample image/text.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="modes.html" class="active" aria-current="page">Modes</a></li>
+        <li><a href="playground.html">Playground</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>Modes Visualizer</h1><p class="subtitle">Why ECB leaks patterns and why CBC/CTR/GCM don't. Enter repeated text and compare.</p></div></section>
+    <section class="section"><div class="container" style="max-width:90ch;">
+      <div class="form-group">
+        <label class="form-label" for="mvInput">Input text (repeated blocks show leakage)</label>
+        <textarea id="mvInput" class="form-input" rows="3">AAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAA BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mvKey">Key (32 hex chars)</label>
+        <input id="mvKey" class="form-input" type="text" value="000102030405060708090a0b0c0d0e0f">
+      </div>
+      <button class="btn btn-primary" id="mvRun">Render</button>
+      <div id="mvOut" style="margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;"></div>
+      <p style="margin-top:1rem;color:var(--text-muted);font-size:.875rem;">Each square = one 16-byte block. Color = first byte of ciphertext. Identical colors = identical ciphertext blocks (pattern leakage).</p>
+    </div></section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/aes-js.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+  <script>
+    (function(){
+      function blocks(s){const b=[];for(let i=0;i<s.length;i+=16)b.push(s.slice(i,i+16).padEnd(16,' '));return b;}
+      function xor(a,b){const r=new Uint8Array(a.length);for(let i=0;i<a.length;i++)r[i]=a[i]^b[i];return r;}
+      document.getElementById('mvRun').addEventListener('click',()=>{
+        const key=AES.hexToBytes(document.getElementById('mvKey').value.trim());
+        const rk=AES.keyExpansion128(key);
+        const text=document.getElementById('mvInput').value;
+        const bs=blocks(text);
+        // ECB
+        const ecb=bs.map(b=>AES.encryptBlock128(new TextEncoder().encode(b),rk));
+        // CBC
+        const cbc=[];let prev=new Uint8Array(16);
+        for(const b of bs){const x=xor(new TextEncoder().encode(b),prev);const c=AES.encryptBlock128(x,rk);cbc.push(c);prev=c;}
+        // CTR (simplified: counter 0,1,...)
+        const ctr=[];for(let i=0;i<bs.length;i++){const counter=new Uint8Array(16);counter[15]=i;const ks=AES.encryptBlock128(counter,rk);ctr.push(xor(new TextEncoder().encode(bs[i]),ks));}
+        function render(label,arr){
+          const div=document.createElement('div');
+          div.innerHTML='<h3 style="margin-bottom:.5rem;">'+label+'</h3>';
+          const g=document.createElement('div');
+          g.style.display='grid';g.style.gridTemplateColumns='repeat(8,1fr)';g.style.gap='4px';
+          arr.forEach(c=>{const sq=document.createElement('div');sq.style.aspectRatio='1';sq.style.borderRadius='4px';sq.style.background='hsl('+(c[0]*1.4)+',70%,50%)';sq.title=AES.bytesToHex(c).slice(0,8);g.appendChild(sq);});
+          div.appendChild(g);
+          return div;
+        }
+        const out=document.getElementById('mvOut');
+        out.innerHTML='';
+        out.appendChild(render('ECB (leaks patterns)',ecb));
+        out.appendChild(render('CBC (chained)',cbc));
+        out.appendChild(render('CTR (stream-like)',ctr));
+      });
+      document.getElementById('mvRun').click();
+    })();
+  </script>
+</body>
+</html>

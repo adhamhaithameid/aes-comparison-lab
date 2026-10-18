@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AES Playground — AES Education Platform</title>
+  <meta name="description" content="In-browser AES-128 block cipher playground. Encrypt and decrypt a single 16-byte block.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="playground.html" class="active" aria-current="page">Playground</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <div class="nav-search">
+        <input type="search" id="siteSearch" placeholder="Search…" aria-label="Search site" autocomplete="off">
+        <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>AES Playground</h1><p class="subtitle">Encrypt and decrypt a single 16-byte block with AES-128. Educational only — not for production.</p></div></section>
+    <section class="section"><div class="container" style="max-width:70ch;">
+      <div class="alert alert-warning" role="note"><strong>Educational implementation.</strong> Do not use for real data.</div>
+      <div class="form-group">
+        <label class="form-label" for="pgKey">Key (32 hex chars = 16 bytes)</label>
+        <input id="pgKey" class="form-input" type="text" value="000102030405060708090a0b0c0d0e0f" spellcheck="false">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pgPt">Plaintext (32 hex chars = 16 bytes)</label>
+        <input id="pgPt" class="form-input" type="text" value="00112233445566778899aabbccddeeff" spellcheck="false">
+      </div>
+      <div class="btn-group" style="margin:1rem 0;">
+        <button class="btn btn-primary" id="pgEnc">Encrypt</button>
+        <button class="btn btn-secondary" id="pgDec">Decrypt ciphertext above</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pgOut">Output (hex)</label>
+        <textarea id="pgOut" class="form-input" rows="2" readonly></textarea>
+      </div>
+      <p id="pgMsg" role="status" aria-live="polite" style="margin-top:1rem;color:var(--text-muted);"></p>
+    </div></section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/aes-js.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+  <script>
+    (function(){
+      const keyEl=document.getElementById('pgKey');
+      const ptEl=document.getElementById('pgPt');
+      const outEl=document.getElementById('pgOut');
+      const msg=document.getElementById('pgMsg');
+      function hexOk(h){return /^[0-9a-fA-F]{32}$/.test(h.trim());}
+      document.getElementById('pgEnc').addEventListener('click',()=>{
+        const k=keyEl.value.trim(), p=ptEl.value.trim();
+        if(!hexOk(k)||!hexOk(p)){msg.textContent='Key and plaintext must be 32 hex chars.';return;}
+        try{
+          const rk=AES.keyExpansion128(AES.hexToBytes(k));
+          const ct=AES.encryptBlock128(AES.hexToBytes(p),rk);
+          outEl.value=AES.bytesToHex(ct);
+          msg.textContent='Encrypted. Expected for test vector: 69c4e0d86a7b0430d8cdb78070b4c55a';
+        }catch(e){msg.textContent='Error: '+e.message;}
+      });
+      document.getElementById('pgDec').addEventListener('click',()=>{
+        const k=keyEl.value.trim(), c=outEl.value.trim();
+        if(!hexOk(k)||!hexOk(c)){msg.textContent='Need valid key and ciphertext.';return;}
+        try{
+          const rk=AES.keyExpansion128(AES.hexToBytes(k));
+          const pt=AES.decryptBlock128(AES.hexToBytes(c),rk);
+          ptEl.value=AES.bytesToHex(pt);
+          msg.textContent='Decrypted.';
+        }catch(e){msg.textContent='Error: '+e.message;}
+      });
+    })();
+  </script>
+</body>
+</html>
