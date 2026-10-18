@@ -17,6 +17,7 @@
     { title: 'Attack Lab', url: 'what-if.html', desc: '12 security scenarios.' },
     { title: 'Knowledge Quiz', url: 'quiz.html', desc: '10 questions with feedback.' },
     { title: 'Case Study', url: 'case-study.html', desc: 'Engineering, performance, security write-up.' },
+    { title: 'Presentation', url: 'presentation.html', desc: 'Slide deck: Impl A vs Impl B.' },
     { title: 'MixColumns', url: 'visualizer.html', desc: 'Linear mixing over GF(2^8); xtime vs tables.' },
     { title: 'Key Expansion', url: 'key-explorer.html', desc: 'RotWord, SubWord, Rcon, XOR.' },
     { title: 'GCM', url: 'fundamentals.html', desc: 'Galois/Counter Mode authenticated encryption.' },
