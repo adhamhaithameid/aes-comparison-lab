@@ -17,6 +17,14 @@
     { title: 'Attack Lab', url: 'what-if.html', desc: '12 security scenarios.' },
     { title: 'Knowledge Quiz', url: 'quiz.html', desc: '10 questions with feedback.' },
     { title: 'Case Study', url: 'case-study.html', desc: 'Engineering, performance, security write-up.' },
+    { title: 'MixColumns', url: 'visualizer.html', desc: 'Linear mixing over GF(2^8); xtime vs tables.' },
+    { title: 'Key Expansion', url: 'key-explorer.html', desc: 'RotWord, SubWord, Rcon, XOR.' },
+    { title: 'GCM', url: 'fundamentals.html', desc: 'Galois/Counter Mode authenticated encryption.' },
+    { title: 'Nonce Reuse', url: 'what-if.html', desc: 'Why reusing a GCM nonce breaks security.' },
+    { title: 'ECB Pattern Leakage', url: 'modes.html', desc: 'Why ECB leaks image patterns.' },
+    { title: 'PKCS#7 Padding', url: 'modes.html', desc: 'Padding to block boundary.' },
+    { title: 'FIPS 197', url: 'fundamentals.html', desc: 'AES standard specification.' },
+    { title: 'AES-NI', url: 'dashboard.html', desc: 'Hardware acceleration.' },
   ];
 
   const input = document.getElementById('siteSearch');

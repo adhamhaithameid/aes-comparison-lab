@@ -381,6 +381,15 @@
     if (lastBtn) lastBtn.addEventListener('click', function () { renderStep(currentTrace.length - 1); });
     if (autoBtn) autoBtn.addEventListener('click', toggleAutoPlay);
 
+    const shareBtn = $('shareBtn');
+    if (shareBtn) shareBtn.addEventListener('click', function () {
+      try {
+        navigator.clipboard.writeText(location.href);
+        shareBtn.textContent = '✓ Copied';
+        setTimeout(function () { shareBtn.textContent = '🔗 Share step'; }, 1500);
+      } catch (e) { alert(location.href); }
+    });
+
     // Deep-link hash navigation
     window.addEventListener('hashchange', function () {
       if (!currentTrace.length) return;
