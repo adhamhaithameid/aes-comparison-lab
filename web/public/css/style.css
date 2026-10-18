@@ -10,7 +10,7 @@
   --bg-code: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-muted: #64748b;
   --accent-primary: #3b82f6;
   --accent-primary-hover: #2563eb;
   --accent-secondary: #8b5cf6;
@@ -341,12 +341,12 @@ pre code {
 }
 
 .btn-primary {
-  background: var(--accent-primary);
+  background: var(--accent-primary-hover);
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: var(--accent-primary-hover);
+  background: #1d4ed8;
   text-decoration: none;
   color: #fff;
 }
@@ -537,11 +537,11 @@ tr:hover td {
   letter-spacing: 0.025em;
 }
 
-.badge-blue { background: rgba(59, 130, 246, 0.1); color: var(--accent-primary); }
-.badge-green { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); }
-.badge-red { background: rgba(239, 68, 68, 0.1); color: var(--accent-danger); }
-.badge-yellow { background: rgba(245, 158, 11, 0.1); color: var(--accent-warning); }
-.badge-purple { background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary); }
+.badge-blue { background: rgba(59, 130, 246, 0.1); color: #1d4ed8; }
+.badge-green { background: rgba(16, 185, 129, 0.1); color: #047857; }
+.badge-red { background: rgba(239, 68, 68, 0.1); color: #b91c1c; }
+.badge-yellow { background: rgba(245, 158, 11, 0.1); color: #b45309; }
+.badge-purple { background: rgba(139, 92, 246, 0.1); color: #6d28d9; }
 
 /* ==========================================================================
    Alerts
@@ -1482,7 +1482,7 @@ textarea:focus-visible,
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--accent-primary);
+  background: #1d4ed8;
   color: #fff;
   padding: 0.5rem 1rem;
   z-index: 1000;
@@ -1548,8 +1548,12 @@ textarea:focus-visible,
 }
 
 .path-list a {
-  color: var(--accent-primary);
+  color: #1d4ed8;
   text-decoration: none;
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+  padding: 0 0.25rem;
 }
 
 .path-list a:hover {

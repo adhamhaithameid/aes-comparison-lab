@@ -13,7 +13,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab">
         <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
@@ -58,7 +58,7 @@
       <div class="container">
         <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="compass"></span> Choose Your Path</h2>
         <div class="path-grid">
-          <a href="fundamentals.html" class="path-card path-learn">
+          <div class="path-card path-learn">
             <div class="path-icon" aria-hidden="true">📘</div>
             <h3>Learn</h3>
             <p>Start from zero. What is AES, how do blocks and keys work, what are
@@ -69,9 +69,10 @@
               <li><a href="key-explorer.html">Key Expansion Explorer</a></li>
             </ul>
             <span class="badge badge-blue">Beginner Friendly</span>
-          </a>
+            <a href="fundamentals.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">Start learning →</a>
+          </div>
 
-          <a href="visualizer.html" class="path-card path-play">
+          <div class="path-card path-play">
             <div class="path-icon" aria-hidden="true">🔬</div>
             <h3>Play</h3>
             <p>See AES happen. Step through all 10 rounds, watch the state matrix
@@ -82,9 +83,10 @@
               <li><a href="what-if.html">Attack Lab (12 scenarios)</a></li>
             </ul>
             <span class="badge badge-purple">Interactive</span>
-          </a>
+            <a href="visualizer.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">Open visualizer →</a>
+          </div>
 
-          <a href="dashboard.html" class="path-card path-measure">
+          <div class="path-card path-measure">
             <div class="path-icon" aria-hidden="true">📊</div>
             <h3>Measure</h3>
             <p>Real numbers. Compare a from-scratch C++ implementation against
@@ -95,7 +97,8 @@
               <li><a href="quiz.html">Knowledge Quiz</a></li>
             </ul>
             <span class="badge badge-green">Data-Driven</span>
-          </a>
+            <a href="dashboard.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">View dashboard →</a>
+          </div>
         </div>
       </div>
     </section>
@@ -112,7 +115,8 @@
             </div>
             <p>Core concepts: plaintext/ciphertext, keys, symmetric encryption, block sizes, AES-128/192/256, rounds, key expansion, authenticated encryption.</p>
             <span class="badge badge-blue">Beginner Friendly</span>
-          </a>
+            <a href="fundamentals.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">Start learning →</a>
+          </div>
 
           <a href="visualizer.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
@@ -121,7 +125,8 @@
             </div>
             <p>Step through all 10 rounds of AES-128 encryption with the FIPS 197 Appendix B test vector. See the state matrix transform at each step.</p>
             <span class="badge badge-purple">Interactive</span>
-          </a>
+            <a href="visualizer.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">Open visualizer →</a>
+          </div>
 
           <a href="key-explorer.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
@@ -130,7 +135,8 @@
             </div>
             <p>Explore how RotWord, SubWord, Rcon, and XOR operations generate round keys from the original cipher key.</p>
             <span class="badge badge-purple">Interactive</span>
-          </a>
+            <a href="visualizer.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">Open visualizer →</a>
+          </div>
 
           <a href="dashboard.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
@@ -139,7 +145,8 @@
             </div>
             <p>Compare scratch C++ vs OpenSSL ECB vs OpenSSL GCM across execution time, throughput, memory usage, and more.</p>
             <span class="badge badge-green">Data-Driven</span>
-          </a>
+            <a href="dashboard.html" class="btn btn-sm btn-primary" style="margin-top:.5rem;align-self:flex-start;">View dashboard →</a>
+          </div>
 
           <a href="what-if.html" class="card" style="text-decoration: none; color: inherit;">
             <div class="card-header">
@@ -220,27 +227,27 @@ graph TD
         <h2 class="section-title"><span aria-hidden="true" class="icon" data-icon="bulb"></span> Quick Facts About AES</h2>
         <div class="grid-3">
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="calendar"></span> Standardized</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="calendar"></span> Standardized</h3>
             <p>November 2001, by NIST (FIPS 197)</p>
           </div>
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="key"></span> Key Sizes</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="key"></span> Key Sizes</h3>
             <p>128, 192, or 256 bits</p>
           </div>
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="package"></span> Block Size</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="package"></span> Block Size</h3>
             <p>Always 128 bits (16 bytes)</p>
           </div>
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="refresh"></span> Rounds</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="refresh"></span> Rounds</h3>
             <p>10, 12, or 14 depending on key size</p>
           </div>
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="globe"></span> Usage</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="globe"></span> Usage</h3>
             <p>TLS, Wi-Fi (WPA2/3), disk encryption, VPNs</p>
           </div>
           <div class="card">
-            <h4><span aria-hidden="true" class="icon" data-icon="trophy"></span> Origin</h4>
+            <h3><span aria-hidden="true" class="icon" data-icon="trophy"></span> Origin</h3>
             <p>Rijndael cipher by Daemen &amp; Rijmen</p>
           </div>
         </div>
