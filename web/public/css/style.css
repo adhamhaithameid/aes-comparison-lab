@@ -114,6 +114,7 @@ code, pre {
 }
 
 code {
+  color: var(--text-primary);
   background: var(--bg-code);
   padding: 0.125rem 0.375rem;
   border-radius: var(--radius-sm);
@@ -560,7 +561,7 @@ tr:hover td {
 .alert-info {
   background: rgba(59, 130, 246, 0.08);
   border-color: rgba(59, 130, 246, 0.2);
-  color: #1d4ed8;
+  color: #1e3a8a;
 }
 
 .alert-success {
@@ -612,8 +613,8 @@ tr:hover td {
 }
 
 .tab.active {
-  color: var(--accent-primary);
-  border-bottom-color: var(--accent-primary);
+  color: #1d4ed8;
+  border-bottom-color: #1d4ed8;
 }
 
 .tab:focus-visible {
@@ -1576,7 +1577,7 @@ textarea:focus-visible,
 .glossary-item dt {
   font-size: 1.05rem;
   margin-bottom: 0.25rem;
-  color: var(--accent-primary);
+  color: #1d4ed8;
 }
 
 .glossary-item dd {
@@ -1666,4 +1667,22 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 3px solid var(--accent-primary);
   outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Links in text (a11y: distinguishable + contrast)
+   ========================================================================== */
+
+main a:not(.btn):not(.card):not(.path-card) {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+main a:not(.btn):not(.card):not(.path-card):hover {
+  color: #1e3a8a;
+}
+
+[data-theme="dark"] main a:not(.btn):not(.card):not(.path-card) {
+  color: #93c5fd;
 }

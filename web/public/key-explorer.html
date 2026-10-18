@@ -13,7 +13,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab">
         <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
@@ -52,7 +52,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="key"></span>
-            <h3>Cipher Key Input</h3>
+            <h2>Cipher Key Input</h2>
           </div>
           <div class="form-group">
             <label class="form-label" for="keyInput">Cipher Key (hex)</label>
@@ -75,7 +75,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="triangle"></span>
-            <h3>Key Schedule</h3>
+            <h2>Key Schedule</h2>
           </div>
           <div class="mermaid-container">
             <div class="mermaid">
@@ -108,7 +108,7 @@ graph TD
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="search"></span>
-            <h3>Step-by-Step Expansion</h3>
+            <h2>Step-by-Step Expansion</h2>
           </div>
           <div class="btn-group mb-2" role="group" aria-label="Step navigation">
             <button class="btn btn-secondary btn-sm" id="prevStepBtn">◀ Previous Step</button>
@@ -124,7 +124,7 @@ graph TD
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="key"></span>
-            <h3>Generated Round Keys</h3>
+            <h2>Generated Round Keys</h2>
           </div>
           <div id="roundKeysList"></div>
         </div>
@@ -135,7 +135,7 @@ graph TD
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="clipboard"></span>
-            <h3>Rcon (Round Constant) Values</h3>
+            <h2>Rcon (Round Constant) Values</h2>
           </div>
           <div class="table-wrapper">
             <table>

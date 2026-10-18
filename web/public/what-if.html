@@ -13,7 +13,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab">
         <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
@@ -73,7 +73,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">1</span>
-            <h3 class="scenario-title">Modified Ciphertext (Bit Flip)</h3>
+            <h2 class="scenario-title">Modified Ciphertext (Bit Flip)</h2>
           </div>
           <p class="scenario-question">What happens if an attacker flips a single bit in AES-GCM ciphertext?</p>
           <div class="scenario-conditions">
@@ -101,7 +101,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">2</span>
-            <h3 class="scenario-title">Modified Authentication Tag</h3>
+            <h2 class="scenario-title">Modified Authentication Tag</h2>
           </div>
           <p class="scenario-question">What if an attacker modifies the GCM authentication tag instead of the ciphertext?</p>
           <div class="scenario-conditions">
@@ -128,7 +128,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">3</span>
-            <h3 class="scenario-title">Wrong Key</h3>
+            <h2 class="scenario-title">Wrong Key</h2>
           </div>
           <p class="scenario-question">What happens when you try to decrypt AES-GCM ciphertext with the wrong key?</p>
           <div class="scenario-conditions">
@@ -155,7 +155,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">4</span>
-            <h3 class="scenario-title">GCM Nonce Reuse</h3>
+            <h2 class="scenario-title">GCM Nonce Reuse</h2>
           </div>
           <p class="scenario-question">Why is reusing a GCM nonce with the same key catastrophic?</p>
           <div class="scenario-conditions">
@@ -186,7 +186,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">5</span>
-            <h3 class="scenario-title">AES-128 vs AES-256</h3>
+            <h2 class="scenario-title">AES-128 vs AES-256</h2>
           </div>
           <p class="scenario-question">How do AES-128 and AES-256 compare in security and performance?</p>
           <div class="scenario-conditions">
@@ -209,7 +209,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">6</span>
-            <h3 class="scenario-title">Input Size Scaling</h3>
+            <h2 class="scenario-title">Input Size Scaling</h2>
           </div>
           <p class="scenario-question">How does AES performance scale with input size?</p>
           <div class="scenario-conditions">
@@ -232,7 +232,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">7</span>
-            <h3 class="scenario-title">Hardware Acceleration Detection</h3>
+            <h2 class="scenario-title">Hardware Acceleration Detection</h2>
           </div>
           <p class="scenario-question">How much does AES-NI hardware acceleration improve performance?</p>
           <div class="scenario-conditions">
@@ -255,7 +255,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">8</span>
-            <h3 class="scenario-title">Incorrect AES Implementation</h3>
+            <h2 class="scenario-title">Incorrect AES Implementation</h2>
           </div>
           <p class="scenario-question">What if SubBytes uses a deliberately broken S-box? Round-trips pass but KATs fail.</p>
           <div class="scenario-conditions">
@@ -278,7 +278,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">9</span>
-            <h3 class="scenario-title">Authentication Failure Mid-File</h3>
+            <h2 class="scenario-title">Authentication Failure Mid-File</h2>
           </div>
           <p class="scenario-question">What happens when authentication fails partway through decrypting a large file?</p>
           <div class="scenario-conditions">
@@ -305,7 +305,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">10</span>
-            <h3 class="scenario-title">ECB Pattern Leakage</h3>
+            <h2 class="scenario-title">ECB Pattern Leakage</h2>
           </div>
           <p class="scenario-question">Why does ECB mode leak patterns in encrypted data?</p>
           <div class="scenario-conditions">
@@ -328,7 +328,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">11</span>
-            <h3 class="scenario-title">Memory/Timing Measurement Variance</h3>
+            <h2 class="scenario-title">Memory/Timing Measurement Variance</h2>
           </div>
           <p class="scenario-question">How much do memory and timing measurements vary between runs?</p>
           <div class="scenario-conditions">
@@ -351,7 +351,7 @@
         <div class="scenario-card">
           <div class="scenario-header">
             <span class="scenario-number">12</span>
-            <h3 class="scenario-title">Implementation Selection Decision Guide</h3>
+            <h2 class="scenario-title">Implementation Selection Decision Guide</h2>
           </div>
           <p class="scenario-question">Which AES implementation should you choose for your use case?</p>
           <div class="scenario-conditions">

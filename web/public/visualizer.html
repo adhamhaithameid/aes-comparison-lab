@@ -13,7 +13,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab">
         <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
@@ -52,7 +52,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="download"></span>
-            <h3>Input</h3>
+            <h2>Input</h2>
             <span class="badge badge-yellow">FIPS 197 Appendix B</span>
           </div>
           <div class="grid-2">
@@ -84,7 +84,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="refresh"></span>
-            <h3>Round Navigation</h3>
+            <h2>Round Navigation</h2>
           </div>
           <div class="step-indicator" id="stepIndicator" role="progressbar" aria-label="Encryption progress" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0"></div>
           <div class="progress-bar" aria-hidden="true"><div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div></div>
@@ -104,7 +104,7 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="chart"></span>
-              <h3>State Matrix</h3>
+              <h2>State Matrix</h2>
               <span id="roundBadge" class="badge badge-blue">Round 0</span>
             </div>
             <p id="operationDesc" class="text-muted">Initial state — plaintext loaded into state matrix</p>
@@ -115,12 +115,12 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="key"></span>
-              <h3>Round Key</h3>
+              <h2>Round Key</h2>
             </div>
             <div id="roundKeyDisplay" class="round-key-display"></div>
             <div id="roundKeyHex" class="hex-dump mt-2"></div>
             <div class="mt-2">
-              <h4>Operation Explanation</h4>
+              <h2>Operation Explanation</h2>
               <p id="explanationText">The plaintext bytes are loaded into the 4×4 state matrix column by column.</p>
             </div>
           </div>
@@ -130,7 +130,7 @@
         <div class="card mt-2">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="search"></span>
-            <h3>Transformation Details</h3>
+            <h2>Transformation Details</h2>
           </div>
           <div id="transformDetails">
             <p class="text-muted">Navigate through rounds to see transformation details.</p>
@@ -143,7 +143,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="key"></span>
-            <h3>All Round Keys</h3>
+            <h2>All Round Keys</h2>
           </div>
           <div id="allRoundKeys"></div>
         </div>
@@ -154,7 +154,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="lock"></span>
-            <h3>Ciphertext Output</h3>
+            <h2>Ciphertext Output</h2>
           </div>
           <div class="hex-dump" id="ciphertextOutput"></div>
           <div class="alert alert-success mt-2" role="status">

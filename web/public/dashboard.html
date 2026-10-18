@@ -14,7 +14,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="AES Education Platform home">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab">
         <span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
@@ -53,7 +53,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="tool"></span>
-            <h3>Filters</h3>
+            <h2>Filters</h2>
           </div>
           <div class="grid-3">
             <div class="form-group">
@@ -101,14 +101,14 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="timer"></span>
-              <h3>Execution Time (ns)</h3>
+              <h2>Execution Time (ns)</h2>
             </div>
             <canvas id="timeChart" aria-label="Bar chart of execution time in nanoseconds" role="img"></canvas>
           </div>
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="rocket"></span>
-              <h3>Throughput (MiB/s)</h3>
+              <h2>Throughput (MiB/s)</h2>
             </div>
             <canvas id="throughputChart" aria-label="Bar chart of throughput in MiB/s" role="img"></canvas>
           </div>
@@ -119,7 +119,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="save"></span>
-            <h3>Memory Usage (Peak RSS)</h3>
+            <h2>Memory Usage (Peak RSS)</h2>
           </div>
           <canvas id="memoryChart" aria-label="Bar chart of peak memory usage in bytes" role="img"></canvas>
         </div>
@@ -131,7 +131,7 @@
         <div class="card">
           <div class="card-header">
             <span aria-hidden="true" class="icon" data-icon="chart"></span>
-            <h3>Aggregate Benchmark Data</h3>
+            <h2>Aggregate Benchmark Data</h2>
           </div>
           <div class="table-wrapper">
             <table id="benchmarkTable">
@@ -159,7 +159,7 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="tool"></span>
-              <h3>Scratch C++</h3>
+              <h2>Scratch C++</h2>
               <span class="badge badge-yellow">Educational</span>
             </div>
             <ul style="list-style: none; padding: 0;">
@@ -175,7 +175,7 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="lock"></span>
-              <h3>OpenSSL ECB</h3>
+              <h2>OpenSSL ECB</h2>
               <span class="badge badge-blue">Production</span>
             </div>
             <ul style="list-style: none; padding: 0;">
@@ -191,7 +191,7 @@
           <div class="card">
             <div class="card-header">
               <span aria-hidden="true" class="icon" data-icon="check-circle"></span>
-              <h3>OpenSSL GCM</h3>
+              <h2>OpenSSL GCM</h2>
               <span class="badge badge-green">Recommended</span>
             </div>
             <ul style="list-style: none; padding: 0;">

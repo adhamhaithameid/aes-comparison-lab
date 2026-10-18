@@ -72,7 +72,7 @@
     if (fastest) {
       html += '<div class="card text-center">';
       html += '<span aria-hidden="true" class="icon" data-icon="bolt" style="font-size: 2rem;"></span>';
-      html += '<h4>Fastest (1MB Encrypt)</h4>';
+      html += '<h3>Fastest (1MB Encrypt)</h3>';
       html += '<p><strong>' + fastest.implementation + '</strong></p>';
       html += '<p class="text-muted">' + BenchmarkData.formatTime(fastest.mean_time_ns) + '</p>';
       html += '</div>';
@@ -81,7 +81,7 @@
     if (highestTp) {
       html += '<div class="card text-center">';
       html += '<span aria-hidden="true" class="icon" data-icon="rocket" style="font-size: 2rem;"></span>';
-      html += '<h4>Highest Throughput</h4>';
+      html += '<h3>Highest Throughput</h3>';
       html += '<p><strong>' + highestTp.implementation + '</strong></p>';
       html += '<p class="text-muted">' + highestTp.mean_throughput_mib_s.toFixed(1) + ' MiB/s</p>';
       html += '</div>';
@@ -89,7 +89,7 @@
 
     html += '<div class="card text-center">';
     html += '<span aria-hidden="true" class="icon" data-icon="chart" style="font-size: 2rem;"></span>';
-    html += '<h4>Measurements</h4>';
+    html += '<h3>Measurements</h3>';
     html += '<p><strong>' + totalMeasurements + '</strong></p>';
     html += '<p class="text-muted">Total benchmark runs</p>';
     html += '</div>';
