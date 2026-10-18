@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Educación AES — Aprende el Estándar de Cifrado Avanzado</title>
+  <meta name="description" content="Plataforma interactiva para aprender AES: fundamentos, visualizador, explorador de claves, comparación de implementaciones y escenarios de seguridad.">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+  <nav class="nav" role="navigation" aria-label="Navegación principal">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.es.html" class="active" aria-current="page">Inicio</a></li>
+        <li><a href="index.html">English</a></li>
+        <li><a href="fundamentals.html">Aprender</a></li>
+        <li><a href="visualizer.html">Visualizar</a></li>
+        <li><a href="what-if.html">Laboratorio de ataques</a></li>
+        <li><a href="dashboard.html">Medir</a></li>
+        <li><a href="quiz.html">Cuestionario</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Cambiar tema" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header">
+      <div class="container">
+        <div class="text-center" style="padding: 2rem 0;">
+          <h1 style="font-size: 3rem; margin-bottom: 1rem;">Estándar de Cifrado Avanzado</h1>
+          <p class="subtitle" style="font-size: 1.25rem; max-width: 70ch; margin: 0 auto 2rem;">
+            Un laboratorio interactivo y de código abierto para comprender AES — desde tu primer concepto hasta implementaciones reales, mediciones y ataques de seguridad.
+          </p>
+          <p style="color: var(--text-muted); max-width: 60ch; margin: 0 auto 2rem;">
+            ¿Eres nuevo? Elige un camino. Todo es educativo y se ejecuta en tu navegador.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Elige tu camino</h2>
+        <div class="path-grid">
+          <div class="path-card path-learn">
+            <div class="path-icon" aria-hidden="true">📘</div>
+            <h3>Aprender</h3>
+            <p>Empieza desde cero: qué es AES, cómo funcionan los bloques y las claves, qué son los modos y por qué importa la autenticación.</p>
+            <ul class="path-list">
+              <li><a href="fundamentals.html">Fundamentos</a></li>
+              <li><a href="glossary.html">Glosario</a></li>
+              <li><a href="key-explorer.html">Explorador de expansión de clave</a></li>
+            </ul>
+          </div>
+          <div class="path-card path-play">
+            <div class="path-icon" aria-hidden="true">🔬</div>
+            <h3>Jugar</h3>
+            <p>Mira AES en acción. Recorre los 10 rounds, observa la matriz de estado y experimenta con 12 escenarios de seguridad.</p>
+            <ul class="path-list">
+              <li><a href="visualizer.html">Visualizador de rounds</a></li>
+              <li><a href="what-if.html">Laboratorio de ataques</a></li>
+            </ul>
+          </div>
+          <div class="path-card path-measure">
+            <div class="path-icon" aria-hidden="true">📊</div>
+            <h3>Medir</h3>
+            <p>Números reales. Compara una implementación en C++ desde cero contra OpenSSL GCM en tiempo, rendimiento y memoria.</p>
+            <ul class="path-list">
+              <li><a href="dashboard.html">Panel de implementaciones</a></li>
+              <li><a href="case-study.html">Caso de estudio</a></li>
+              <li><a href="quiz.html">Cuestionario</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="alert alert-info" role="note"><strong>Nota:</strong> Esta es una traducción inicial. El contenido detallado está en inglés por ahora.</div>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);">
+    <div class="container">
+      <p>Plataforma de Educación AES — Solo con fines educativos.</p>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+  <script>if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }</script>
+</body>
+</html>
