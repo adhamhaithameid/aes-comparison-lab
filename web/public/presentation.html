@@ -187,6 +187,28 @@
 </section>
 
 <section class="slide">
+  <h2>Performance — time &amp; throughput (1 MiB encrypt)</h2>
+  <table>
+    <tr><th>Implementation</th><th>Median time</th><th>Throughput</th><th>Relative</th></tr>
+    <tr><td>Impl A (Scratch)</td><td>3191 ms</td><td>0.31 MiB/s</td><td>1x (baseline)</td></tr>
+    <tr><td>Impl B (OpenSSL ECB)</td><td>1.39 ms</td><td>717.84 MiB/s</td><td>~2280x faster</td></tr>
+    <tr><td>Impl B (OpenSSL GCM)</td><td>1.45 ms</td><td>690.24 MiB/s</td><td>~2200x faster</td></tr>
+  </table>
+  <p style="margin-top:1rem">OpenSSL is ~3 orders of magnitude faster due to AES-NI / ARMv8 hardware acceleration.</p>
+</section>
+
+<section class="slide">
+  <h2>Memory — peak RSS (1 MiB encrypt)</h2>
+  <table>
+    <tr><th>Implementation</th><th>Baseline RSS</th><th>Peak RSS</th><th>Delta</th></tr>
+    <tr><td>Impl A (Scratch)</td><td>1888 KB</td><td>3904 KB</td><td>+2016 KB</td></tr>
+    <tr><td>Impl B (OpenSSL ECB)</td><td>3856 KB</td><td>5920 KB</td><td>+2064 KB</td></tr>
+    <tr><td>Impl B (OpenSSL GCM)</td><td>3936 KB</td><td>6000 KB</td><td>+2064 KB</td></tr>
+  </table>
+  <p style="margin-top:1rem">OpenSSL has a larger baseline footprint (library load) but similar incremental cost per MiB.</p>
+</section>
+
+<section class="slide">
   <h1>Summary</h1>
   <ul>
     <li><span class="badge bA">Impl A</span> = transparent, educational, no auth — for learning and validation.</li>
@@ -198,7 +220,7 @@
 </section>
 
 </div>
-<div class="counter" id="counter">1 / 11</div>
+<div class="counter" id="counter">1 / 13</div>
 <div class="nav">
   <button onclick="prev()">Prev</button>
   <button onclick="next()">Next</button>
