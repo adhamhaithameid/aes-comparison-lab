@@ -3,91 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AES: Implementation A vs B</title>
-<meta name="description" content="Slide deck comparing the two AES implementations.">
+<title>AES: Implementation A vs B — Detailed Comparison</title>
+<meta name="description" content="Detailed slide deck comparing AES Implementation A (scratch) vs B (OpenSSL GCM): performance, memory, security, and decision matrix.">
 <style>
+  :root{
+    --bg:#0b1220;--bg2:#111a2e;--card:#162033;--border:#243049;
+    --text:#e8edf5;--muted:#94a3b8;
+    --blue:#3b82f6;--blue2:#60a5fa;
+    --green:#10b981;--green2:#34d399;
+    --purple:#8b5cf6;--purple2:#a78bfa;
+    --orange:#f59e0b;--orange2:#fbbf24;
+    --red:#ef4444;--red2:#f87171;
+    --cyan:#06b6d4;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0f172a;color:#f1f5f9;height:100vh;overflow:hidden}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
   .deck{width:100%;height:100%;position:relative}
-  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:4rem 6rem;overflow:auto}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:3.5rem 5rem;overflow:auto;background:radial-gradient(ellipse at top left,#111a2e 0%,#0b1220 70%)}
   .slide.active{display:flex}
-  h1{font-size:2.8rem;margin-bottom:1rem;color:#60a5fa}
-  h2{font-size:2.2rem;margin-bottom:1rem;color:#a78bfa}
-  h3{font-size:1.4rem;margin:1rem 0 .5rem;color:#34d399}
-  p,li{font-size:1.15rem;line-height:1.6;margin:.4rem 0}
-  ul{margin-left:1.5rem}
-  code{background:#1e293b;padding:.15rem .4rem;border-radius:4px;font-family:monospace;font-size:1rem}
-  pre{background:#1e293b;padding:1rem;border-radius:8px;overflow-x:auto;margin:.8rem 0;font-size:.95rem}
-  table{border-collapse:collapse;margin:1rem 0;width:100%}
-  th,td{border:1px solid #334155;padding:.6rem .8rem;text-align:left}
-  th{background:#1e293b;color:#60a5fa}
-  .nav{position:fixed;bottom:1rem;right:1rem;display:flex;gap:.5rem;z-index:10}
-  .nav button{padding:.5rem 1rem;border:none;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer;font-size:1rem}
-  .nav button:hover{background:#2563eb}
-  .counter{position:fixed;bottom:1rem;left:1rem;color:#94a3b8;font-size:.9rem}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-  .card{background:#1e293b;padding:1.2rem;border-radius:10px;border:1px solid #334155}
-  .badge{display:inline-block;padding:.2rem .6rem;border-radius:4px;font-size:.85rem;margin:.2rem}
-  .bA{background:#7c3aed22;color:#a78bfa;border:1px solid #7c3aed}
-  .bB{background:#10b98122;color:#34d399;border:1px solid #10b981}
-  .warn{color:#fbbf24}
+  .slide h1{font-size:2.6rem;margin-bottom:.6rem;background:linear-gradient(90deg,var(--blue2),var(--purple2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .slide h2{font-size:2rem;margin-bottom:.8rem;color:var(--blue2)}
+  .slide h3{font-size:1.3rem;margin:1rem 0 .4rem;color:var(--green2)}
+  p,li{font-size:1.1rem;line-height:1.6;margin:.35rem 0}
+  ul{margin-left:1.4rem}
+  code{background:#1e293b;padding:.15rem .4rem;border-radius:4px;font-family:'SF Mono',Menlo,monospace;font-size:.95rem;color:var(--cyan)}
+  pre{background:#1e293b;padding:1rem;border-radius:8px;overflow-x:auto;margin:.8rem 0;font-size:.9rem;border:1px solid var(--border)}
+  table{border-collapse:collapse;margin:1rem 0;width:100%;border-radius:10px;overflow:hidden}
+  th,td{border:1px solid var(--border);padding:.65rem .85rem;text-align:left}
+  th{background:#1e293b;color:var(--blue2);font-weight:600}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+  .card{background:var(--card);padding:1.2rem;border-radius:12px;border:1px solid var(--border)}
+  .badge{display:inline-block;padding:.25rem .7rem;border-radius:6px;font-size:.8rem;margin:.2rem;font-weight:600}
+  .bA{background:rgba(139,92,246,.15);color:var(--purple2);border:1px solid var(--purple)}
+  .bB{background:rgba(16,185,129,.15);color:var(--green2);border:1px solid var(--green)}
+  .warn{color:var(--orange2)}
+  .good{color:var(--green2);font-weight:600}
+  .bad{color:var(--red2);font-weight:600}
+  .muted{color:var(--muted);font-size:.95rem}
+  .kpi{display:flex;gap:1.2rem;margin:1rem 0;flex-wrap:wrap}
+  .kpi .box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.4rem;min-width:180px}
+  .kpi .val{font-size:2rem;font-weight:700}
+  .kpi .lbl{font-size:.85rem;color:var(--muted);margin-top:.2rem}
+  .callout{background:rgba(59,130,246,.08);border-left:4px solid var(--blue);padding:.9rem 1.2rem;border-radius:8px;margin:1rem 0}
+  .callout.green{background:rgba(16,185,129,.08);border-color:var(--green)}
+  .callout.orange{background:rgba(245,158,11,.08);border-color:var(--orange)}
+  .counter{position:fixed;bottom:1rem;left:1.2rem;color:var(--muted);font-size:.9rem;z-index:10}
+  .nav{position:fixed;bottom:1rem;right:1.2rem;display:flex;gap:.5rem;z-index:10}
+  .nav button{padding:.55rem 1.1rem;border:none;border-radius:8px;background:var(--blue);color:#fff;cursor:pointer;font-size:.95rem;font-weight:600;transition:background .15s,transform .1s}
+  .nav button:hover{background:var(--blue2);transform:translateY(-1px)}
+  .nav button:active{transform:translateY(0)}
+  .tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;margin-left:.4rem}
+  .tagA{background:var(--purple);color:#fff}
+  .tagB{background:var(--green);color:#000}
+  .tagWin{background:var(--green);color:#000}
+  .tagLose{background:var(--red);color:#fff}
+  .hl{color:var(--green2);font-weight:700}
+  .hlr{color:var(--red2);font-weight:700}
+  .hlo{color:var(--orange2);font-weight:700}
 </style>
 </head>
 <body>
 <div class="deck">
 
+<!-- 1 Title -->
 <section class="slide active">
   <h1>AES Implementation Comparison</h1>
-  <p>Two approaches to AES-128: a from-scratch educational cipher vs. a production OpenSSL wrapper.</p>
-  <p class="warn">Educational lab — not for production use unless noted.</p>
-  <div style="margin-top:1.5rem">
-    <span class="badge bA">Implementation A — Scratch AES-128</span>
-    <span class="badge bB">Implementation B — OpenSSL AES-128-GCM</span>
+  <p style="font-size:1.3rem;color:var(--muted)">Two approaches to AES-128: a from-scratch educational cipher vs. a production OpenSSL wrapper.</p>
+  <div class="kpi" style="margin-top:2rem">
+    <div class="box"><div class="val" style="color:var(--purple2)">Impl A</div><div class="lbl">Scratch AES-128 (education)</div></div>
+    <div class="box"><div class="val" style="color:var(--green2)">Impl B</div><div class="lbl">OpenSSL AES-128-GCM (production)</div></div>
+    <div class="box"><div class="val" style="color:var(--orange2)">1,431</div><div class="lbl">automated tests</div></div>
+    <div class="box"><div class="val" style="color:var(--blue2)">355</div><div class="lbl">benchmark data points</div></div>
   </div>
+  <p class="warn" style="margin-top:1.5rem">Educational lab — not for production use unless noted.</p>
 </section>
 
+<!-- 2 What is AES -->
 <section class="slide">
   <h2>What is AES?</h2>
   <ul>
-    <li>Symmetric block cipher — FIPS 197 (NIST, 2001).</li>
-    <li>128-bit block size; keys of 128 / 192 / 256 bits.</li>
-    <li>AES-128 uses 10 rounds: SubBytes, ShiftRows, MixColumns, AddRoundKey.</li>
-    <li>Raw AES gives <strong>confidentiality only</strong> — no integrity, no authentication.</li>
-    <li>Real systems need a <strong>mode of operation</strong> (GCM, CBC, CTR, …) and often a MAC.</li>
+    <li>Symmetric block cipher — FIPS 197 (NIST, 2001). 128-bit blocks.</li>
+    <li>Keys: 128 / 192 / 256 bits. AES-128 uses <strong>10 rounds</strong>.</li>
+    <li>Rounds: SubBytes → ShiftRows → MixColumns → AddRoundKey.</li>
+    <li>Raw AES gives <span class="bad">confidentiality only</span> — no integrity, no authentication.</li>
+    <li>Real systems need a <strong>mode of operation</strong> (GCM, CBC, CTR) + authentication.</li>
   </ul>
+  <div class="callout orange" style="margin-top:1rem"><strong>Rule of thumb:</strong> learn with A, ship with B (or libsodium/mbedTLS).</div>
 </section>
 
+<!-- 3 Impl A -->
 <section class="slide">
-  <h2>Implementation A — Scratch AES-128</h2>
+  <h2>Implementation A — Scratch AES-128 <span class="tag tagA">Impl A</span></h2>
   <div class="two">
     <div class="card">
       <h3>What it is</h3>
       <ul>
         <li>Written from scratch in C++17 (<code>src/aes_core.hpp/.cpp</code>).</li>
-        <li>Every transform exposed for learning and validation.</li>
-        <li>Raw block cipher: encrypts 16-byte blocks.</li>
+        <li>Every transform exposed for learning &amp; validation.</li>
+        <li>Raw block cipher — encrypts 16-byte blocks.</li>
       </ul>
     </div>
     <div class="card">
       <h3>Provides</h3>
       <ul>
-        <li>FIPS 197 known-answer tests pass.</li>
+        <li>FIPS 197 KATs pass.</li>
         <li>NIST CAVP ECB KATs (GFSbox, VarTxt, VarKey, MMT).</li>
         <li>Cross-validation vs OpenSSL on 1000 random blocks.</li>
         <li>CLI: <code>aes_scratch kat / encrypt-block / roundtrace</code>.</li>
       </ul>
     </div>
   </div>
-  <p class="warn" style="margin-top:1rem">No authentication, no replay protection, no padding — education/validation only.</p>
+  <div class="callout orange" style="margin-top:1rem"><strong>⚠ Warning:</strong> No authentication, no replay protection, no padding — education/validation only.</div>
 </section>
 
+<!-- 4 Impl B -->
 <section class="slide">
-  <h2>Implementation B — OpenSSL AES-128-GCM</h2>
+  <h2>Implementation B — OpenSSL AES-128-GCM <span class="tag tagB">Impl B</span></h2>
   <div class="two">
     <div class="card">
       <h3>What it is</h3>
       <ul>
-        <li>Wrapper around OpenSSL EVP interface (<code>src/aes_gcm_openssl.hpp/.cpp</code>).</li>
+        <li>Wrapper around OpenSSL EVP (<code>src/aes_gcm_openssl.hpp/.cpp</code>).</li>
         <li>Authenticated encryption: confidentiality + integrity.</li>
         <li>Hardware-accelerated (AES-NI / ARMv8 crypto).</li>
       </ul>
@@ -95,135 +132,193 @@
     <div class="card">
       <h3>Provides</h3>
       <ul>
-        <li>Fresh random nonce per encryption.</li>
-        <li>128-bit authentication tag verified before plaintext release.</li>
+        <li>Fresh random 96-bit nonce per encryption.</li>
+        <li>128-bit auth tag verified before plaintext release.</li>
         <li>File encryption CLI: <code>aes_openssl keygen / encrypt / decrypt / selftest</code>.</li>
         <li>NIST CAVP GCM KATs incl. official FAIL cases.</li>
       </ul>
     </div>
   </div>
-  <p style="margin-top:1rem">Use this (or libsodium/mbedTLS) for real applications.</p>
+  <div class="callout green" style="margin-top:1rem"><strong>✅ Recommended</strong> for real applications (or libsodium/mbedTLS).</div>
 </section>
 
+<!-- 5 Side-by-side -->
 <section class="slide">
   <h2>Side-by-side comparison</h2>
   <table>
     <tr><th>Aspect</th><th>Impl A (Scratch)</th><th>Impl B (OpenSSL GCM)</th></tr>
-    <tr><td>Purpose</td><td>Education / validation</td><td>Production file encryption</td></tr>
-    <tr><td>Authentication</td><td>None</td><td>128-bit GCM tag</td></tr>
-    <tr><td>Nonce handling</td><td>N/A (raw block)</td><td>Fresh random 96-bit nonce</td></tr>
-    <tr><td>Padding</td><td>None (multiple of 16 B)</td><td>Handled by mode</td></tr>
-    <tr><td>Hardware accel</td><td>No</td><td>Yes (AES-NI / ARMv8)</td></tr>
-    <tr><td>Performance</td><td>Slower (pure C++)</td><td>Faster (OpenSSL)</td></tr>
-    <tr><td>Security use</td><td>Do not use for real data</td><td>Recommended</td></tr>
+    <tr><td>Purpose</td><td>Education / validation</td><td class="good">Production file encryption</td></tr>
+    <tr><td>Authentication</td><td class="bad">None</td><td class="good">128-bit GCM tag</td></tr>
+    <tr><td>Nonce handling</td><td>N/A (raw block)</td><td class="good">Fresh random 96-bit nonce</td></tr>
+    <tr><td>Padding</td><td>None (multiple of 16 B)</td><td class="good">Handled by mode</td></tr>
+    <tr><td>Hardware accel</td><td class="bad">No</td><td class="good">Yes (AES-NI / ARMv8)</td></tr>
+    <tr><td>Performance (1 MiB)</td><td class="bad">0.31 MiB/s</td><td class="good">690 MiB/s</td></tr>
+    <tr><td>Memory (1 MiB)</td><td class="good">3904 KB peak</td><td>6000 KB peak</td></tr>
+    <tr><td>Security use</td><td class="bad">❌ Do not use for real data</td><td class="good">✅ Recommended</td></tr>
   </table>
 </section>
 
+<!-- 6 Performance time -->
+<section class="slide">
+  <h2>Performance — encrypt time (1 MiB input)</h2>
+  <table>
+    <tr><th>Implementation</th><th>Median time</th><th>Throughput</th><th>Speedup</th></tr>
+    <tr><td>Impl A (Scratch) <span class="tag tagA">A</span></td><td class="bad">3191 ms</td><td class="bad">0.31 MiB/s</td><td>1x (baseline)</td></tr>
+    <tr><td>Impl B (OpenSSL ECB) <span class="tag tagB">B</span></td><td class="good">1.39 ms</td><td class="good">717.84 MiB/s</td><td class="good">~2280x faster</td></tr>
+    <tr><td>Impl B (OpenSSL GCM) <span class="tag tagB">B</span></td><td class="good">1.45 ms</td><td class="good">690.24 MiB/s</td><td class="good">~2200x faster</td></tr>
+  </table>
+  <div class="callout green" style="margin-top:1rem"><strong>Takeaway:</strong> OpenSSL is ~3 orders of magnitude faster thanks to AES-NI / ARMv8 hardware acceleration. Impl A is pure C++ with no accel.</div>
+</section>
+
+<!-- 7 Throughput detail -->
+<section class="slide">
+  <h2>Throughput across input sizes</h2>
+  <table>
+    <tr><th>Size</th><th>Impl A (MiB/s)</th><th>Impl B ECB (MiB/s)</th><th>Impl B GCM (MiB/s)</th></tr>
+    <tr><td>16 B</td><td>0.03</td><td>28.97</td><td>11.00</td></tr>
+    <tr><td>1 KiB</td><td>0.46</td><td>467.18</td><td>320.75</td></tr>
+    <tr><td>100 KiB</td><td>0.71</td><td>710.75</td><td>631.21</td></tr>
+    <tr><td>1 MiB</td><td class="bad">0.31</td><td class="good">717.84</td><td class="good">690.24</td></tr>
+    <tr><td>10 MiB</td><td>0.72</td><td>715.19</td><td>637.64</td></tr>
+  </table>
+  <p class="muted" style="margin-top:.6rem">Impl A throughput is flat (~0.3–0.7 MiB/s) regardless of size. Impl B scales to ~700 MiB/s.</p>
+</section>
+
+<!-- 8 Memory -->
+<section class="slide">
+  <h2>Memory — peak RSS (1 MiB encrypt)</h2>
+  <table>
+    <tr><th>Implementation</th><th>Baseline RSS</th><th>Peak RSS</th><th>Delta</th><th>Verdict</th></tr>
+    <tr><td>Impl A (Scratch)</td><td>1888 KB</td><td>3904 KB</td><td>+2016 KB</td><td class="good">Smallest footprint</td></tr>
+    <tr><td>Impl B (OpenSSL ECB)</td><td>3856 KB</td><td>5920 KB</td><td>+2064 KB</td><td>Larger (lib load)</td></tr>
+    <tr><td>Impl B (OpenSSL GCM)</td><td>3936 KB</td><td>6000 KB</td><td>+2064 KB</td><td>Larger (lib load)</td></tr>
+  </table>
+  <div class="callout" style="margin-top:1rem"><strong>Takeaway:</strong> OpenSSL has a larger baseline footprint (library load) but similar incremental cost per MiB. Impl A is leaner in memory but ~2000x slower.</div>
+</section>
+
+<!-- 9 Memory scaling -->
+<section class="slide">
+  <h2>Memory scaling with input size</h2>
+  <table>
+    <tr><th>Size</th><th>Impl A peak (KB)</th><th>Impl B GCM peak (KB)</th></tr>
+    <tr><td>1 KiB</td><td>1888</td><td>3936</td></tr>
+    <tr><td>100 KiB</td><td>2128</td><td>4208</td></tr>
+    <tr><td>1 MiB</td><td>3904</td><td>6000</td></tr>
+    <tr><td>10 MiB</td><td>22368</td><td>24336</td></tr>
+  </table>
+  <p class="muted" style="margin-top:.6rem">Both scale linearly with input size (~input + constant overhead). OpenSSL baseline is ~2x larger.</p>
+</section>
+
+<!-- 10 CLI usage -->
 <section class="slide">
   <h2>Usage — CLI</h2>
   <h3>Implementation A (block cipher demo)</h3>
   <pre>./build/aes_scratch kat
-./build/aes_scratch encrypt-block --key 000102030405060708090a0b0c0d0e0f --input 00112233445566778899aabbccddeeff</pre>
+./build/aes_scratch encrypt-block --key 000102030405060708090a0b0c0d0e0f \\
+    --input 00112233445566778899aabbccddeeff</pre>
   <h3>Implementation B (file encryption)</h3>
   <pre>./build/aes_openssl keygen mykey.txt
 ./build/aes_openssl encrypt mykey.txt secret.txt secret.enc
 ./build/aes_openssl decrypt mykey.txt secret.enc secret_dec.txt</pre>
 </section>
 
+<!-- 11 Security -->
 <section class="slide">
   <h2>Security model</h2>
   <div class="two">
     <div class="card">
-      <h3>Impl A risks</h3>
+      <h3><span class="bad">Impl A risks</span></h3>
       <ul>
         <li>Ciphertext tampering undetected.</li>
         <li>Replay attacks possible.</li>
         <li>ECB-style misuse if chained naively.</li>
+        <li>No padding → must handle multiples of 16 B.</li>
       </ul>
     </div>
     <div class="card">
-      <h3>Impl B guarantees</h3>
+      <h3><span class="good">Impl B guarantees</span></h3>
       <ul>
         <li>Confidentiality + integrity (GCM).</li>
         <li>Tag verified before plaintext release.</li>
         <li>Nonce uniqueness enforced by design.</li>
+        <li>Hardware-accelerated.</li>
       </ul>
     </div>
   </div>
-  <p class="warn" style="margin-top:1rem">Rule of thumb: learn with A, ship with B (or libsodium/mbedTLS).</p>
+  <div class="callout orange" style="margin-top:1rem"><strong>Rule of thumb:</strong> learn with A, ship with B (or libsodium/mbedTLS).</div>
 </section>
 
+<!-- 12 Testing -->
 <section class="slide">
-  <h2>Bonus: MixColumns micro-benchmark (Python)</h2>
-  <p>The repo also includes a pure-Python AES-128 comparing two MixColumns strategies:</p>
-  <ul>
-    <li><strong>Version A</strong> — xtime operations.</li>
-    <li><strong>Version B</strong> — precomputed x2 / x3 lookup tables.</li>
-  </ul>
-  <p>Both match the FIPS 197 test vector; tables are faster at scale (trade-off: extra memory).</p>
-  <pre>cd python && python3 aes_compare.py</pre>
-</section>
-
-<section class="slide">
-  <h2>Testing and validation</h2>
-  <ul>
-    <li>1,431 automated checks (FIPS 197 KATs, NIST CAVP ECB/GCM, round-trips 0 B to 10 MB, tampering, cross-validation).</li>
-    <li>Sanitizers: ASan + UBSan, 0 findings.</li>
-    <li>Benchmarks: 3 implementations x 5 sizes x 3 ops (355 data points).</li>
-    <li>Memory profiling: peak RSS (24 measurements).</li>
+  <h2>Testing &amp; validation</h2>
+  <div class="kpi">
+    <div class="box"><div class="val" style="color:var(--blue2)">1,431</div><div class="lbl">automated checks</div></div>
+    <div class="box"><div class="val" style="color:var(--green2)">0</div><div class="lbl">sanitizer findings</div></div>
+    <div class="box"><div class="val" style="color:var(--purple2)">355</div><div class="lbl">benchmark data points</div></div>
+    <div class="box"><div class="val" style="color:var(--orange2)">24</div><div class="lbl">memory measurements</div></div>
+  </div>
+  <ul style="margin-top:1rem">
+    <li>FIPS 197 KATs, NIST CAVP ECB/GCM (incl. official FAIL cases).</li>
+    <li>Round-trips 0 B–10 MB, tampering tests, cross-validation on 1000 random blocks.</li>
+    <li>Sanitizers: ASan + UBSan.</li>
   </ul>
 </section>
 
+<!-- 13 When to use -->
 <section class="slide">
   <h2>When to use which</h2>
   <table>
-    <tr><th>Scenario</th><th>Choice</th></tr>
-    <tr><td>Learning AES internals / teaching</td><td>Impl A</td></tr>
-    <tr><td>Validating a new implementation</td><td>Impl A (KATs)</td></tr>
-    <tr><td>Encrypting real files / data at rest</td><td>Impl B (GCM)</td></tr>
-    <tr><td>High-throughput / low-latency</td><td>Impl B (HW accel)</td></tr>
-    <tr><td>Need authentication / tamper detection</td><td>Impl B (GCM)</td></tr>
+    <tr><th>Scenario</th><th>Choice</th><th>Why</th></tr>
+    <tr><td>Learning AES internals / teaching</td><td><span class="tag tagA">Impl A</span></td><td>Transparent, every transform visible</td></tr>
+    <tr><td>Validating a new implementation</td><td><span class="tag tagA">Impl A</span></td><td>KATs &amp; cross-validation</td></tr>
+    <tr><td>Encrypting real files / data at rest</td><td><span class="tag tagB">Impl B</span></td><td>Auth + integrity (GCM)</td></tr>
+    <tr><td>High-throughput / low-latency</td><td><span class="tag tagB">Impl B</span></td><td>HW accel, ~700 MiB/s</td></tr>
+    <tr><td>Need tamper detection</td><td><span class="tag tagB">Impl B</span></td><td>128-bit auth tag</td></tr>
+    <tr><td>Memory-constrained embedded</td><td><span class="tag tagA">Impl A</span></td><td>Smaller baseline footprint</td></tr>
   </table>
 </section>
 
+<!-- 14 Python bonus -->
 <section class="slide">
-  <h2>Performance — time &amp; throughput (1 MiB encrypt)</h2>
-  <table>
-    <tr><th>Implementation</th><th>Median time</th><th>Throughput</th><th>Relative</th></tr>
-    <tr><td>Impl A (Scratch)</td><td>3191 ms</td><td>0.31 MiB/s</td><td>1x (baseline)</td></tr>
-    <tr><td>Impl B (OpenSSL ECB)</td><td>1.39 ms</td><td>717.84 MiB/s</td><td>~2280x faster</td></tr>
-    <tr><td>Impl B (OpenSSL GCM)</td><td>1.45 ms</td><td>690.24 MiB/s</td><td>~2200x faster</td></tr>
-  </table>
-  <p style="margin-top:1rem">OpenSSL is ~3 orders of magnitude faster due to AES-NI / ARMv8 hardware acceleration.</p>
+  <h2>Bonus: MixColumns micro-benchmark (Python)</h2>
+  <p>Pure-Python AES-128 comparing two MixColumns strategies:</p>
+  <div class="two">
+    <div class="card">
+      <h3>Version A — xtime</h3>
+      <p>Computes MixColumns with <code>xtime</code> operations.</p>
+      <p class="muted">Slower, no extra memory.</p>
+    </div>
+    <div class="card">
+      <h3>Version B — lookup tables</h3>
+      <p>Precomputed ×2 / ×3 tables.</p>
+      <p class="good">Faster at scale (trade-off: table memory).</p>
+    </div>
+  </div>
+  <p style="margin-top:1rem">Both match the FIPS 197 test vector. Run: <code>cd python &amp;&amp; python3 aes_compare.py</code></p>
 </section>
 
-<section class="slide">
-  <h2>Memory — peak RSS (1 MiB encrypt)</h2>
-  <table>
-    <tr><th>Implementation</th><th>Baseline RSS</th><th>Peak RSS</th><th>Delta</th></tr>
-    <tr><td>Impl A (Scratch)</td><td>1888 KB</td><td>3904 KB</td><td>+2016 KB</td></tr>
-    <tr><td>Impl B (OpenSSL ECB)</td><td>3856 KB</td><td>5920 KB</td><td>+2064 KB</td></tr>
-    <tr><td>Impl B (OpenSSL GCM)</td><td>3936 KB</td><td>6000 KB</td><td>+2064 KB</td></tr>
-  </table>
-  <p style="margin-top:1rem">OpenSSL has a larger baseline footprint (library load) but similar incremental cost per MiB.</p>
-</section>
-
+<!-- 15 Summary -->
 <section class="slide">
   <h1>Summary</h1>
-  <ul>
-    <li><span class="badge bA">Impl A</span> = transparent, educational, no auth — for learning and validation.</li>
+  <div class="kpi" style="margin-top:1rem">
+    <div class="box"><div class="val" style="color:var(--purple2)">Impl A</div><div class="lbl">Learn &amp; validate</div></div>
+    <div class="box"><div class="val" style="color:var(--green2)">Impl B</div><div class="lbl">Ship to production</div></div>
+  </div>
+  <ul style="margin-top:1.5rem">
+    <li><span class="badge bA">Impl A</span> = transparent, educational, no auth — for learning &amp; validation.</li>
     <li><span class="badge bB">Impl B</span> = authenticated, accelerated, production-ready — for real data.</li>
     <li>Same AES-128 core; difference is <strong>mode, integrity, and performance</strong>.</li>
-    <li>Always: learn with A, ship with B (or libsodium/mbedTLS).</li>
+    <li>Impl B is ~2200x faster and adds authentication; Impl A is leaner in memory.</li>
+    <li><span class="hlo">Always: learn with A, ship with B (or libsodium/mbedTLS).</span></li>
   </ul>
-  <p style="margin-top:2rem;color:#94a3b8">Questions?</p>
+  <p style="margin-top:2rem;color:var(--muted)">Questions?</p>
 </section>
 
 </div>
-<div class="counter" id="counter">1 / 13</div>
+<div class="counter" id="counter">1 / 15</div>
 <div class="nav">
-  <button onclick="prev()">Prev</button>
-  <button onclick="next()">Next</button>
+  <button onclick="prev()">◀ Prev</button>
+  <button onclick="next()">Next ▶</button>
 </div>
 <script>
   const slides = document.querySelectorAll('.slide');
