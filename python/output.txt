@@ -1,0 +1,15 @@
+AES-128 comparison: MixColumns xtime vs lookup tables
+Correctness: both versions match FIPS 197 AES-128 test vector.
+Timing: 7 samples; each sample averages 10 encryptions; median reported.
+Python 3.12.7 | Windows-11-10.0.26200-SP0
+
+Input size        Version A (ms)    Version B (ms)
+--------------------------------------------------
+   16 bytes            0.1688            0.1939
+ 1024 bytes            6.9728            6.6283
+ 4096 bytes           32.5918           25.7641
+
+All ciphertexts identical before timing.
+16 bytes: faster = A (xtime)
+1024 bytes: faster = B (tables)
+4096 bytes: faster = B (tables)

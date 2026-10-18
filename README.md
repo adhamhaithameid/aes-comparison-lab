@@ -60,6 +60,7 @@ cmake --build build -j
 ├── docs/                       # Comprehensive documentation
 │   └── deployment.md           # Pages deployment + maintenance
 ├── results/                    # Benchmark and test results
+├── python/                     # Pure-Python AES-128 MixColumns comparison (xtime vs tables)
 ├── reports/                    # Final report and figures
 └── presentation/               # Presentation materials
 ```
