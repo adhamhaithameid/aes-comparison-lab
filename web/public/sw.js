@@ -1,4 +1,4 @@
-const CACHE = 'aes-lab-v5';
+const CACHE = 'aes-lab-v7';
 const ASSETS = [
   '/', '/index.html', '/css/style.css?v=4', '/js/main.js', '/js/aes-js.js',
   '/pagefind/pagefind-ui.js', '/pagefind/pagefind-ui.css', '/pagefind/pagefind.js',
@@ -9,10 +9,10 @@ self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(keys => 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+    fetch(e.request).then(resp => {
       const copy = resp.clone();
       caches.open(CACHE).then(c => c.put(e.request, copy));
       return resp;
-    }).catch(() => caches.match('/index.html')))
+    }).catch(() => caches.match(e.request).then(r => r || caches.match('/index.html')))
   );
 });
