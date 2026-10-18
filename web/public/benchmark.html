@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Benchmark — AES Education Platform</title>
+  <meta name="description" content="Run an AES-128 benchmark in your browser.">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='44' width='72' height='52' rx='14' fill='%233b82f6'/><path d='M30 44V32a20 20 0 0 1 40 0v12' fill='none' stroke='%233b82f6' stroke-width='12' stroke-linecap='round'/><circle cx='50' cy='70' r='8' fill='white'/><rect x='46' y='70' width='8' height='16' rx='4' fill='white'/></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="AES Lab"><span aria-hidden="true" class="icon" data-icon="lock"></span> AES Lab</a>
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="document.getElementById('navLinks').classList.toggle('open'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');"><span class="icon" data-icon="menu"></span></button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="fundamentals.html">Learn</a></li>
+        <li><a href="visualizer.html">Visualize</a></li>
+        <li><a href="benchmark.html" class="active" aria-current="page">Benchmark</a></li>
+        <li><a href="playground.html">Playground</a></li>
+        <li><a href="what-if.html">Attack Lab</a></li>
+        <li><a href="dashboard.html">Measure</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+      </ul>
+      <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"><span aria-hidden="true" id="themeIcon" class="icon" data-icon="moon"></span></button>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="page-header"><div class="container"><h1>Browser Benchmark</h1><p class="subtitle">Measure AES-128 encryption throughput on your machine (educational JS impl).</p></div></section>
+    <section class="section"><div class="container" style="max-width:70ch;">
+      <div class="alert alert-info" role="note"><strong>Educational.</strong> JS implementation, not hardware-accelerated. Results are indicative only.</div>
+      <button class="btn btn-primary" id="bmRun">Run benchmark</button>
+      <pre id="bmOut" class="hex-dump" style="margin-top:1rem;"></pre>
+    </div></section>
+  </main>
+  <footer style="border-top: 1px solid var(--border-color); padding: 2rem 0; margin-top: 3rem; text-align: center; color: var(--text-muted);"><div class="container"><p>AES Education Platform — Built for learning purposes only.</p></div></footer>
+  <script src="js/aes-js.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('bmRun').addEventListener('click',()=>{
+      const key=AES.hexToBytes('000102030405060708090a0b0c0d0e0f');
+      const rk=AES.keyExpansion128(key);
+      const sizes=[16,1024,4096];
+      let out='Size (bytes)  Ops/sec  MB/s\\n';
+      for(const n of sizes){
+        const data=new Uint8Array(n);
+        const t0=performance.now();
+        let ops=0;
+        while(performance.now()-t0<500){ for(let i=0;i<data.length;i+=16) AES.encryptBlock128(data.slice(i,i+16),rk); ops++; }
+        const elapsed=(performance.now()-t0)/1000;
+        const mbps=(n*ops/1024/1024)/elapsed;
+        out+=n.toString().padStart(14)+'  '+ops.toString().padStart(7)+'  '+mbps.toFixed(2)+'\\n';
+      }
+      document.getElementById('bmOut').textContent=out;
+    });
+  </script>
+</body>
+</html>

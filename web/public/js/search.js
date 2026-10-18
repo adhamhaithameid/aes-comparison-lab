@@ -14,6 +14,7 @@
     { title: 'Padding Visualizer', url: 'modes.html', desc: 'PKCS#7 padding demo.' },
     { title: 'Key Expansion Explorer', url: 'key-explorer.html', desc: 'RotWord, SubWord, Rcon, XOR.' },
     { title: 'Implementation Dashboard', url: 'dashboard.html', desc: 'Scratch vs OpenSSL benchmarks.' },
+    { title: 'Browser Benchmark', url: 'benchmark.html', desc: 'Run AES-128 benchmark in your browser.' },
     { title: 'Attack Lab', url: 'what-if.html', desc: '12 security scenarios.' },
     { title: 'Knowledge Quiz', url: 'quiz.html', desc: '10 questions with feedback.' },
     { title: 'Case Study', url: 'case-study.html', desc: 'Engineering, performance, security write-up.' },
